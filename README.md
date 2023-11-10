@@ -119,4 +119,7 @@
   - もう一度行きたい場合はその画面から経路案内を開始できる。また、人に共有したい場合は、Google Places APIから提供される詳細情報をLINEでシェアできる。
 
 ## 画面遷移図
-https://www.figma.com/file/iU0kAQMW4nNlqC3HHIdpRf/画面遷移図?type=design&node-id=0-1&mode=design&t=AhLcQdSYLoVKUOHp-0
+[画面遷移図](https://www.figma.com/file/iU0kAQMW4nNlqC3HHIdpRf/画面遷移図?type=design&node-id=0-1&mode=design&t=AhLcQdSYLoVKUOHp-0)
+
+## ER図
+[![Image from Gyazo](https://i.gyazo.com/428610e175bb155b408fa40c4e07f96c.png)](https://gyazo.com/428610e175bb155b408fa40c4e07f96c)
