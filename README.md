@@ -122,4 +122,4 @@
 [画面遷移図](https://www.figma.com/file/iU0kAQMW4nNlqC3HHIdpRf/画面遷移図?type=design&node-id=0-1&mode=design&t=AhLcQdSYLoVKUOHp-0)
 
 ## ER図
-[![Image from Gyazo](https://i.gyazo.com/b13adfba43b8718776c9ab2502137675.png)](https://gyazo.com/b13adfba43b8718776c9ab2502137675)
+[![Image from Gyazo](https://i.gyazo.com/8033a6cd04d0b7342d8a7d3ec2d525d1.png)](https://gyazo.com/8033a6cd04d0b7342d8a7d3ec2d525d1)
