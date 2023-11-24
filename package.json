@@ -1,0 +1,7 @@
+{
+  "name": "go-next",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Dai <kobayashi.daigo3@gmail.com>",
+  "license": "MIT"
+}
