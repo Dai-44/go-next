@@ -81,6 +81,7 @@ GEM
     bootsnap (1.17.0)
       msgpack (~> 1.2)
     builder (3.2.4)
+    colorize (0.8.1)
     concurrent-ruby (1.2.2)
     connection_pool (2.4.1)
     crass (1.0.6)
@@ -133,6 +134,9 @@ GEM
       racc (~> 1.4)
     nokogiri (1.15.5-x86_64-linux)
       racc (~> 1.4)
+    planetscale_rails (0.2.0)
+      colorize (~> 0.8.1)
+      rails (>= 6.0, < 8)
     psych (5.1.1.1)
       stringio
     puma (6.4.0)
@@ -226,6 +230,7 @@ DEPENDENCIES
   debug
   importmap-rails
   mysql2 (~> 0.5)
+  planetscale_rails
   puma (>= 5.0)
   rails (~> 7.1.2)
   sprockets-rails
