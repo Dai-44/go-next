@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_06_053341) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_06_063717) do
   create_table "feelings", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -20,11 +20,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_06_053341) do
   create_table "google_places_api_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.string "display_name"
-    t.bigint "feeling_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["feeling_id"], name: "index_google_places_api_types_on_feeling_id"
   end
 
-  add_foreign_key "google_places_api_types", "feelings"
 end
