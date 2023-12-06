@@ -1,0 +1,17 @@
+GooglePlacesApiType.seed(:id,
+  { id: 1, name: "amusement_park", display_name: "遊園地" },
+  { id: 2, name: "movie_theater", display_name: "映画館" },
+  { id: 3, name: "shopping_mall", display_name: "ショッピングモール" },
+  { id: 4, name: "tourist_attraction", display_name: "観光名所" },
+  { id: 5, name: "hiking_area", display_name: "ハイキングエリア" },
+  { id: 6, name: "museum", display_name: "美術館" },
+  { id: 7, name: "zoo", display_name: "動物園" },
+  { id: 8, name: "electronics_store", display_name: "家電量販店" },
+  { id: 9, name: "furniture_store", display_name: "家具店" },
+  { id: 10, name: "historical_landmark", display_name: "歴史的名所" },
+  { id: 11, name: "marina", display_name: "マリーナ" },
+  { id: 12, name: "park", display_name: "公園" },
+  { id: 13, name: "spa", display_name: "スパ" },
+  { id: 14, name: "aquarium", display_name: "水族館" },
+  { id: 15, name: "coffee_shop", display_name: "カフェ" }
+)
