@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_06_063717) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_06_070025) do
+  create_table "feeling_type_mappings", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "feeling_id", null: false
+    t.bigint "google_places_api_type_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["feeling_id"], name: "index_feeling_type_mappings_on_feeling_id"
+    t.index ["google_places_api_type_id"], name: "index_feeling_type_mappings_on_google_places_api_type_id"
+  end
+
   create_table "feelings", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -24,4 +33,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_06_063717) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "feeling_type_mappings", "feelings"
+  add_foreign_key "feeling_type_mappings", "google_places_api_types"
 end
