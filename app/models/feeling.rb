@@ -1,0 +1,2 @@
+class Feeling < ApplicationRecord
+end
