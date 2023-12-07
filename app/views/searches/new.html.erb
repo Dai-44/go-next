@@ -1,0 +1,35 @@
+<%= form_with model: @user_selection, url: searches_path, local: true do |form| %>
+  <div class="my-5">
+    <div class="form-element">
+      <%= form.label :type %>
+    </div>
+    <div class="form-element space-y-2">
+      <%= form.collection_check_boxes :type, GooglePlacesApiType.all, :display_name, :display_name do |b| %>
+          <!-- 引数として指定しているdisplay_nameのうち、前者(option要素のvalue属性に指定するもの)は不要。でも今の状態で消すと引数が3つになり、collection_selectは引数を4〜６取るものなのでエラーが起きてしまう。従い、差し当たり残してあるが追々消す -->
+        <div class="flex items-center">
+          <%= b.check_box(class: "form-checkbox h-5 w-5 text-indigo-600") %>
+          <%= b.label(class: "ml-2 text-gray-700") %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  
+  <div class="my-5">
+    <div class="form-element">
+      <%= form.label :feeling %>
+    </div>
+    <div class="form-element space-y-2">
+      <%= form.collection_radio_buttons :feeling, Feeling.all, :name, :name do |b| %>
+        <!-- ここの引数の2つのnameも上と同じ。 -->
+        <div class="flex items-center">
+          <%= b.radio_button(class: "form-radio h-5 w-5 text-indigo-600") %>
+          <%= b.label(class: "ml-2 text-gray-700") %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  
+  <div class="form-element mt-3">
+    <%= form.submit "次へ", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+  </div>
+<% end %>

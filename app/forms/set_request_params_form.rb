@@ -1,5 +1,4 @@
 class SetRequestParamsForm
-
   include ActiveModel::Model
   include ActiveModel::Attributes 
   
