@@ -1,4 +1,4 @@
-class SetRequestParamsForm
+class UserSelectionForm
   include ActiveModel::Model
   include ActiveModel::Attributes 
   

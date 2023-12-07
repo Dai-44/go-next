@@ -3,7 +3,7 @@ class SearchesController < ApplicationController
   end
 
   def new
-    @user_selection = SetRequestParamsForm.new
+    @user_selection = UserSelectionForm.new
   end
 
   def create
