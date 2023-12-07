@@ -4,8 +4,7 @@
       <%= form.label :type %>
     </div>
     <div class="form-element space-y-2">
-      <%= form.collection_check_boxes :type, GooglePlacesApiType.all, :display_name, :display_name do |b| %>
-          <!-- 引数として指定しているdisplay_nameのうち、前者(option要素のvalue属性に指定するもの)は不要。でも今の状態で消すと引数が3つになり、collection_selectは引数を4〜６取るものなのでエラーが起きてしまう。従い、差し当たり残してあるが追々消す -->
+      <%= form.collection_check_boxes :type, GooglePlacesApiType.all, :name, :display_name, include_hidden: false do |b| %>
         <div class="flex items-center">
           <%= b.check_box(class: "form-checkbox h-5 w-5 text-indigo-600") %>
           <%= b.label(class: "ml-2 text-gray-700") %>
