@@ -1,10 +1,10 @@
 <%= form_with model: @user_selection, url: searches_path, local: true do |form| %>
   <div class="my-5">
     <div class="form-element">
-      <%= form.label :type %>
+      <%= form.label :type, "今日どこに行ってたんだい？" %>
     </div>
     <div class="form-element space-y-2">
-      <%= form.collection_check_boxes :type, GooglePlacesApiType.all, :name, :display_name, include_hidden: false do |b| %>
+      <%= form.collection_check_boxes :type, GooglePlacesApiType.all, :name, :display_name, { include_hidden: false } do |b| %>
         <div class="flex items-center">
           <%= b.check_box(class: "form-checkbox h-5 w-5 text-indigo-600") %>
           <%= b.label(class: "ml-2 text-gray-700") %>
@@ -15,11 +15,10 @@
   
   <div class="my-5">
     <div class="form-element">
-      <%= form.label :feeling %>
+      <%= form.label :feeling, "今、どんな気分だい？" %>
     </div>
     <div class="form-element space-y-2">
       <%= form.collection_radio_buttons :feeling, Feeling.all, :name, :name do |b| %>
-        <!-- ここの引数の2つのnameも上と同じ。 -->
         <div class="flex items-center">
           <%= b.radio_button(class: "form-radio h-5 w-5 text-indigo-600") %>
           <%= b.label(class: "ml-2 text-gray-700") %>
@@ -27,8 +26,17 @@
       <% end %>
     </div>
   </div>
+
+  <div class="my-5">
+    <div class="form-element">
+      <%= form.label :drive_time, "どのくらい走りたいんだい？" %>
+    </div>
+    <div class="form-element space-y-2">
+      <%= form.select :drive_time, options_for_select(@user_selection.drive_time_options), { include_blank: '選択してください' }, class: "form-select block w-full mt-1"  %>
+    </div>
+  </div>
   
-  <div class="form-element mt-3">
+  <div class="form-element my-5">
     <%= form.submit "次へ", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
   </div>
 <% end %>

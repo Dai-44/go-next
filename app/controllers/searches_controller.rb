@@ -17,6 +17,6 @@ class SearchesController < ApplicationController
 
   private
     def user_selection_params
-      params.require(:user_selection_form).permit(:feeling, type: [])
+      params.require(:user_selection_form).permit(:feeling, :drive_time, type: [])
     end
 end
