@@ -10,8 +10,8 @@ class SearchesController < ApplicationController
     @user_selection = UserSelectionForm.new(user_selection_params)
     if @user_selection.valid?
       request_params = @user_selection.to_request_params
-      redirect_to root_path
       # 処理成功後は、仮でルートパスへ飛ばしておく。
+      redirect_to root_path
     else
       render :new
     end

@@ -3,7 +3,9 @@ class UserSelectionForm
   include ActiveModel::Attributes
   attr_reader :drive_time_options
   
-  attribute :type, :string
+  # このFormオブジェクトの各属性はPlaces APIへのリクエストに用いる値(及びその生成元になる値)を扱うため、予期せぬエラーを防ぐ意味でも型は固定されている方がより望ましい。
+  # カスタム型のStringArrayを別途定義してtype属性の型として指定することで、type属性を配列形式に限定したかったが、実装中のエラーを解決できなかったので後に対応する。
+  attribute :type
   attribute :feeling, :integer
   attribute :drive_time, :integer
 
