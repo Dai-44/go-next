@@ -7,12 +7,12 @@ class UserSelectionForm
   # カスタム型のStringArrayを別途定義してtype属性の型として指定することで、type属性を配列形式に限定したかったが、実装中のエラーを解決できなかったので後に対応する。
   attribute :type
   attribute :feeling, :integer
-  attribute :drive_time, :integer
+  attribute :drive_range, :integer
 
   with_options presence: true do
     validates :type
     validates :feeling
-    validates :drive_time
+    validates :drive_range
   end
 
   def initialize(attributes = {})
@@ -41,7 +41,7 @@ class UserSelectionForm
     params_hash = {}
     params_hash[:included_types] = to_types(self.feeling)
     params_hash[:excluded_primary_types] = self.type
-    params_hash[:radius] = self.drive_time
+    params_hash[:radius] = self.drive_range
     params_hash
   end
 

@@ -29,10 +29,10 @@
 
   <div class="my-5">
     <div class="form-element">
-      <%= form.label :drive_time, "どのくらい走りたいか選ぶところ" %>
+      <%= form.label :drive_range, "どのくらい走りたいか選ぶところ" %>
     </div>
     <div class="form-element space-y-2">
-      <%= form.select :drive_time, options_for_select(@user_selection.drive_time_options), { include_blank: '選択してください' }, class: "form-select block w-full mt-1"  %>
+      <%= form.select :drive_range, options_for_select(@user_selection.drive_time_options), { include_blank: '選択してください' }, class: "form-select block w-full mt-1"  %>
     </div>
   </div>
   
