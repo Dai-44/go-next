@@ -4,7 +4,7 @@ class UserSelectionForm
   attr_reader :drive_time_options
   
   attribute :type, :string
-  attribute :feeling, :string
+  attribute :feeling, :integer
   attribute :drive_time, :integer
 
   with_options presence: true do
@@ -33,4 +33,18 @@ class UserSelectionForm
   #    '1.5時間〜2時間' => 56,
   #    '2時間〜2.5時間' => 70
   #  }.freeze
+  # 定数を外部(viewファイルなど)から呼び出せるように、呼び出し用のメソッドも定義する。
+
+  def to_request_params
+    params_hash = {}
+    params_hash[:included_types] = to_types(self.feeling)
+    params_hash[:excluded_primary_types] = self.type
+    params_hash[:radius] = self.drive_time
+    params_hash
+  end
+
+  private
+    def to_types(feeling_id)
+      GooglePlacesApiType.by_feeling(feeling_id).pluck(:name)
+    end
 end

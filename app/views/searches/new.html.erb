@@ -1,7 +1,7 @@
 <%= form_with model: @user_selection, url: searches_path, local: true do |form| %>
   <div class="my-5">
     <div class="form-element">
-      <%= form.label :type, "今日どこに行ってたんだい？" %>
+      <%= form.label :type, "今日どこに行ってたか選ぶところ" %>
     </div>
     <div class="form-element space-y-2">
       <%= form.collection_check_boxes :type, GooglePlacesApiType.all, :name, :display_name, { include_hidden: false } do |b| %>
@@ -15,10 +15,10 @@
   
   <div class="my-5">
     <div class="form-element">
-      <%= form.label :feeling, "今、どんな気分だい？" %>
+      <%= form.label :feeling, "今、どんな気分か選ぶところ" %>
     </div>
     <div class="form-element space-y-2">
-      <%= form.collection_radio_buttons :feeling, Feeling.all, :name, :name do |b| %>
+      <%= form.collection_radio_buttons :feeling, Feeling.all, :id, :name do |b| %>
         <div class="flex items-center">
           <%= b.radio_button(class: "form-radio h-5 w-5 text-indigo-600") %>
           <%= b.label(class: "ml-2 text-gray-700") %>
@@ -29,7 +29,7 @@
 
   <div class="my-5">
     <div class="form-element">
-      <%= form.label :drive_time, "どのくらい走りたいんだい？" %>
+      <%= form.label :drive_time, "どのくらい走りたいか選ぶところ" %>
     </div>
     <div class="form-element space-y-2">
       <%= form.select :drive_time, options_for_select(@user_selection.drive_time_options), { include_blank: '選択してください' }, class: "form-select block w-full mt-1"  %>
