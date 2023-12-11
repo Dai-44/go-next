@@ -1,7 +1,8 @@
 <%= form_with model: @user_selection, url: searches_path, local: true do |form| %>
+  <%= render 'shared/error_messages', object: form.object %>
   <div class="my-5">
     <div class="form-element">
-      <%= form.label :type, "今日どこに行ってたか選ぶところ" %>
+      <%= form.label :type, t('.select_visited_place') %>
     </div>
     <div class="form-element space-y-2">
       <%= form.collection_check_boxes :type, GooglePlacesApiType.all, :name, :display_name, { include_hidden: false } do |b| %>
@@ -15,7 +16,7 @@
   
   <div class="my-5">
     <div class="form-element">
-      <%= form.label :feeling, "今、どんな気分か選ぶところ" %>
+      <%= form.label :feeling, t('.select_feeling') %>
     </div>
     <div class="form-element space-y-2">
       <%= form.collection_radio_buttons :feeling, Feeling.all, :id, :name do |b| %>
@@ -29,7 +30,7 @@
 
   <div class="my-5">
     <div class="form-element">
-      <%= form.label :drive_range, "どのくらい走りたいか選ぶところ" %>
+      <%= form.label :drive_range, t('.select_drive_range') %>
     </div>
     <div class="form-element space-y-2">
       <%= form.select :drive_range, options_for_select(@user_selection.drive_time_options), { include_blank: '選択してください' }, class: "form-select block w-full mt-1"  %>
@@ -37,6 +38,6 @@
   </div>
   
   <div class="form-element my-5">
-    <%= form.submit "次へ", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+    <%= form.submit t('.search'), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
   </div>
 <% end %>
