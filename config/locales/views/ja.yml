@@ -1,0 +1,8 @@
+ja:
+  searches:
+    new:
+      select_visited_place: '今日どこに行ってたか選ぶところ'
+      select_feeling: '今、どんな気分か選ぶところ'
+      select_drive_range: 'どのくらい走りたいか選ぶところ'
+      search: '検索'
+    
