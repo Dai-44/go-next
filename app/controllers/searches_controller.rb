@@ -11,8 +11,10 @@ class SearchesController < ApplicationController
     if @user_selection.valid?
       request_params = @user_selection.to_request_params
       # 処理成功後は、仮でルートパスへ飛ばしておく。
+      flash[:success] = 'テスト'
       redirect_to root_path
     else
+      flash.now[:danger] = 'テスト'
       render :new
     end
   end
