@@ -2,7 +2,7 @@
   <h1 class="font-bold text-red-500 text-5xl font-mono mb-8">トップページ</h1>
 </div>
 <div class="text-center">
-  <%= link_to '行き先を探す', '#', id: 'search-location', class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block mt-4' %>
+  <%= link_to '行き先を探す', new_search_path, id: 'search-location', class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block mt-4' %>
 </div>
 
 <script>
@@ -11,20 +11,16 @@
     event.preventDefault(); // link_toによるデフォルトの画面遷移を防止
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        showPosition(position);
+        sessionStorage.setItem('latitude', position.coords.latitude);
+        sessionStorage.setItem('longitude', position.coords.longitude);
         // 位置情報取得後に指定URLへ遷移
-        window.location.href = '<%= '#' %>';
+        window.location.href = '<%= new_search_path %>';
       }, showError);
     } else {
       // ここは、とりあえずは画面上にアラート的な感じでメッセージが表示されればOKとする。
       console.log("Geolocation is not supported by this browser.");
     }
   });
-
-  function showPosition(position) {
-    console.log("Latitude: " + position.coords.latitude +
-    "\\nLongitude: " + position.coords.longitude);
-  }
 
   function showError(error) {
     switch(error.code) {

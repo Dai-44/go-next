@@ -1,5 +1,7 @@
 <%= form_with model: @user_selection, url: searches_path, local: true do |form| %>
   <%= render 'shared/error_messages', object: form.object %>
+  <%= form.hidden_field :latitude, id: 'hidden_latitude' %>
+  <%= form.hidden_field :longitude, id: 'hidden_longitude' %>
   <div class="my-5">
     <div class="form-element">
       <%= form.label :type, t('.select_visited_place') %>
@@ -41,3 +43,13 @@
     <%= form.submit t('.search'), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
   </div>
 <% end %>
+
+<script>
+  document.addEventListener('DOMContentLoaded', (event) => {
+  const latitude = sessionStorage.getItem('latitude');
+  const longitude = sessionStorage.getItem('longitude');
+
+  document.getElementById('hidden_latitude').value = latitude;
+  document.getElementById('hidden_longitude').value = longitude;
+  });
+</script>
