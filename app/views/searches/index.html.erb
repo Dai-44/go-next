@@ -7,14 +7,11 @@
 
 <script>
   const locationButton = document.getElementById('search-location')
-  locationButton.addEventListener('click', (event) => {
-    event.preventDefault(); // link_toによるデフォルトの画面遷移を防止
+  locationButton.addEventListener('click', () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         sessionStorage.setItem('latitude', position.coords.latitude);
         sessionStorage.setItem('longitude', position.coords.longitude);
-        // 位置情報取得後に指定URLへ遷移
-        window.location.href = '<%= new_search_path %>';
       }, showError);
     } else {
       // ここは、とりあえずは画面上にアラート的な感じでメッセージが表示されればOKとする。
