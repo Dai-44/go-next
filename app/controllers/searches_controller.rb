@@ -10,11 +10,12 @@ class SearchesController < ApplicationController
     @user_selection = UserSelectionForm.new(user_selection_params)
     if @user_selection.valid?
       request_params = @user_selection.to_request_params
+      binding.pry
       # 処理成功後は、仮でルートパスへ飛ばしておく。
-      flash[:success] = 'テスト'
+      flash[:success] = '成功'
       redirect_to root_path
     else
-      flash.now[:danger] = 'テスト'
+      flash.now[:danger] = '失敗'
       render :new
     end
   end
@@ -22,6 +23,6 @@ class SearchesController < ApplicationController
   private
 
   def user_selection_params
-    params.require(:user_selection_form).permit(:feeling, :drive_range, type: [])
+    params.require(:user_selection_form).permit(:feeling, :drive_range, :latitude, :longitude, type: [])
   end
 end
