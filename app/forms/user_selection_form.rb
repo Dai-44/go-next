@@ -8,11 +8,16 @@ class UserSelectionForm
   attribute :type
   attribute :feeling, :integer
   attribute :drive_range, :integer
+  attribute :latitude, :float
+  attribute :longitude, :float
+
 
   with_options presence: true do
     validates :type
     validates :feeling
     validates :drive_range
+    validates :latitude
+    validates :longitude
   end
 
   def initialize(attributes = {})
@@ -42,6 +47,8 @@ class UserSelectionForm
     params_hash[:included_types] = to_types(self.feeling)
     params_hash[:excluded_primary_types] = self.type
     params_hash[:radius] = self.drive_range
+    params_hash[:latitude] = self.latitude
+    params_hash[:longitude] = self.longitude
     params_hash
   end
 
