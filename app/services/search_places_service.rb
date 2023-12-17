@@ -4,7 +4,8 @@ class SearchPlacesService
 
   def self.search_places(params)
     uri = URI(API_ENDPOINT)
-    field_mask = ['places.types', 'places.addressComponents', 'places.location', 'places.rating', 'places.googleMapsUri', 'places.websiteUri', 'places.businessStatus', 'places.userRatingCount', 'places.displayName', 'places.currentOpeningHours','places.primaryType', 'places.restroom'].join(',')
+    # メソッド内部の可読性向上のため、field_maskの生成はprivateメソッドとして定義する
+    field_mask = build_field_mask
     headers = { 'Content-Type' => 'application/json', 'X-Goog-Api-Key' => API_KEY, 'X-Goog-FieldMask' => field_mask }
     body = {
       includedTypes: params[:included_types],
@@ -25,5 +26,16 @@ class SearchPlacesService
 
     response = http.request(request)
     JSON.parse(response.body)
+  end
+
+  private
+  def self.build_field_mask
+    [
+      'places.types', 'places.addressComponents', 'places.location', 
+      'places.rating', 'places.googleMapsUri', 'places.websiteUri', 
+      'places.businessStatus', 'places.userRatingCount', 
+      'places.displayName', 'places.currentOpeningHours', 
+      'places.primaryType', 'places.restroom'
+    ].join(',')
   end
 end

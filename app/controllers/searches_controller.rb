@@ -11,7 +11,6 @@ class SearchesController < ApplicationController
     if @user_selection.valid?
       request_params = @user_selection.to_request_params
       response = SearchPlacesService.search_places(request_params)
-      binding.pry
       # 処理成功後は、仮でルートパスへ飛ばしておく。
       flash[:success] = '成功'
       redirect_to root_path
