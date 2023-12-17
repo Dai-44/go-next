@@ -8,12 +8,12 @@ class SearchPlacesService
     field_mask = build_field_mask
     headers = { 'Content-Type' => 'application/json', 'X-Goog-Api-Key' => API_KEY, 'X-Goog-FieldMask' => field_mask }
     body = {
-      includedTypes: params[:included_types],
-      excludedPrimaryTypes: params[:excluded_primary_types],
+      includedTypes: params['included_types'],
+      excludedPrimaryTypes: params['excluded_primary_types'],
       locationRestriction: {
         circle: {
-          center: { latitude: params[:latitude], longitude: params[:longitude] },
-          radius: params[:radius]
+          center: { latitude: params['latitude'], longitude: params['longitude'] },
+          radius: params['radius']
         }
       },
       languageCode: 'ja'
