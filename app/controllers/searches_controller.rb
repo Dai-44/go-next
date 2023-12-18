@@ -24,6 +24,7 @@ class SearchesController < ApplicationController
   end
 
   private
+
   def user_selection_params
     params.require(:user_selection_form).permit(:feeling, :drive_range, :latitude, :longitude, type: [])
   end

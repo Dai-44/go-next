@@ -1,6 +1,7 @@
 <div class="text-center">
   <h1 class="font-bold text-red-500 text-3xl font-mono mb-8">検索結果</h1>
 </div>
+
 <div class="text-center">
   <ul class="text-center flex flex-col items-center justify-center">
     <% @response['places'].each do |place| %>
@@ -10,6 +11,52 @@
     <% end %>
   </ul>
 </div>
+
+<!-- マップの表示領域となる要素を定義。 -->
+<div class="flex justify-center items-center">
+  <div id="map" class="h-72 w-96 my-5"></div>
+</div> 
+
 <div class="text-center my-5">
   <p><%= link_to 'トップへ戻る', root_path, class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-1/4 my-2" %></p>
 </div>
+
+<script>
+  // Searches#resultから受け取った各場所のデータ(@response['places'])を変数に格納
+  const places = <%= @response['places'].to_json.html_safe %>;
+
+  function initMap() {
+    // ブラウザのセッションストレージから現在地の緯度と経度を取得
+    const latitude = parseFloat(sessionStorage.getItem('latitude'));
+    const longitude = parseFloat(sessionStorage.getItem('longitude'));
+
+    // 取得した現在地の緯度と経度を、マップの中心点の指定時に用いる定数に設定
+    const mapCenter = { lat: latitude, lng: longitude };
+
+    // viewの'map'要素に表示する地図を作成
+    const map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 8,
+      center: mapCenter
+    });
+
+    // 検索結果として表示する各場所に対して繰り返し処理を定義し、マーカーを作成
+    places.forEach(function(place) {
+      const markerPosition = {
+        lat: parseFloat(place['location']['latitude']),
+        lng: parseFloat(place['location']['longitude'])
+      }
+
+      // マーカーを作成
+      const marker = new google.maps.Marker({
+        position: markerPosition,
+        map: map,
+        title: place['displayName']['text']
+      });
+    });
+  }
+</script>
+
+<!-- asyncの必要性は、この後の実装していく中で検討する。非同期でマップ作成する方が良いのか。 -->
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=<%= Rails.application.credentials.api_key&.fetch(:google) %>&callback=initMap">
+</script>
