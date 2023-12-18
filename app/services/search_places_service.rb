@@ -28,8 +28,6 @@ class SearchPlacesService
     JSON.parse(response.body)
   end
 
-  private_class_method :build_field_mask  # クラスメソッドであるbuild_field_maskをプライベート化。privateキーワードはインスタンスのコンテキストに基づいて動作するもので、クラスメソッドには適用されないため左記の記載としている。
-
   def self.build_field_mask
     [
       'places.types', 'places.addressComponents', 'places.location',
@@ -39,4 +37,6 @@ class SearchPlacesService
       'places.primaryType', 'places.restroom'
     ].join(',')
   end
+
+  private_class_method :build_field_mask # クラスメソッドであるbuild_field_maskをプライベート化。privateキーワードはインスタンスのコンテキストに基づいて動作するもので、クラスメソッドには適用されないため左記の記載としている。
 end
