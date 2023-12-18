@@ -22,6 +22,9 @@
 </div>
 
 <script>
+  // Searches#resultから受け取った各場所のデータ(@response['places'])を変数に格納
+  const places = <%= @response['places'].to_json.html_safe %>;
+
   function initMap() {
     // ブラウザのセッションストレージから現在地の緯度と経度を取得
     const latitude = parseFloat(sessionStorage.getItem('latitude'));
@@ -30,10 +33,25 @@
     // 取得した現在地の緯度と経度を、マップの中心点の指定時に用いる定数に設定
     const mapCenter = { lat: latitude, lng: longitude };
 
-    // 地図を表示
+    // viewの'map'要素に表示する地図を作成
     const map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 9,
+      zoom: 8,
       center: mapCenter
+    });
+
+    // 検索結果として表示する各場所に対して繰り返し処理を定義し、マーカーを作成
+    places.forEach(function(place) {
+      const markerPosition = {
+        lat: parseFloat(place['location']['latitude']),
+        lng: parseFloat(place['location']['longitude'])
+      }
+
+      // マーカーを作成
+      const marker = new google.maps.Marker({
+        position: markerPosition,
+        map: map,
+        title: place['displayName']['text']
+      });
     });
   }
 </script>
