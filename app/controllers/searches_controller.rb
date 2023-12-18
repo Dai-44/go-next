@@ -21,7 +21,6 @@ class SearchesController < ApplicationController
   def result
     request_params = session[:request_params]
     @response = SearchPlacesService.search_places(request_params)
-    binding.pry
   end
 
   private

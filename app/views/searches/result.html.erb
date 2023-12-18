@@ -1,0 +1,15 @@
+<div class="text-center">
+  <h1 class="font-bold text-red-500 text-3xl font-mono mb-8">検索結果</h1>
+</div>
+<div class="text-center">
+  <ul class="text-center flex flex-col items-center justify-center">
+    <% @response['places'].each do |place| %>
+      <li class= "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-1/4 my-2">
+        <%= place['displayName']['text'] %>
+      </li>
+    <% end %>
+  </ul>
+</div>
+<div class="text-center my-5">
+  <p><%= link_to 'トップへ戻る', root_path, class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-1/4 my-2" %></p>
+</div>
