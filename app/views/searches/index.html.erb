@@ -13,7 +13,8 @@
       navigator.geolocation.getCurrentPosition((position) => {
         sessionStorage.setItem('latitude', position.coords.latitude);
         sessionStorage.setItem('longitude', position.coords.longitude);
-        window.location.href = "<%= new_search_path %>"; // 現在地情報の取得後に画面遷移する
+        window.location.href = "<%= new_search_path %>"; 
+        // 現在地情報の取得後に画面遷移する。クリックから画面遷移まで4秒ほど待機時間発生してしまっているので、対策考える。
       }, showError);
     } else {
       // ここは、とりあえずは画面上にアラート的な感じでメッセージが表示されればOKとする。
