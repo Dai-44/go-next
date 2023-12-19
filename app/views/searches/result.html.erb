@@ -39,6 +39,8 @@
       center: mapCenter
     });
 
+    let openInfoWindow = null; // 現在開いている情報ウィンドウを変数で管理
+
     // 検索結果として表示する各場所に対して繰り返し処理を定義し、マーカーを作成
     places.forEach(function(place) {
       const markerPosition = {
@@ -50,8 +52,34 @@
       const marker = new google.maps.Marker({
         position: markerPosition,
         map: map,
-        title: place['displayName']['text']
       });
+
+      // 情報ウィンドウに表示する内容を定義する
+      const infowindowContent = `
+        <div class="text-center">
+        <h1 class="font-bold">${place['displayName']['text']}</h1>
+        <div>
+        <p>${place['primaryType']}</p>
+        <a href="${place['websiteUri']}">サイトURL</a>
+        </div>
+        </div>`
+
+      // 情報ウィンドウオブジェクトを作成
+      const infowindow = new google.maps.InfoWindow({
+        content: infowindowContent
+      })
+
+      marker.addListener('click', () => {
+        // 別のマーカーがクリックされた際に、既に開いている情報ウィンドウを閉じる
+        if (openInfoWindow) {
+          openInfoWindow.close();
+        }
+        infowindow.open({
+          anchor: marker,
+          map: map
+        });
+        openInfoWindow = infowindow // 開いた情報ウィンドウを変数に入れて管理
+      })
     });
   }
 </script>
