@@ -52,12 +52,21 @@
       const marker = new google.maps.Marker({
         position: markerPosition,
         map: map,
-        title: place['displayName']['text']
       });
+
+      // 情報ウィンドウに表示する内容を定義する
+      const infowindowContent = `
+        <div class="text-center">
+        <h1 class="font-bold">${place['displayName']['text']}</h1>
+        <div>
+        <p>${place['primaryType']}</p>
+        <a href="${place['websiteUri']}">サイトURL</a>
+        </div>
+        </div>`
 
       // 情報ウィンドウオブジェクトを作成
       const infowindow = new google.maps.InfoWindow({
-        content: 'Information'
+        content: infowindowContent
       })
 
       marker.addListener('click', () => {
