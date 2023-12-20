@@ -60,9 +60,9 @@
         <h1 class="font-bold">${place['displayName']['text']}</h1>
         <div>
         <p>${place['primaryType']}</p>
-        <p><a href="${place['websiteUri']}">サイトURL</a></p>
+        <p><a href="${place['websiteUri']}" target="_blank" rel="noopener noreferrer">サイトURL</a></p>
         <p><a href="yjcarnavi://navi/select?lat=${place['location']['latitude']}&lon=${place['location']['longitude']}">ナビを起動 (Yahoo!カーナビ)</a></p>
-        <p><a href="https://www.google.com/maps/dir/?api=1&origin=${latitude}, ${longitude}&destination=${place['location']['latitude']}, ${place['location']['longitude']}" target="_blank" rel="noopener noreferrer" >ナビを起動 (Google Map)</a></p>
+        <p><a href="https://www.google.com/maps/dir/?api=1&origin=${latitude}, ${longitude}&destination=${place['location']['latitude']}, ${place['location']['longitude']}" target="_blank" rel="noopener noreferrer">ナビを起動 (Google Map)</a></p>
         </div>
         </div>`
       // ナビ起動リンク押されたとき、外部サービスに位置情報を共有する旨のアラート出す方が良いかも。
