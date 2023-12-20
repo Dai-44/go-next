@@ -54,16 +54,19 @@
         map: map,
       });
 
-      // 情報ウィンドウに表示する内容を定義する
+      // 情報ウィンドウの表示内容を定義
       const infowindowContent = `
         <div class="text-center">
         <h1 class="font-bold">${place['displayName']['text']}</h1>
         <div>
         <p>${place['primaryType']}</p>
-        <a href="${place['websiteUri']}">サイトURL</a>
-        <a href="yjcarnavi://navi/select?lat=${place['location']['latitude']}&lon=${place['location']['longitude']}">ここに行く</a>
+        <p><a href="${place['websiteUri']}">サイトURL</a></p>
+        <p><a href="yjcarnavi://navi/select?lat=${place['location']['latitude']}&lon=${place['location']['longitude']}">ナビを起動 (Yahoo!カーナビ)</a></p>
+        <p><a href="https://www.google.com/maps/dir/?api=1&origin=${latitude}, ${longitude}&destination=${place['location']['latitude']}, ${place['location']['longitude']}">ナビを起動 (Google Map)</a></p>
         </div>
         </div>`
+      // ナビ起動リンク押されたとき、外部サービスに位置情報を共有する旨のアラート出す方が良いかも。
+      // ドライブ中の検索だと、ナビ起動時の緯度経度は検索時から若干変わってる可能性あるため、ナビ起動直前に改めて緯度経度取得しても良いかも。
 
       // 情報ウィンドウオブジェクトを作成
       const infowindow = new google.maps.InfoWindow({
