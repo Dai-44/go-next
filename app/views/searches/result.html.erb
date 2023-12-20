@@ -42,6 +42,7 @@
     let openInfoWindow = null; // 現在開いている情報ウィンドウを変数で管理
 
     // 検索結果として表示する各場所に対して繰り返し処理を定義し、マーカーを作成
+    // 繰り返し処理の中で各マーカーに紐づく情報ウィンドウも作成し、マーカークリック時に表示されるようイベントハンドラを定義
     places.forEach(function(place) {
       const markerPosition = {
         lat: parseFloat(place['location']['latitude']),
@@ -54,6 +55,10 @@
         map: map,
       });
 
+      // 情報ウィンドウ内部の、Googleマップでのルート検索リンク(「ルート検索 (Google Map)」)には、現在地を取得するクリックイベントを設定している。
+      // このクリックイベント実行のために、それぞれのルート検索リンクには動的な一意のIDを付与する必要があるため、以下で生成する。
+      const uniqueId = `googleMapsLink-${place['location']['latitude']}-${place['location']['longitude']}`;
+
       // 情報ウィンドウの表示内容を定義
       const infowindowContent = `
         <div class="text-center">
@@ -61,20 +66,22 @@
         <div>
         <p>${place['primaryType']}</p>
         <p><a href="${place['websiteUri']}" target="_blank" rel="noopener noreferrer">サイトURL</a></p>
-        <p><a href="yjcarnavi://navi/select?lat=${place['location']['latitude']}&lon=${place['location']['longitude']}">ナビを起動 (Yahoo!カーナビ)</a></p>
-        <p><a href="https://www.google.com/maps/dir/?api=1&origin=${latitude}, ${longitude}&destination=${place['location']['latitude']}, ${place['location']['longitude']}" target="_blank" rel="noopener noreferrer">ナビを起動 (Google Map)</a></p>
+        <p><a href="yjcarnavi://navi/select?lat=${place['location']['latitude']}&lon=${place['location']['longitude']}">ルート検索 (Yahoo!カーナビ)</a></p>
+        <p><a href="#" id="${uniqueId}" data-lat="${place['location']['latitude']}" data-lng="${place['location']['longitude']}">ルート検索 (Google Map)</a></p>
         </div>
         </div>`
       // ナビ起動リンク押されたとき、外部サービスに位置情報を共有する旨のアラート出す方が良いかも。
-      // ドライブ中の検索だと、ナビ起動時の緯度経度は検索時から若干変わってる可能性あるため、ナビ起動直前に改めて緯度経度取得しても良いかも。
+      // 走行中にルート検索をする場合、移動によって、ルート検索時の緯度経度は検索時に取得した緯度経度から若干変わっている可能性がある。
+      // そのため、以下でルート探索のリンクにクリックイベントを設定(googleMapsLink.addEventListener)して、改めて緯度と経度を取得した上でルート検索を実行している。
+      // Yahoo!カーナビの方は、リンクをクリックしてアプリに遷移すると、自動的にルート探索時の現在地が出発地点として設定される。そのため、本アプリでの現在地取得は不要。
 
-      // 情報ウィンドウオブジェクトを作成
+      // 上部で定義した表示内容を用いて、情報ウィンドウオブジェクトを作成
       const infowindow = new google.maps.InfoWindow({
         content: infowindowContent
       })
 
       marker.addListener('click', () => {
-        // 別のマーカーがクリックされた際に、既に開いている情報ウィンドウを閉じる
+        // マーカーがクリックされた際、既に開いている情報ウィンドウがあれば閉じる
         if (openInfoWindow) {
           openInfoWindow.close();
         }
@@ -83,6 +90,30 @@
           map: map
         });
         openInfoWindow = infowindow // 開いた情報ウィンドウを変数に入れて管理
+
+        // 情報ウィンドウ内の、Googleマップでのルート検索リンクのクリックイベントを定義
+        // Googleマップでのルート検索リンク(uniqueIdをidにもつ要素)は、infowindowのcontentに指定されているinfowindowContent内にある。infowindowContentはinfowindow.openで情報ウィンドウが開かれたタイミングで、要素としてDOMに追加される。
+        // しかし実際の動作では、DOMの変更は非同期で行われることも多く、infowindow.openの実行後ただちにinfowindowContentがDOMに追加されるとは限らず、適切にDOM
+        google.maps.event.addListenerOnce(infowindow, 'domready', () => {
+          const googleMapsLink = document.getElementById(uniqueId);
+          googleMapsLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            const destinationLat = event.currentTarget.getAttribute('data-lat'); // イベントに関連する多くの情報を含むeventオブジェクトのcurrentTargetプロパティ(ここでは、id: googleMapsLink が設定されたaタグの要素)のgetAttributeメソッドを実行している
+            const destinationLng = event.currentTarget.getAttribute('data-lng');
+
+            // ユーザーの現在地を改めて取得
+            navigator.geolocation.getCurrentPosition((position) => {
+              const originLat = position.coords.latitude;
+              const originLng = position.coords.longitude;
+
+              // Googleマップのルート探索URLを生成し、別タブで開く
+              const googleMapsUri = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLng}&destination=${destinationLat},${destinationLng}`;
+              window.open(googleMapsUri, '_blank', 'noopener,noreferrer');
+            }, (error) => {
+              alert('現在地を取得できませんでした。');
+            });
+          });
+        });
       })
     });
   }
