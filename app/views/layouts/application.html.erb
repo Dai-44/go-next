@@ -11,10 +11,12 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <main class="container mx-auto mt-28 px-5">
+  <body class="flex flex-col min-h-screen">
+    <%= render 'shared/header' %>
+    <main class="container mx-auto mt-28 px-5 mb-8 flex-grow">
       <%= render 'shared/flash_message' %>
       <%= yield %>
     </main>
+    <%= render 'shared/footer' %>
   </body>
 </html>
