@@ -45,6 +45,8 @@
 <% end %>
 
 <script>
+  // ページのDOM要素が全て読み込まれたら、ブラウザのセッションストレージに格納されている緯度と経度のデータを取得し、上記フォーム内の該当するhidden_fieldに設定する処理
+  // 現在地の緯度と経度のデータは、ユーザーがフォームで選択した内容とまとめてコントローラに送って処理したいため、hidden_fieldに設定する
   document.addEventListener('DOMContentLoaded', (event) => {
   const latitude = sessionStorage.getItem('latitude');
   const longitude = sessionStorage.getItem('longitude');

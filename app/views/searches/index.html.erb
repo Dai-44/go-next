@@ -9,9 +9,10 @@
   const locationButton = document.getElementById('search-location')
   locationButton.addEventListener('click', (event) => {
     event.preventDefault(); // デフォルトでの画面遷移をキャンセル
+    // ブラウザがGeolocation APIをサポートしている場合、現在地の緯度と経度を取得。
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        sessionStorage.setItem('latitude', position.coords.latitude);
+        sessionStorage.setItem('latitude', position.coords.latitude); // 現在地取得後の遷移先であるsearches/newに、取得した緯度と経度の情報を渡す必要があるため、ブラウザのセッションストレージに格納しておく。
         sessionStorage.setItem('longitude', position.coords.longitude);
         window.location.href = "<%= new_search_path %>"; 
         // 現在地情報の取得後に画面遷移する。クリックから画面遷移まで4秒ほど待機時間発生してしまっているので、対策考える。
