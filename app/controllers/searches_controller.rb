@@ -9,7 +9,7 @@ class SearchesController < ApplicationController
   def create
     @user_selection = UserSelectionForm.new(user_selection_params)
     if @user_selection.valid?
-      session[:request_params] = @user_selection.to_request_params
+      session[:request_params] = @user_selection.to_request_params # to_request_paramsはUserSelectionForm内で定義している
       flash[:success] = '成功'
       redirect_to result_searches_path
     else
@@ -19,8 +19,7 @@ class SearchesController < ApplicationController
   end
 
   def result
-    request_params = session[:request_params]
-    @response = SearchPlacesService.search_places(request_params)
+    @response = SearchPlacesService.search_places(session[:request_params])
   end
 
   private

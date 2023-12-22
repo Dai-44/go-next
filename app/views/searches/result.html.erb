@@ -33,7 +33,7 @@
     // 取得した現在地の緯度と経度を、マップの中心点の指定時に用いる定数に設定
     const mapCenter = { lat: latitude, lng: longitude };
 
-    // viewの'map'要素に表示する地図を作成
+    // 'map'をidに持つ要素に表示する地図を作成
     const map = new google.maps.Map(document.getElementById('map'), {
       zoom: 9,
       center: mapCenter
@@ -91,9 +91,9 @@
         });
         openInfoWindow = infowindow // 開いた情報ウィンドウを変数に入れて管理
 
-        // 情報ウィンドウ内の、Googleマップでのルート検索リンクのクリックイベントを定義
+        // 以下で、情報ウィンドウ内の、Googleマップでのルート検索リンクのクリックイベントを定義
         // Googleマップでのルート検索リンク(uniqueIdをidにもつ要素)は、infowindowのcontentに指定されているinfowindowContent内にある。infowindowContentはinfowindow.openで情報ウィンドウが開かれたタイミングで、要素としてDOMに追加される。
-        // しかし実際の動作では、DOMの変更は非同期で行われることも多く、infowindow.openの実行後ただちにinfowindowContentがDOMに追加されるとは限らず、適切にDOM
+        // しかし実際の動作では、DOMの変更は非同期で行われることも多く、infowindow.openの実行後ただちにinfowindowContentがDOMに追加されるとは限らない。infowindowContentがDOM要素に追加された後にgetElementByIdで要素を確実に取得するため、Maps JavaScript APIのInfoWindowオブジェクトに定義されているdomreadyイベントを利用したイベントリスナーを設定する。
         google.maps.event.addListenerOnce(infowindow, 'domready', () => {
           const googleMapsLink = document.getElementById(uniqueId);
           googleMapsLink.addEventListener('click', (event) => {
