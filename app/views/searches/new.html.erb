@@ -9,7 +9,7 @@
     <div class="form-element space-y-2 flex flex-col justify-center items-center">
       <%= form.collection_check_boxes :type, GooglePlacesApiType.all, :name, :display_name, { include_hidden: false } do |b| %>
         <div class="flex items-center">
-          <%= b.check_box(class: "hidden") %>
+          <%= b.check_box(class: "form-checkbox hidden") %>
           <%= b.label(class: "flex items-center justify-center label-color hover:bg-cyan-400 text-white font-bold rounded-full h-12 w-48 cursor-pointer ") %>
         </div>
       <% end %>
@@ -23,7 +23,7 @@
     <div class="form-element space-y-2 flex flex-col justify-center items-center">
       <%= form.collection_radio_buttons :feeling, Feeling.all, :id, :name do |b| %>
         <div>
-          <%= b.radio_button(class: "hidden") %>
+          <%= b.radio_button(class: "form-radio hidden") %>
           <%= b.label(class: "flex items-center justify-center label-color  hover:bg-cyan-400 text-white font-bold rounded-full h-12 w-64 cursor-pointer") %>
           <%# label-colorクラスは、ラジオボタンの選択状態に応じて背景色を変えるスタイル。app/assets/application.cssで定義している。 %>
         </div>

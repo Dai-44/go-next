@@ -13,10 +13,12 @@
 
   <body class="flex flex-col min-h-screen">
     <%= render 'shared/header' %>
-    <main class="container bg-cyan-50 mx-auto mt-10 px-5 mb-8 flex-grow">
-      <%= render 'shared/flash_message' %>
-      <%= yield %>
-    </main>
+    <div class="bg-cyan-50 flex-grow">
+      <main class="container mx-auto my-10">
+        <%= render 'shared/flash_message' %>
+        <%= yield %>
+      </main>
+    </div>
     <%= render 'shared/footer' %>
   </body>
 </html>
