@@ -10,10 +10,8 @@ class SearchesController < ApplicationController
     @user_selection = UserSelectionForm.new(user_selection_params)
     if @user_selection.valid?
       session[:request_params] = @user_selection.to_request_params # to_request_paramsはUserSelectionForm内で定義している
-      flash[:success] = '成功'
       redirect_to result_searches_path
     else
-      flash.now[:danger] = '失敗'
       render :new
     end
   end
