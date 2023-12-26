@@ -6,11 +6,11 @@
     <div class="form-element">
       <%= form.label :type, t('.select_visited_place') %>
     </div>
-    <div class="form-element space-y-2">
+    <div class="form-element space-y-2 flex flex-col justify-center items-center">
       <%= form.collection_check_boxes :type, GooglePlacesApiType.all, :name, :display_name, { include_hidden: false } do |b| %>
         <div class="flex items-center">
-          <%= b.check_box(class: "form-checkbox h-5 w-5 text-indigo-600") %>
-          <%= b.label(class: "ml-2 text-gray-700") %>
+          <%= b.check_box(class: "form-checkbox hidden") %>
+          <%= b.label(class: "flex items-center justify-center label-color hover:bg-cyan-400 text-white font-bold rounded-full h-12 w-48 cursor-pointer ") %>
         </div>
       <% end %>
     </div>
@@ -20,11 +20,12 @@
     <div class="form-element">
       <%= form.label :feeling, t('.select_feeling') %>
     </div>
-    <div class="form-element space-y-2">
+    <div class="form-element space-y-2 flex flex-col justify-center items-center">
       <%= form.collection_radio_buttons :feeling, Feeling.all, :id, :name do |b| %>
-        <div class="flex items-center">
-          <%= b.radio_button(class: "form-radio h-5 w-5 text-indigo-600") %>
-          <%= b.label(class: "ml-2 text-gray-700") %>
+        <div>
+          <%= b.radio_button(class: "form-radio hidden") %>
+          <%= b.label(class: "flex items-center justify-center label-color  hover:bg-cyan-400 text-white font-bold rounded-full h-12 w-64 cursor-pointer") %>
+          <%# label-colorクラスは、ラジオボタンの選択状態に応じて背景色を変えるスタイル。app/assets/application.cssで定義している。 %>
         </div>
       <% end %>
     </div>
@@ -34,12 +35,12 @@
     <div class="form-element">
       <%= form.label :drive_range, t('.select_drive_range') %>
     </div>
-    <div class="form-element space-y-2">
-      <%= form.select :drive_range, options_for_select(@user_selection.drive_time_options), { include_blank: '選択してください' }, class: "form-select block w-60 mt-1"  %>
+    <div class="form-element flex justify-center items-center">
+      <%= form.select :drive_range, options_for_select(@user_selection.drive_time_options), { include_blank: '選択してください' }, class: "form-select block w-60 rounded-md shadow-sm bg-white border-2 border-indigo-300 hover:border-indigo-500 focus:border-indigo-400 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 " %>
     </div>
   </div>
   
-  <div class="form-element my-5">
+  <div class="form-element my-5 flex justify-center items-center">
     <%= form.submit t('.search'), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
   </div>
 <% end %>
