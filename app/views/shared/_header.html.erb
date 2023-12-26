@@ -1,5 +1,9 @@
 <header>
-  <nav class='flex items-center bg-gray-100 h-20'>
-    <a href='/' class='inline-block p-5'>トップページ</a>
+  <nav class='flex items-center justify-between bg-gray-100 h-20'>
+    <%= link_to 'トップページ', root_path, class: 'inline-block p-5' %>
+    <div>
+      <%= link_to 'ログイン', '#', class: 'inline-block p-5' %>
+      <%= link_to '新規登録', '#', class: 'inline-block p-5' %>
+    </div>
   </nav>
 </header>
