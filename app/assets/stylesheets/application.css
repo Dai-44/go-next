@@ -14,14 +14,19 @@
  *= require_self
  */
 
-/* app/views/searches/new.html.erbのラジオボタンの状態に応じて適用される背景色のスタイル */
+/* app/views/searches/new.html.erbのチェックボックス/ラジオボタンの状態に応じて適用される背景色のスタイル */
 
-/* ラジオボタンが選択されていないときに適用するスタイル */
+/* 選択されていないときに適用するスタイル */
 .label-color {
-  background-color: #34D399; /* bg-emerald-400に相当 */
+  background-color: #06B6D4; /* Tailwindのbg-cyan-500に相当 */
+}
+
+/* チェックボックスが選択されているときに適用するスタイル */
+.form-checkbox:checked + .label-color {
+  background-color: #0E7490; /* bg-cyan-700に相当 */
 }
 
 /* ラジオボタンが選択されているときに適用するスタイル */
 .form-radio:checked + .label-color {
-  background-color: #059669; /* Tailwindのbg-emerald-500に相当 */
+  background-color: #0E7490; /* bg-cyan-700に相当 */
 }
