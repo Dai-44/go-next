@@ -12,7 +12,11 @@
   </head>
 
   <body class="flex flex-col min-h-screen">
-    <%= render 'shared/header' %>
+    <% if logged_in? %>
+      <%= render 'shared/header' %>
+    <% else %>
+      <%= render 'shared/before_login_header' %>
+    <% end %>
     <div class="bg-cyan-50 flex-grow">
       <main class="container mx-auto my-10">
         <%= render 'shared/flash_message' %>
