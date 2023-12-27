@@ -10,4 +10,6 @@ Rails.application.routes.draw do
   resources :searches, only: %i[new create] do
     get :result, on: :collection
   end
+
+  resources :users, only: %i[new create]
 end

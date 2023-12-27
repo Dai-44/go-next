@@ -1,11 +1,12 @@
+<div class="">
 <% flash.each do |type, message| %>
   <% case type %>
   <% when 'success' %>
-    <div class="bg-green-100 text-green-800 w-full p-4 mb-4 rounded">
+    <div class="bg-green-100 text-green-800 p-4 m-4 rounded">
       <%= message %>
     </div>
   <% when 'danger' %>
-    <div class="bg-red-100 text-red-800 w-full p-4 mb-4 rounded">
+    <div class="bg-red-100 text-red-800 p-4 m-4 rounded">
       <%= message %>
     </div>
   <% end %>
