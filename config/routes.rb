@@ -12,4 +12,6 @@ Rails.application.routes.draw do
   end
 
   resources :users, only: %i[new create]
+  get 'login', to: 'usersessions#new'
+  post 'login', to: 'usersessions#create'
 end
