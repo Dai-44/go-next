@@ -160,12 +160,12 @@ Rails.application.config.sorcery.configure do |config|
   # config.auth0.site = "https://example.auth0.com"
   #
 
-  #credentials.ymlから情報を取得
+  # credentials.ymlから情報を取得
   config.google.key = Rails.application.credentials.google&.fetch(:google_client_id)
   config.google.secret = Rails.application.credentials.google&.fetch(:google_client_secret)
-  #API設定で承認済みのリダイレクトURIとして登録したurlを設定
-  config.google.callback_url = 'http://localhost:3000/oauth/callback?provider=google'
-  #外部サービスから取得したユーザー情報をUserモデルの指定した属性にマッピング。参考記事に倣って:username => "name"にしたらNoMethodError出たが、下記記述に変更したら解消した。追って原因調べてみる。
+  # API設定で承認済みのリダイレクトURIとして登録したurlを設定。開発環境と本番環境それぞれで異なるURLにアクセスするよう定義。
+  config.google.callback_url = Settings.sorcery[:google_callback_url]
+  # 外部サービスから取得したユーザー情報をUserモデルの指定した属性にマッピング。参考記事に倣って:username => "name"にしたらNoMethodError出たが、下記記述に変更したら解消した。追って原因調べてみる。
   config.google.user_info_mapping = {:email => "email", :name => "name"}
   # config.google.scope = "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
   #
