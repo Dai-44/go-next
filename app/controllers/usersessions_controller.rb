@@ -11,4 +11,9 @@ class UsersessionsController < ApplicationController
       render :new, status: :unprocessable_entity
     end
   end
+
+  def destroy
+    logout
+    redirect_to root_path, status: :see_other, flash: { success: "ログアウトしました" }
+  end
 end
