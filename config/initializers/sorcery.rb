@@ -166,7 +166,7 @@ Rails.application.config.sorcery.configure do |config|
   # API設定で承認済みのリダイレクトURIとして登録したurlを設定。開発環境と本番環境それぞれで異なるURLにアクセスするよう定義。
   config.google.callback_url = Settings.sorcery[:google_callback_url]
   # 外部サービスから取得したユーザー情報をUserモデルの指定した属性にマッピング。参考記事に倣って:username => "name"にしたらNoMethodError出たが、下記記述に変更したら解消した。追って原因調べてみる。
-  config.google.user_info_mapping = {:email => "email", :name => "name"}
+  config.google.user_info_mapping = { email: "email", name: "name" }
   # config.google.scope = "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
   #
   # For Microsoft Graph, the key will be your App ID, and the secret will be your app password/public key.
@@ -231,7 +231,6 @@ Rails.application.config.sorcery.configure do |config|
   # config.line.bot_prompt = "normal"
   # config.line.user_info_mapping = {name: 'displayName'}
 
-  
   # For information about Discord API
   # https://discordapp.com/developers/docs/topics/oauth2
   # config.discord.key = "xxxxxx"
