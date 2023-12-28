@@ -1,5 +1,5 @@
 <% if object.errors.any? %>
-  <div id="error_messages" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+  <div id="error_messages" class="bg-red-100 border-2 border-red-400 text-red-700 p-4 m-4 rounded relative" role="alert">
     <ul class="list-disc list-inside">
       <% object.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
