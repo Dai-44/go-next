@@ -1,0 +1,26 @@
+<div class="flex justify-center">
+  <div class="w-full max-w-md px-4">
+    <h1 class="text-2xl font-bold text-center mb-4">ログイン</h1>
+    <%= form_with url: login_path, local: true do |f| %>
+      <div class="mb-4">
+        <%= f.label :email, class: 'block text-sm font-medium text-gray-700' %>
+        <%= f.text_field :email, class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm' %>
+      </div>
+      <div class="mb-4">
+        <%= f.label :password, class: 'block text-sm font-medium text-gray-700' %>
+        <%= f.password_field :password, class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm' %>
+      </div>
+      <div class="actions mb-6 flex justify-center">
+        <%= f.submit 'ログイン', class: 'w-2/3 text-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500' %>
+      </div>
+    <% end %>
+    <div class='text-center mt-4 flex flex-row items-center justify-center space-x-6'>
+      <%= link_to auth_at_provider_path(provider: :google), class: "px-4 py-2 border flex gap-2 border-slate-200 rounded-lg text-slate-700 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150" do %>
+        <img class="w-6 h-6" src="https://www.svgrepo.com/show/475656/google-color.svg" loading="lazy" alt="google logo">
+        <span>Googleでログイン</span>
+      <% end %>
+      <%= link_to 'ユーザー登録ページへ', new_user_path, class: 'text-indigo-600 hover:text-indigo-500' %>
+    </div>
+  </div>
+</div>
+

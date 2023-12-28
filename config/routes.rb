@@ -10,4 +10,13 @@ Rails.application.routes.draw do
   resources :searches, only: %i[new create] do
     get :result, on: :collection
   end
+
+  resources :users, only: %i[new create]
+  get 'login', to: 'usersessions#new'
+  post 'login', to: 'usersessions#create'
+  delete 'logout', to: 'usersessions#destroy'
+
+  post "oauth/callback" => "oauths#callback" # これの必要性がいまいちピンと来てないので、後ほど調べてみて不要なら消す。今は参考記事に倣って記述してある。
+  get "oauth/callback" => "oauths#callback"
+  get "oauth/:provider" => "oauths#oauth", as: :auth_at_provider
 end
