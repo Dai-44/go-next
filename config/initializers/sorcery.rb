@@ -165,8 +165,8 @@ Rails.application.config.sorcery.configure do |config|
   config.google.secret = Rails.application.credentials.google&.fetch(:google_client_secret)
   #API設定で承認済みのリダイレクトURIとして登録したurlを設定
   config.google.callback_url = 'http://localhost:3000/oauth/callback?provider=google'
-  #外部サービスから取得したユーザー情報をUserモデルの指定した属性にマッピング
-  config.google.user_info_mapping = {:email => "email", :username => "name"}
+  #外部サービスから取得したユーザー情報をUserモデルの指定した属性にマッピング。参考記事に倣って:username => "name"にしたらNoMethodError出たが、下記記述に変更したら解消した。追って原因調べてみる。
+  config.google.user_info_mapping = {:email => "email", :name => "name"}
   # config.google.scope = "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
   #
   # For Microsoft Graph, the key will be your App ID, and the secret will be your app password/public key.
