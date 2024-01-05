@@ -3,7 +3,7 @@
     <%= link_to 'トップページ', root_path, class: 'text-slate-50 font-bold inline-block p-5' %>
     <div>
       <%= link_to 'ブックマーク', '#', class: 'text-slate-50 font-bold inline-block p-5' %>
-      <%= link_to 'プロフィール', '#', class: 'text-slate-50 font-bold inline-block p-5' %>
+      <%= link_to 'プロフィール', profile_path, class: 'text-slate-50 font-bold inline-block p-5' %>
       <%= link_to 'ログアウト', logout_path, class: 'text-slate-50 font-bold inline-block p-5', data: { turbo_method: :delete } %>
     </div>
   </nav>
