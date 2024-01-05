@@ -16,7 +16,11 @@ Rails.application.routes.draw do
   post 'login', to: 'usersessions#create'
   delete 'logout', to: 'usersessions#destroy'
 
+  resources :password_resets, only: %i[new create edit update]
+
   post "oauth/callback" => "oauths#callback" # これの必要性がいまいちピンと来てないので、後ほど調べてみて不要なら消す。今は参考記事に倣って記述してある。
   get "oauth/callback" => "oauths#callback"
   get "oauth/:provider" => "oauths#oauth", as: :auth_at_provider
+
+  mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 end

@@ -14,12 +14,13 @@
         <%= f.submit 'ログイン', class: 'w-2/3 text-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500' %>
       </div>
     <% end %>
-    <div class='text-center mt-4 flex flex-row items-center justify-center space-x-6'>
+    <div class='text-center mt-4 flex flex-col items-center justify-center space-y-3'>
       <%= link_to auth_at_provider_path(provider: :google), class: "px-4 py-2 border flex gap-2 border-slate-200 rounded-lg text-slate-700 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150" do %>
         <img class="w-6 h-6" src="https://www.svgrepo.com/show/475656/google-color.svg" loading="lazy" alt="google logo">
         <span>Googleでログイン</span>
       <% end %>
       <%= link_to 'ユーザー登録ページへ', new_user_path, class: 'text-indigo-600 hover:text-indigo-500' %>
+      <%= link_to 'パスワードをお忘れの方はコチラ', new_password_reset_path, class: 'text-indigo-600 hover:text-indigo-500' %>
     </div>
   </div>
 </div>
