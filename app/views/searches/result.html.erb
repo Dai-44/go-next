@@ -1,12 +1,21 @@
-<div class="text-center">
-  <h1 class="font-bold text-slate-600 text-3xl mb-8">検索結果</h1>
+<div>
+  <h1 class="text-center font-bold text-slate-600 text-3xl mb-8">検索結果</h1>
 </div>
 
-<div class="text-center">
-  <ul class="text-center flex flex-col items-center justify-center">
+<div>
+  <ul class="flex flex-col items-center justify-center">
     <% @response['places'].each do |place| %>
-      <li class= "flex bg-cyan-500 hover:bg-cyan-400 text-white font-bold py-3 px-6 rounded-full h-16 w-1/2 my-2">
-        <span class="flex items-center justify-center w-full"><%= place['displayName']['text'] %></span>
+      <li class= "flex flex-col space-y-2 bg-cyan-500 hover:bg-cyan-400 text-white font-bold py-3 px-6 rounded-full h-20 w-4/5 my-2">
+        <span class="flex justify-center text-center w-full"><%= place['displayName']['text'] %></span>
+        <%= link_to 'ここへ行く', drive_records_path(destination: {
+            name: place['displayName']['text'],
+            address: place['formattedAddress'],
+            latitude: place['location']['latitude'],
+            longitude: place['location']['longitude'],
+            type: place['primaryType']
+          }),
+          data: { turbo_method: :post },
+          class: "bg-teal-200 text-slate-600 text-center w-2/5 rounded-lg" %>
       </li>
     <% end %>
   </ul>
