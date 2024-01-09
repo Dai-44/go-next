@@ -1,6 +1,6 @@
 class DriveRecordsController < ApplicationController
   def index
-    @drive_records = current_user.drive_records.includes(:destination).order(created_at: :desc)
+    @drive_records = current_user.drive_records.includes(:destination).order(created_at: :desc).page(params[:page])
   end
 
   def create
