@@ -1,0 +1,11 @@
+<div>
+  <h1 class="text-center font-bold text-slate-600 text-3xl mb-8">ドライブ履歴詳細</h1>
+</div>
+<div class="bg-blue-100 rounded-3xl p-5 mx-5 flex flex-col items-center text-slate-600 font-bold h-96">
+  <h2 class="text-xl p-3"><%= @drive_record_destination.name %></h2>
+  <p class="text-sm"><%= @drive_record_destination.address %></p>
+  <p class="py-5">日付: <%= @drive_record_destination.created_at %></p>
+</div>
+<div class="text-center mt-10">
+  <p><%= link_to 'ドライブ履歴一覧へ戻る', drive_records_path, class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-1/4" %></p>
+</div>

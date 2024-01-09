@@ -23,5 +23,5 @@ Rails.application.routes.draw do
   resources :password_resets, only: %i[new create edit update]
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
-  resources :drive_records, only: %i[index create]
+  resources :drive_records, only: %i[index show create]
 end
