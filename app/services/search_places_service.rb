@@ -34,7 +34,7 @@ class SearchPlacesService
 
   def self.build_field_mask
     [
-      'places.types', 'places.addressComponents', 'places.location',
+      'places.types', 'places.formattedAddress', 'places.location',
       'places.rating', 'places.googleMapsUri', 'places.websiteUri',
       'places.businessStatus', 'places.userRatingCount',
       'places.displayName', 'places.currentOpeningHours',
