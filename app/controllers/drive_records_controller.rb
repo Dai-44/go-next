@@ -1,4 +1,13 @@
 class DriveRecordsController < ApplicationController
+  def index
+    @drive_records = current_user.drive_records.includes(:destination).order(created_at: :desc).page(params[:page])
+  end
+
+  def show
+    @drive_record = current_user.drive_records.find(params[:id])
+    @drive_record_destination = @drive_record.destination
+  end
+
   def create
     # 目的地となる場所の特定と、その場所へのユーザーのドライブ履歴を生成するLogDestinationActivityServiceのcallメソッドを実行
     service = LogDestinationActivityService.new(

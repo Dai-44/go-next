@@ -2,10 +2,10 @@
   <h1 class="text-center font-bold text-slate-600 text-3xl mb-8">検索結果</h1>
 </div>
 
-<div>
-  <ul class="flex flex-col items-center justify-center">
+<div class="bg-blue-100 rounded-3xl py-5 mx-5">
+  <ul class="flex flex-col items-center justify-center text-slate-600">
     <% @response['places'].each do |place| %>
-      <li class= "flex flex-col space-y-2 bg-cyan-500 hover:bg-cyan-400 text-white font-bold py-3 px-6 rounded-full h-20 w-4/5 my-2">
+      <li class= "flex flex-col space-y-2 hover:bg-blue-300 font-bold py-3 px-6 rounded-sm border-b-2 border-slate-400 h-20 w-4/5 my-2">
         <span class="flex justify-center text-center w-full"><%= place['displayName']['text'] %></span>
         <!-- ユーザーのドライブ履歴作成処理のリクエストを送るリンクを仮で設置する。本来は、場所の詳細を表示するモーダル内に設置する経路案内のリンクに本リクエストを実装する -->
         <!-- ドライブ履歴の保存はログインユーザーのみ利用できる機能であるため、ログイン状態でのみリンクを表示させる。 -->
@@ -19,7 +19,7 @@
               type: place['primaryType']
             }),
             data: { turbo_method: :post },
-            class: "bg-teal-200 text-slate-600 text-center w-2/5 rounded-lg" %>
+            class: "bg-cyan-300 text-center w-2/5 rounded-lg" %>
         <% end %>
       </li>
     <% end %>
