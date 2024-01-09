@@ -6,6 +6,7 @@ class User < ApplicationRecord
 
   has_many :drive_records, dependent: :destroy
   has_many :bookmarks, dependent: :destroy
+  has_many :bookmark_destinations, through: :bookmarks, source: :destination
 
   validates :password, length: { minimum: 6 }, if: -> { new_record? || changes[:crypted_password] }
   validates :password, confirmation: true, if: -> { new_record? || changes[:crypted_password] }
@@ -13,4 +14,12 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true, length: { maximum: 255 }
   validates :name, presence: true, length: { maximum: 50 }
   validates :reset_password_token, presence: true, uniqueness: true, allow_nil: true
+
+  def unbookmark(destination)
+    bookmark_destinations.destroy(article)
+  end
+
+  def bookmark?(article)
+    bookmark_destinations.include?(article)
+  end
 end
