@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_08_082114) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_09_084222) do
   create_table "authentications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "provider", null: false
@@ -18,6 +18,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_08_082114) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["provider", "uid"], name: "index_authentications_on_provider_and_uid"
+  end
+
+  create_table "bookmarks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "destination_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["destination_id"], name: "index_bookmarks_on_destination_id"
+    t.index ["user_id"], name: "index_bookmarks_on_user_id"
   end
 
   create_table "destinations", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -79,6 +88,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_08_082114) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token"
   end
 
+  add_foreign_key "bookmarks", "destinations"
+  add_foreign_key "bookmarks", "users"
   add_foreign_key "destinations", "google_places_api_types"
   add_foreign_key "drive_records", "destinations"
   add_foreign_key "drive_records", "users"
