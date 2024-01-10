@@ -15,11 +15,15 @@ class User < ApplicationRecord
   validates :name, presence: true, length: { maximum: 50 }
   validates :reset_password_token, presence: true, uniqueness: true, allow_nil: true
 
+  # ブックマークを作成するbookmarkメソッドは、対象となるDestinationレコードの特定と併せて一連の処理として実行するため、app/services/log_destination_activity_service.rbで定義している。
+  # ブックマークの対象となる場所のデータは、DBから取得して表示しているものではなく単にAPIからのレスポンスを表示しているものであるため、「対象となる場所に該当するDestinationレコードが存在すればそれを指定し、存在しなければ新たに作成する」という処理が必要となる。そのため、Destinationレコードの特定とブックマークの作成という一連の処理をServiceオブジェクトとしてまとめて実装する方針をとっている。
+
   def unbookmark(destination)
     bookmark_destinations.destroy(destination)
   end
 
   def bookmark?(place)
+    # view側で扱っている場所の情報はAPIからのレスポンスデータに過ぎず、末尾のようなinclude?メソッドを実行するにはDestinationインスタンスに変換する必要があるため、まずDestinationインスタンスを生成してdestinationに格納する処理を実装している。
     destination = Destination.find_by(name: place['displayName']['text'], address: place['formattedAddress'])
     bookmark_destinations.include?(destination)
   end
