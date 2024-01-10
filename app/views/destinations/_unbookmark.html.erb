@@ -1,0 +1,9 @@
+<!-- 削除対象となるブックマークに紐づくDestinationレコード自体を指定し、bookmark_pathの引数に渡す -->
+<%= link_to 'ブックマークを外す', bookmark_path(
+    current_user.bookmark_destinations.find_by(
+      name: place['displayName']['text'],
+      address: place['formattedAddress']
+    )
+  ), 
+data: { turbo_method: :delete },
+class: "p-1 rounded-lg border-2 border-slate-300" %>

@@ -24,4 +24,5 @@ Rails.application.routes.draw do
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
   resources :drive_records, only: %i[index show create]
+  resources :bookmarks, only: %i[create destroy]
 end
