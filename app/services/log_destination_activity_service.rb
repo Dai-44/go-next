@@ -5,7 +5,7 @@ class LogDestinationActivityService
     @record_type = record_type
   end
 
-  # 目的地となる場所の特定と、その場所へのユーザーのドライブ履歴を生成する処理
+  # 目的地となる場所の特定と、その場所へのユーザーのドライブ履歴またはブックマークを生成する処理
   def call
     type = GooglePlacesApiType.find_by(name: @destination_info[:type])
     destination = Destination.find_or_create_by(name: @destination_info[:name], address: @destination_info[:address], latitude: @destination_info[:latitude], longitude: @destination_info[:longitude], google_places_api_type: type)

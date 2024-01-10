@@ -1,0 +1,5 @@
+<% if current_user&.bookmark?(place) %>
+  <%= render 'destinations/unbookmark', place: place %>
+<% else %>
+  <%= render 'destinations/bookmark', place: place %>
+<% end %>

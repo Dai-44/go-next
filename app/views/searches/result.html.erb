@@ -5,22 +5,25 @@
 <div class="bg-blue-100 rounded-3xl py-5 mx-5">
   <ul class="flex flex-col items-center justify-center text-slate-600">
     <% @response['places'].each do |place| %>
-      <li class= "flex flex-col space-y-2 hover:bg-blue-300 font-bold py-3 px-6 rounded-sm border-b-2 border-slate-400 h-20 w-4/5 my-2">
-        <span class="flex justify-center text-center w-full"><%= place['displayName']['text'] %></span>
-        <!-- ユーザーのドライブ履歴作成処理のリクエストを送るリンクを仮で設置する。本来は、場所の詳細を表示するモーダル内に設置する経路案内のリンクに本リクエストを実装する -->
-        <!-- ドライブ履歴の保存はログインユーザーのみ利用できる機能であるため、ログイン状態でのみリンクを表示させる。 -->
-        <!-- ドライブ履歴作成処理では目的地となる場所を特定する必要があるため、当該場所の情報をパラメータに含めて送信する -->
-        <% if logged_in? %>
-          <%= link_to 'ここへ行く', drive_records_path(destination: {
-              name: place['displayName']['text'],
-              address: place['formattedAddress'],
-              latitude: place['location']['latitude'],
-              longitude: place['location']['longitude'],
-              type: place['primaryType']
-            }),
-            data: { turbo_method: :post },
-            class: "bg-cyan-300 text-center w-2/5 rounded-lg" %>
-        <% end %>
+      <li class= "flex flex-col font-bold px-6 rounded-sm border-b-2 border-slate-400 h-20 w-4/5 my-2">
+        <span class="flex justify-center text-center w-full mb-2"><%= place['displayName']['text'] %></span>
+        <div class="flex justify-around items-center w-full">
+          <% if logged_in? %>
+            <!-- ユーザーのドライブ履歴作成処理のリクエストを送るリンクを仮で設置する。本来は、場所の詳細を表示するモーダル内に設置する経路案内のリンクに本リクエストを実装する -->
+            <!-- ドライブ履歴の保存はログインユーザーのみ利用できる機能であるため、ログイン状態でのみリンクを表示させる。 -->
+            <!-- ドライブ履歴作成処理では目的地となる場所を特定する必要があるため、当該場所の情報をパラメータに含めて送信する -->
+            <%= link_to 'ここへ行く', drive_records_path(destination: {
+                name: place['displayName']['text'],
+                address: place['formattedAddress'],
+                latitude: place['location']['latitude'],
+                longitude: place['location']['longitude'],
+                type: place['primaryType']
+              }),
+              data: { turbo_method: :post },
+              class: "p-1 rounded-lg border-2 border-slate-300" %>
+            <%= render 'destinations/bookmark_button', place: place %>
+          <% end %>
+        </div>
       </li>
     <% end %>
   </ul>

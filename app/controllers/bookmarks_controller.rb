@@ -12,8 +12,14 @@ class BookmarksController < ApplicationController
   end
 
   def destroy
-    destination = current_user.bookmarks.find_by(id: params[:id])&.destination
+    destination = current_user.bookmark_destinations.find_by(id: params[:id])
     current_user.unbookmark(destination)
     redirect_to root_path, status: :see_other, flash: { success: "ブックマークを削除しました" } # 処理後は仮でルートパスに遷移しているが、実際は経路案内を表示する画面に遷移させる。画面のUI/UXを整える過程で修正する。
+  end
+
+  private
+
+  def destination_params
+    params.require(:destination).permit(:name, :address, :latitude, :longitude, :type)
   end
 end

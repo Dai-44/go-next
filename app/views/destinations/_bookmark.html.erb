@@ -1,0 +1,9 @@
+<%= link_to 'ブックマーク', bookmarks_path(destination: {
+    name: place['displayName']['text'],
+    address: place['formattedAddress'],
+    latitude: place['location']['latitude'],
+    longitude: place['location']['longitude'],
+    type: place['primaryType']
+  }), 
+  data: { turbo_method: :post },
+  class: "p-1 rounded-lg border-2 border-slate-300" %>

@@ -16,10 +16,11 @@ class User < ApplicationRecord
   validates :reset_password_token, presence: true, uniqueness: true, allow_nil: true
 
   def unbookmark(destination)
-    bookmark_destinations.destroy(article)
+    bookmark_destinations.destroy(destination)
   end
 
-  def bookmark?(article)
-    bookmark_destinations.include?(article)
+  def bookmark?(place)
+    destination = Destination.find_by(name: place['displayName']['text'], address: place['formattedAddress'])
+    bookmark_destinations.include?(destination)
   end
 end
