@@ -3,7 +3,7 @@
     <%= link_to 'トップページ', root_path, class: 'inline-block' %>
     <div class='flex space-x-3 items-center'>
       <%= link_to 'ドライブ履歴', drive_records_path %>
-      <%= link_to 'ブックマーク', '#' %>
+      <%= link_to 'ブックマーク', bookmarks_destinations_path %>
       <%= link_to 'プロフィール', profile_path %>
       <%= link_to 'ログアウト', logout_path, data: { turbo_method: :delete } %>
     </div>
