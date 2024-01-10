@@ -25,4 +25,7 @@ Rails.application.routes.draw do
 
   resources :drive_records, only: %i[index show create]
   resources :bookmarks, only: %i[create destroy]
+  resources :destinations, only: %i[show] do
+    get "bookmarks", on: :collection
+  end
 end
