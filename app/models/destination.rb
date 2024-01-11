@@ -1,5 +1,5 @@
 class Destination < ApplicationRecord
-  belongs_to :google_places_api_type, optional: true
+  belongs_to :google_type, class_name: 'GooglePlacesApiType', optional: true # 関連名が長いと可読性さがるため、エイリアスを設定
   has_many :drive_records
   has_many :bookmarks
 
@@ -12,6 +12,6 @@ class Destination < ApplicationRecord
   end
 
   def self.ransackable_associations(auth_object = nil)
-    %w(google_places_api_type)
+    %w(google_type)
   end
 end
