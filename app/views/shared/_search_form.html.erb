@@ -1,0 +1,16 @@
+<%= search_form_for q, url: url, class: "flex justify-center mb-5" do |f| %>
+  <div class="flex items-center space-x-4">
+    <div>
+      <%= f.select :visited_month_eq, @visited_months, include_blank: "月から検索", class: "block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
+    </div>
+    <div>
+      <%= f.select :destination_area_eq, @areas, include_blank: "エリアから検索", class: "block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
+    </div>
+    <div>
+      <%= f.select :destination_google_places_api_type_display_name_eq, @types, include_blank: "カテゴリから検索", class: "block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
+    </div>
+    <div>
+      <%= f.submit "検索", class: "py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+    </div>
+  </div>
+<% end %>
