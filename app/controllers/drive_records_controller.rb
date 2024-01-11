@@ -23,6 +23,6 @@ class DriveRecordsController < ApplicationController
   private
 
   def destination_params
-    params.require(:destination).permit(:name, :address, :latitude, :longitude, :type)
+    params.require(:destination).permit(:name, :address, :top_level_area, :second_level_area, :latitude, :longitude, :type)
   end
 end
