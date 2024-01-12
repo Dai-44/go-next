@@ -1,9 +1,18 @@
 class GooglePlacesApiType < ApplicationRecord
   has_many :feeling_type_mappings, dependent: :destroy
   has_many :feelings, through: :feeling_type_mappings
+  has_many :destinations
 
   scope :by_feeling, lambda { |feeling_id|
     joins(:feeling_type_mappings)
       .where(feeling_type_mappings: { feeling_id: feeling_id })
   }
+
+  def self.get_display_name
+    pluck(:display_name)
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+    %w(display_name)
+  end
 end

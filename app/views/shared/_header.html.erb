@@ -1,10 +1,11 @@
 <header>
-  <nav class='flex items-center justify-between bg-cyan-800 h-20'>
-    <%= link_to 'トップページ', root_path, class: 'text-slate-50 font-bold inline-block p-3' %>
-    <div class='flex items-center'>
-      <%= link_to 'ブックマーク', '#', class: 'text-slate-50 font-bold inline-block p-3' %>
-      <%= link_to 'プロフィール', profile_path, class: 'text-slate-50 font-bold inline-block p-3' %>
-      <%= link_to 'ログアウト', logout_path, class: 'text-slate-50 font-bold inline-block p-3', data: { turbo_method: :delete } %>
+  <nav class='flex items-center justify-between bg-cyan-800 h-16 text-sm text-slate-50 font-bold p-3'>
+    <%= link_to 'トップページ', root_path, class: 'inline-block' %>
+    <div class='flex space-x-3 items-center'>
+      <%= link_to 'ドライブ履歴', drive_records_path %>
+      <%= link_to 'ブックマーク', bookmarks_destinations_path %>
+      <%= link_to 'プロフィール', profile_path %>
+      <%= link_to 'ログアウト', logout_path, data: { turbo_method: :delete } %>
     </div>
   </nav>
 </header>
