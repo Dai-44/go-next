@@ -1,6 +1,8 @@
 <%= link_to 'ブックマーク', bookmarks_path(destination: {
     name: place['displayName']['text'],
     address: place['formattedAddress'],
+    top_level_area: place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_1") }["longText"],
+    second_level_area: place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_2") || component["types"].include?("locality") }["longText"],
     latitude: place['location']['latitude'],
     longitude: place['location']['longitude'],
     type: place['primaryType']
