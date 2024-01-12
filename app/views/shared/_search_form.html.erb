@@ -9,14 +9,14 @@
           <%= f.select :destination_area_eq, @areas, include_blank: "エリアから検索", class: "block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
         </div>
         <div>
-          <%= f.select :destination_google_type_display_name_eq, @types, include_blank: "カテゴリから検索", class: "block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
+          <%= f.select :destination_google_places_api_type_display_name_eq, @types, include_blank: "カテゴリから検索", class: "block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
         </div>
       <% when bookmarks_destinations_path %>
         <div>
           <%= f.select :area_eq, @areas, include_blank: "エリアから検索", class: "block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
         </div>
         <div>
-          <%= f.select :google_type_display_name_eq, @types, include_blank: "カテゴリから検索", class: "block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
+          <%= f.select :google_places_api_type_display_name_eq, @types, include_blank: "カテゴリから検索", class: "block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
         </div>
       <% end %>
     <div>
