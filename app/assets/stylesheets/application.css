@@ -22,3 +22,8 @@
 .max-h-screen {
   max-height: 100vh; /* ビューポートの高さに合わせる */
 }
+
+/* app/views/searches/new.html.erbで、表示中のカルーセルアイテムのインジケーターに色を付けるためのスタイル */
+.active-indicator {
+  background-color: #94a3b8
+}

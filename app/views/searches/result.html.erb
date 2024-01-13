@@ -2,33 +2,56 @@
   <h1 class="text-center font-bold text-slate-600 text-3xl mb-8">検索結果</h1>
 </div>
 
-<div class="bg-blue-100 rounded-3xl py-5 mx-5">
-  <ul class="flex flex-col items-center justify-center text-slate-600">
-    <% @response['places'].each do |place| %>
-      <li class= "flex flex-col font-bold px-6 rounded-sm border-b-2 border-slate-400 h-20 w-4/5 my-2">
-        <span class="flex justify-center text-center w-full mb-2"><%= place['displayName']['text'] %></span>
-        <div class="flex justify-around items-center w-full">
-          <% if logged_in? %>
-            <!-- ユーザーのドライブ履歴作成処理のリクエストを送るリンクを仮で設置する。本来は、場所の詳細を表示するモーダル内に設置する経路案内のリンクに本リクエストを実装する -->
-            <!-- ドライブ履歴の保存はログインユーザーのみ利用できる機能であるため、ログイン状態でのみリンクを表示させる。 -->
-            <!-- ドライブ履歴作成処理では目的地となる場所を特定する必要があるため、当該場所の情報をパラメータに含めて送信する -->
-            <%= link_to 'ここへ行く', drive_records_path(destination: {
-                name: place['displayName']['text'],
-                address: place['formattedAddress'],
-                top_level_area: place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_1") }["longText"],
-                second_level_area: place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_2") || component["types"].include?("locality") }["longText"],
-                latitude: place['location']['latitude'],
-                longitude: place['location']['longitude'],
-                type: place['primaryType']
-              }),
-              data: { turbo_method: :post },
-              class: "p-1 rounded-lg border-2 border-slate-300" %>
-            <%= render 'destinations/bookmark_button', place: place %>
-          <% end %>
+<div class="flex justify-center">
+  <div id="default-carousel" class="relative w-full p-5" data-carousel="slide">
+    <!-- カルーセルのラッパー -->
+    <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
+      <% @response['places'].each_with_index do |place, index| %>
+        <!-- カルーセル内の個々のアイテム -->
+        <div class="<%= 'hidden' unless index.zero? %> duration-700 ease-in-out h-full" data-carousel-item>
+            <div class="bg-blue-100 rounded-3xl py-5 mx-5 h-full flex flex-col items-center justify-center text-slate-600 font-bold">
+                <div class="px-6 rounded-sm border-b-2 border-slate-400 h-20 w-4/5 my-2">
+                    <span class="flex justify-center text-center w-full mb-2"><%= place['displayName']['text'] %></span>
+                    <div class="flex justify-around items-center w-full">
+                        <% if logged_in? %>
+                            <%= link_to 'ここへ行く', drive_records_path(destination: {
+                                name: place['displayName']['text'],
+                                address: place['formattedAddress'],
+                                top_level_area: place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_1") }["longText"],
+                                second_level_area: place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_2") || component["types"].include?("locality") }["longText"],
+                                latitude: place['location']['latitude'],
+                                longitude: place['location']['longitude'],
+                                type: place['primaryType']
+                            }),
+                            data: { turbo_method: :post },
+                            class: "p-1 rounded-lg border-2 border-slate-300" %>
+                            <%= render 'destinations/bookmark_button', place: place %>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
         </div>
-      </li>
-    <% end %>
-  </ul>
+      <% end %>
+
+      <!-- カルーセルのインジケーター -->
+      <div class="absolute bottom-0 left-0 right-0 flex justify-center p-4">
+          <% @response['places'].each_with_index do |_, index| %>
+              <button type="button" class="w-3 h-3 bg-white rounded-full mx-2 focus:outline-none focus:ring" data-carousel-slide-to="<%= index %>"></button>
+          <% end %>
+      </div>
+      <!-- カルーセルのコントロールボタン -->
+      <button type="button" class="absolute top-1/2 bottom-0 left-0 z-30 flex items-center justify-center w-10 h-10 mx-2 bg-white bg-opacity-75 rounded-full focus:outline-none focus:ring hover:bg-opacity-100" data-carousel-prev>
+          <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+      </button>
+      <button type="button" class="absolute top-1/2 bottom-0 right-0 z-30 flex items-center justify-center w-10 h-10 mx-2 bg-white bg-opacity-75 rounded-full focus:outline-none focus:ring hover:bg-opacity-100" data-carousel-next>
+          <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+      </button>
+    </div>
+  </div>
 </div>
 
 <!-- マップの表示領域となる要素を定義。 -->
@@ -136,6 +159,58 @@
       })
     });
   }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // カルーセルアイテムの取得
+    const items = document.querySelectorAll('[data-carousel-item]');
+    // インジケーターの取得
+    const indicators = document.querySelectorAll('[data-carousel-slide-to]');
+
+    // 現在表示されているアイテムのインデックス
+    let currentIndex = 0;
+
+    function updateIndicators(newIndex) {
+      // 現在アクティブなインジケーターのクラスを削除
+      indicators[currentIndex].classList.remove('active-indicator');
+
+      // 新しいインジケーターにアクティブクラスを追加
+      indicators[newIndex].classList.add('active-indicator');
+    }
+
+    // 指定されたインデックスのアイテムに移動する関数
+    function moveToItem(index) {
+      if (index >= items.length) {
+        index = 0; // 最後のアイテムから次に移動する場合は最初のアイテムに戻る
+      } else if (index < 0) {
+        index = items.length - 1; // 最初のアイテムから前に移動する場合は最後のアイテムに移動
+      }
+      items[currentIndex].classList.add('hidden'); // 現在のアイテムを非表示
+      items[index].classList.remove('hidden'); // 新しいアイテムを表示
+      updateIndicators(index); // インジケーターの更新
+      currentIndex = index; // 現在のインデックスを更新
+    }
+
+    // インジケーターのクリックイベント処理
+    indicators.forEach(button => {
+      button.addEventListener('click', (e) => {
+        const index = parseInt(e.target.getAttribute('data-carousel-slide-to'));
+        moveToItem(index); // クリックされたインジケーターのインデックスに移動
+      });
+    });
+
+    // 前のアイテムに移動するボタンのイベント処理
+    document.querySelector('[data-carousel-prev]').addEventListener('click', () => {
+      moveToItem(currentIndex - 1); // 現在のインデックスから1つ前に移動
+    });
+
+    // 次のアイテムに移動するボタンのイベント処理
+    document.querySelector('[data-carousel-next]').addEventListener('click', () => {
+      moveToItem(currentIndex + 1); // 現在のインデックスから1つ次に移動
+    });
+
+    // 初期状態で最初のアイテムのインジケーターをアクティブにする
+    updateIndicators(0);
+  });
 </script>
 
 <!-- asyncの必要性は、この後の実装していく中で検討する。非同期でマップ作成する方が良いのか。 -->
