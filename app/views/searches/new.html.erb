@@ -1,58 +1,133 @@
-<%= form_with model: @user_selection, url: searches_path, data: { turbo: false } do |form| %>
-  <%= render 'shared/error_messages', object: form.object %>
-  <%= form.hidden_field :latitude, id: 'hidden_latitude' %>
-  <%= form.hidden_field :longitude, id: 'hidden_longitude' %>
-  <div class="my-5">
-    <div class="form-element">
-      <%= form.label :type, t('.select_visited_place') %>
-    </div>
-    <div class="form-element space-y-2 flex flex-col justify-center items-center">
-      <%= form.collection_check_boxes :type, GooglePlacesApiType.all, :name, :display_name, { include_hidden: false } do |b| %>
-        <div class="flex items-center">
-          <%= b.check_box(class: "form-checkbox hidden") %>
-          <%= b.label(class: "flex items-center justify-center label-color hover:bg-cyan-400 text-white font-bold rounded-full h-12 w-48 cursor-pointer ") %>
-        </div>
-      <% end %>
-    </div>
-  </div>
-  
-  <div class="my-5">
-    <div class="form-element">
-      <%= form.label :feeling, t('.select_feeling') %>
-    </div>
-    <div class="form-element space-y-2 flex flex-col justify-center items-center">
-      <%= form.collection_radio_buttons :feeling, Feeling.all, :id, :name do |b| %>
-        <div>
-          <%= b.radio_button(class: "form-radio hidden") %>
-          <%= b.label(class: "flex items-center justify-center label-color  hover:bg-cyan-400 text-white font-bold rounded-full h-12 w-64 cursor-pointer") %>
-          <%# label-colorクラスは、ラジオボタンの選択状態に応じて背景色を変えるスタイル。app/assets/application.cssで定義している。 %>
-        </div>
-      <% end %>
-    </div>
-  </div>
+<div class="flex justify-center items-center mx-auto">
+  <%= button_tag '行き先を探す', type: 'button', id: 'toggle-form-button', class: 'bg-cyan-500 hover:bg-cyan-400 text-lg text-white font-bold py-3 px-6 rounded-full my-4' %>
+</div>
 
-  <div class="my-5">
-    <div class="form-element">
-      <%= form.label :drive_range, t('.select_drive_range') %>
+<div id="search-form" class="transition-all ease-in-out duration-500 max-h-0 overflow-hidden m-5">
+  <%= form_with model: @user_selection, url: searches_path, data: { turbo: false } do |form| %>
+    <%= render 'shared/error_messages', object: form.object %>
+    <%= form.hidden_field :latitude, id: 'hidden_latitude' %>
+    <%= form.hidden_field :longitude, id: 'hidden_longitude' %>
+
+    <div class="flex flex-row justify-center items-center space-x-4">
+      <!-- ドロップダウンを開くボタン (カテゴリ) の親要素 -->
+      <div class="form-element">
+        <%= button_tag type: 'button', id: 'dropdownSearchButton', class: 'inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800', data: { dropdown_toggle: 'dropdownSearch' } do %>
+          カテゴリ
+          <%= content_tag :svg, class: 'w-2.5 h-2.5 ms-2.5', aria: { hidden: true }, xmlns: 'http://www.w3.org/2000/svg', fill: 'none', viewBox: '0 0 10 6' do %>
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+          <% end %>
+        <% end %>
+        <!-- ドロップダウンのコンテンツ (カテゴリ) -->
+        <div id="dropdownSearch" class="z-10 hidden bg-white rounded-lg shadow w-60 dark:bg-gray-700">
+          <ul class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+            <div class="form-element space-y-2 flex flex-col justify-center">
+              <%= form.collection_check_boxes :type, GooglePlacesApiType.all, :name, :display_name, include_hidden: false do |b| %>
+                <div class="flex items-center">
+                  <%= b.check_box(class: "w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600") %>
+                  <%= b.label(class: "ms-2 text-sm font-medium text-gray-900 dark:text-gray-300") %>
+                </div>
+              <% end %>
+            </div>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ドロップダウンを開くボタン (気分) -->
+      <div class="form-element">
+        <%= button_tag type: 'button', id: 'dropdownFeelingButton', class: 'inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800', data: { dropdown_toggle: 'dropdownFeeling' } do %>
+          気分
+          <%= content_tag :svg, class: 'w-2.5 h-2.5 ms-2.5', aria: { hidden: true }, xmlns: 'http://www.w3.org/2000/svg', fill: 'none', viewBox: '0 0 10 6' do %>
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+          <% end %>
+        <% end %>
+        <!-- ドロップダウンのコンテンツ (気分) -->
+        <div id="dropdownFeeling" class="z-10 hidden bg-white rounded-lg shadow w-60 dark:bg-gray-700">
+          <ul class="px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownFeelingButton">
+            <div class="form-element space-y-2">
+              <%= form.collection_radio_buttons :feeling, Feeling.all, :id, :name do |b| %>
+                <div class="flex items-center">
+                  <%= b.radio_button(class: "form-radio hidden") %>
+                  <%= b.label(class: "ms-2 text-sm font-medium text-gray-900 dark:text-gray-300") %>
+                </div>
+              <% end %>
+            </div>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 運転範囲の選択 -->
+      <div class="form-element">
+        <%= form.select :drive_range, options_for_select(@user_selection.drive_time_options), { include_blank: '選択してください' }, class: "form-select block w-60 rounded-md shadow-sm bg-white border-2 border-indigo-300 hover:border-indigo-500 focus:border-indigo-400 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 " %>
+      </div>
+
+      <!-- 検索ボタン -->
+      <div class="form-element">
+        <%= form.submit '検索', class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+      </div>
     </div>
-    <div class="form-element flex justify-center items-center">
-      <%= form.select :drive_range, options_for_select(@user_selection.drive_time_options), { include_blank: '選択してください' }, class: "form-select block w-60 rounded-md shadow-sm bg-white border-2 border-indigo-300 hover:border-indigo-500 focus:border-indigo-400 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 " %>
-    </div>
-  </div>
-  
-  <div class="form-element my-5 flex justify-center items-center">
-    <%= form.submit t('.search'), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
-  </div>
-<% end %>
+  <% end %>
+</div>
 
 <script>
   // ページのDOM要素が全て読み込まれたら、ブラウザのセッションストレージに格納されている緯度と経度のデータを取得し、上記フォーム内の該当するhidden_fieldに設定する処理
   // 現在地の緯度と経度のデータは、ユーザーがフォームで選択した内容とまとめてコントローラに送って処理したいため、hidden_fieldに設定する
-  document.addEventListener('DOMContentLoaded', (event) => {
-  const latitude = sessionStorage.getItem('latitude');
-  const longitude = sessionStorage.getItem('longitude');
+  //document.addEventListener('DOMContentLoaded', (event) => {
+  //const latitude = sessionStorage.getItem('latitude');
+  //const longitude = sessionStorage.getItem('longitude');
+//
+  //document.getElementById('hidden_latitude').value = latitude;
+  //document.getElementById('hidden_longitude').value = longitude;
+  //});
 
-  document.getElementById('hidden_latitude').value = latitude;
-  document.getElementById('hidden_longitude').value = longitude;
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggleButton = document.getElementById('toggle-form-button');
+    const searchForm = document.getElementById('search-form');
+
+    toggleButton.addEventListener('click', () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          // 位置情報の取得に成功したら、隠しフィールドに値をセット
+          document.getElementById('hidden_latitude').value = position.coords.latitude;
+          document.getElementById('hidden_longitude').value = position.coords.longitude;
+
+          // 位置情報の取得後、フォームを表示
+          showForm(searchForm);
+        }, (error) => {
+          console.error('位置情報の取得に失敗しました:', error);
+          // 位置情報の取得に失敗した場合の処理（任意）
+        });
+      } else {
+        console.log("Geolocation is not supported by this browser.");
+        // Geolocation APIがサポートされていない場合の処理（任意）
+      }
+    });
+  });
+
+  function showForm(formElement) {
+    if (formElement.classList.contains('max-h-0')) {
+      formElement.classList.remove('max-h-0');
+      formElement.classList.add('max-h-screen');
+    } else {
+      formElement.classList.add('max-h-0');
+      formElement.classList.remove('max-h-screen');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // カテゴリのドロップダウン制御
+    const dropdownSearchButton = document.getElementById('dropdownSearchButton');
+    const dropdownSearchContent = document.getElementById('dropdownSearch');
+
+    dropdownSearchButton.addEventListener('click', () => {
+      dropdownSearchContent.classList.toggle('hidden');
+    });
+
+    // 気分のドロップダウン制御
+    const dropdownFeelingButton = document.getElementById('dropdownFeelingButton');
+    const dropdownFeelingContent = document.getElementById('dropdownFeeling');
+
+    dropdownFeelingButton.addEventListener('click', () => {
+      dropdownFeelingContent.classList.toggle('hidden');
+    });
   });
 </script>
