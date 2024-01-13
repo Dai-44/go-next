@@ -9,27 +9,27 @@
       <% @response['places'].each_with_index do |place, index| %>
         <!-- カルーセル内の個々のアイテム -->
         <div class="<%= 'hidden' unless index.zero? %> duration-700 ease-in-out h-full" data-carousel-item>
-            <div class="bg-blue-100 rounded-3xl py-5 mx-5 h-full flex flex-col items-center justify-center text-slate-600 font-bold">
-                <div class="px-6 rounded-sm border-b-2 border-slate-400 h-20 w-4/5 my-2">
-                    <span class="flex justify-center text-center w-full mb-2"><%= place['displayName']['text'] %></span>
-                    <div class="flex justify-around items-center w-full">
-                        <% if logged_in? %>
-                            <%= link_to 'ここへ行く', drive_records_path(destination: {
-                                name: place['displayName']['text'],
-                                address: place['formattedAddress'],
-                                top_level_area: place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_1") }["longText"],
-                                second_level_area: place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_2") || component["types"].include?("locality") }["longText"],
-                                latitude: place['location']['latitude'],
-                                longitude: place['location']['longitude'],
-                                type: place['primaryType']
-                            }),
-                            data: { turbo_method: :post },
-                            class: "p-1 rounded-lg border-2 border-slate-300" %>
-                            <%= render 'destinations/bookmark_button', place: place %>
-                        <% end %>
-                    </div>
-                </div>
+          <div class="bg-blue-100 rounded-3xl py-5 mx-5 h-full flex flex-col items-center justify-center text-slate-600 font-bold">
+            <div class="px-6 rounded-sm border-b-2 border-slate-400 h-20 w-4/5 my-2">
+              <span class="flex justify-center text-center w-full mb-2"><%= place['displayName']['text'] %></span>
+              <div class="flex justify-around items-center w-full">
+                <% if logged_in? %>
+                  <%= link_to 'ここへ行く', drive_records_path(destination: {
+                      name: place['displayName']['text'],
+                      address: place['formattedAddress'],
+                      top_level_area: place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_1") }["longText"],
+                      second_level_area: place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_2") || component["types"].include?("locality") }["longText"],
+                      latitude: place['location']['latitude'],
+                      longitude: place['location']['longitude'],
+                      type: place['primaryType']
+                  }),
+                  data: { turbo_method: :post },
+                  class: "p-1 rounded-lg border-2 border-slate-300" %>
+                  <%= render 'destinations/bookmark_button', place: place %>
+                <% end %>
+              </div>
             </div>
+          </div>
         </div>
       <% end %>
 
@@ -66,6 +66,7 @@
 <script>
   // Searches#resultから受け取った各場所のデータ(@response['places'])を変数に格納
   const places = <%= @response['places'].to_json.html_safe %>;
+  let markers = []; // マーカーを格納する配列
 
   function initMap() {
     // ブラウザのセッションストレージから現在地の緯度と経度を取得
@@ -95,7 +96,9 @@
       const marker = new google.maps.Marker({
         position: markerPosition,
         map: map,
+        visible: false, // 初期状態では非表示に設定
       });
+      markers.push(marker);
 
       // 情報ウィンドウ内部の、Googleマップでのルート検索リンク(「ルート検索 (Google Map)」)には、現在地を取得するクリックイベントを設定している。
       // このクリックイベント実行のために、それぞれのルート検索リンクには動的な一意のIDを付与する必要があるため、以下で生成する。
@@ -158,6 +161,15 @@
         });
       })
     });
+    // 初期表示するカルーセルアイテムに対応するマーカーを表示
+    updateMarkers(0);
+  }
+
+  // 指定されたインデックスのカルーセルアイテムに対応するマーカーを表示する関数
+  function updateMarkers(index) {
+    markers.forEach((marker, i) => {
+      marker.setVisible(i === index); // 現在のアイテムに対応するマーカーのみを表示
+    });
   }
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -172,7 +184,6 @@
     function updateIndicators(newIndex) {
       // 現在アクティブなインジケーターのクラスを削除
       indicators[currentIndex].classList.remove('active-indicator');
-
       // 新しいインジケーターにアクティブクラスを追加
       indicators[newIndex].classList.add('active-indicator');
     }
@@ -187,6 +198,7 @@
       items[currentIndex].classList.add('hidden'); // 現在のアイテムを非表示
       items[index].classList.remove('hidden'); // 新しいアイテムを表示
       updateIndicators(index); // インジケーターの更新
+      updateMarkers(index); // マーカーの表示を更新
       currentIndex = index; // 現在のインデックスを更新
     }
 
