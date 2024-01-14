@@ -68,19 +68,37 @@
   let markers = []; // マーカーを格納する配列
 
   function initMap() {
-    // ブラウザのセッションストレージから現在地の緯度と経度を取得
+  // ブラウザのセッションストレージから現在地の緯度と経度を取得
     const latitude = parseFloat(sessionStorage.getItem('latitude'));
     const longitude = parseFloat(sessionStorage.getItem('longitude'));
 
     // 取得した現在地の緯度と経度を、マップの中心点の指定時に用いる定数に設定
-    const mapCenter = { lat: latitude, lng: longitude };
+    const currentLocation = { lat: latitude, lng: longitude };
 
     // 'map'をidに持つ要素に表示する地図を作成
     const map = new google.maps.Map(document.getElementById('map'), {
       zoom: 9,
-      center: mapCenter
+      center: currentLocation
     });
 
+    // 現在地を示す青丸のアイコンを作成
+    function setCurrentLocationMaker(map, position){
+      new google.maps.Marker({
+          position: position,
+          map: map,
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            fillColor: '#115EC3',
+            fillOpacity: 1,
+            strokeColor: 'white',
+            strokeWeight: 2,
+            scale: 7
+          },
+      });
+    }
+
+    // 現在地を示す青丸のアイコンを表示
+    setCurrentLocationMaker(map, currentLocation);
     // 検索結果として表示する各場所に対して繰り返し処理を定義し、マーカーを作成
     // 繰り返し処理の中で各マーカーに紐づく情報ウィンドウも作成し、マーカークリック時に表示されるようイベントハンドラを定義
     places.forEach(function(place) {
