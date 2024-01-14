@@ -1,5 +1,5 @@
 <div class="flex justify-center items-center mx-auto">
-  <%= button_tag '行き先を探す', type: 'button', id: 'toggle-form-button', class: 'bg-cyan-500 hover:bg-cyan-400 text-lg text-white font-bold py-3 px-6 rounded-full my-4' %>
+  <%= button_tag '行き先を探す', type: 'button', id: 'toggle-form-button', class: 'bg-orange-400 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 text-lg text-white font-bold py-3 px-6 rounded-lg my-4' %>
 </div>
 
 <div id="search-form" class="transition-all ease-in-out duration-500 max-h-0 overflow-hidden m-5">
@@ -11,7 +11,7 @@
     <div class="flex flex-row justify-center items-center space-x-4">
       <!-- ドロップダウンを開くボタン (カテゴリ) の親要素 -->
       <div class="form-element">
-        <%= button_tag type: 'button', id: 'dropdownSearchButton', class: 'inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800', data: { dropdown_toggle: 'dropdownSearch' } do %>
+        <%= button_tag type: 'button', id: 'dropdownSearchButton', class: 'inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white rounded-lg bg-orange-400 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500', data: { dropdown_toggle: 'dropdownSearch' } do %>
           カテゴリ
           <%= content_tag :svg, class: 'w-2.5 h-2.5 ms-2.5', aria: { hidden: true }, xmlns: 'http://www.w3.org/2000/svg', fill: 'none', viewBox: '0 0 10 6' do %>
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
@@ -34,7 +34,7 @@
 
       <!-- ドロップダウンを開くボタン (気分) -->
       <div class="form-element">
-        <%= button_tag type: 'button', id: 'dropdownFeelingButton', class: 'inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800', data: { dropdown_toggle: 'dropdownFeeling' } do %>
+        <%= button_tag type: 'button', id: 'dropdownFeelingButton', class: 'inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white rounded-lg bg-orange-400 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500', data: { dropdown_toggle: 'dropdownFeeling' } do %>
           気分
           <%= content_tag :svg, class: 'w-2.5 h-2.5 ms-2.5', aria: { hidden: true }, xmlns: 'http://www.w3.org/2000/svg', fill: 'none', viewBox: '0 0 10 6' do %>
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
@@ -57,12 +57,12 @@
 
       <!-- 運転範囲の選択 -->
       <div class="form-element">
-        <%= form.select :drive_range, options_for_select(@user_selection.drive_time_options), { include_blank: '選択してください' }, class: "form-select block w-60 rounded-md shadow-sm bg-white border-2 border-indigo-300 hover:border-indigo-500 focus:border-indigo-400 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 " %>
+        <%= form.select :drive_range, options_for_select(@user_selection.drive_time_options), { include_blank: '選択してください' }, class: "form-select block w-60 rounded-md shadow-sm bg-white border-2 border-orange-300 hover:border-orange-500 focus:border-orange-400 focus:ring focus:ring-orange-200 focus:ring-opacity-50 " %>
       </div>
 
       <!-- 検索ボタン -->
       <div class="form-element">
-        <%= form.submit '検索', class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+        <%= form.submit '検索', class: "bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 text-white font-bold py-2 px-4 rounded" %>
       </div>
     </div>
   <% end %>
