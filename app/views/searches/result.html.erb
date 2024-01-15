@@ -1,5 +1,5 @@
 <div>
-  <h1 class="text-center font-bold text-slate-600 text-3xl mb-8">検索結果</h1>
+  <%= render 'shared/search_place_form' %>
 </div>
 
 <div class="flex justify-center">
@@ -13,6 +13,9 @@
             <div class="h-full w-4/5 my-2 px-6">
               <span class="flex justify-center text-center w-full mb-2"><%= place['displayName']['text'] %></span>
               <div class="flex flex-col space-y-2 items-center w-full">
+                <%= link_to '公式サイト', place['websiteUri'], target: '_blank', rel: 'noopener noreferrer' %>
+                <%= link_to 'ルート検索 (Yahoo!カーナビ)', "yjcarnavi://navi/select?lat=#{place['location']['latitude']}&lon=#{place['location']['longitude']}" %>
+                <%= link_to 'ルート検索 (Google Map)', '#', class: 'google-map-link', data: { lat: place['location']['latitude'], lng: place['location']['longitude'] } %>
                 <% if logged_in? %>
                   <%= link_to 'ここへ行く', drive_records_path(destination: {
                       name: place['displayName']['text'],
@@ -25,9 +28,6 @@
                   }),
                   data: { turbo_method: :post }
                   %>
-                  <%= link_to '公式サイト', place['websiteUri'], target: '_blank', rel: 'noopener noreferrer' %>
-                  <%= link_to 'ルート検索 (Yahoo!カーナビ)', "yjcarnavi://navi/select?lat=#{place['location']['latitude']}&lon=#{place['location']['longitude']}" %>
-                  <%= link_to 'ルート検索 (Google Map)', '#', class: 'google-map-link', data: { lat: place['location']['latitude'], lng: place['location']['longitude'] } %>
                   <%= render 'destinations/bookmark_button', place: place %>
                 <% end %>
               </div>
@@ -63,6 +63,17 @@
 </div> 
 
 <script>
+  // ページのDOM要素が全て読み込まれたら、ブラウザのセッションストレージに格納されている緯度と経度のデータを取得し、上記フォーム内の該当するhidden_fieldに設定する処理
+  // 現在地の緯度と経度のデータは、ユーザーがフォームで選択した内容とまとめてコントローラに送って処理したいため、hidden_fieldに設定する
+  document.addEventListener('DOMContentLoaded', (event) => {
+  const latitude = sessionStorage.getItem('latitude');
+  const longitude = sessionStorage.getItem('longitude');
+
+  document.getElementById('hidden_latitude').value = latitude;
+  document.getElementById('hidden_longitude').value = longitude;
+  });
+
+
   // Searches#resultから受け取った各場所のデータ(@response['places'])を変数に格納
   const places = <%= @response['places'].to_json.html_safe %>;
   let markers = []; // マーカーを格納する配列
