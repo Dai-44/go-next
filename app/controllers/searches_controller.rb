@@ -18,6 +18,7 @@ class SearchesController < ApplicationController
 
   def result
     @response = SearchPlacesService.search_places(session[:request_params])
+    @user_selection = UserSelectionForm.new
   end
 
   private

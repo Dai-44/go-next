@@ -20,7 +20,8 @@ class SearchPlacesService
           radius: params['radius']
         }
       },
-      languageCode: 'ja'
+      languageCode: 'ja',
+      maxResultCount: 10
     }
 
     http = Net::HTTP.new(uri.host, uri.port) # Google Places APIへのリクエストを実行するHTTPクライアントを作成
