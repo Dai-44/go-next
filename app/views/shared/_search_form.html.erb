@@ -3,20 +3,20 @@
     <% case url %>
       <% when drive_records_path %>
         <div class="mb-4">
-          <%= form.select :visited_month_eq, @visited_months, include_blank: "月", class: "block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
+          <%= form.select :visited_month_eq, @visited_months, include_blank: "月" %>
         </div>
         <div class="mb-4">
-          <%= form.select :destination_area_eq, @areas, include_blank: "エリア", class: "block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md sm:w-3" %>
+          <%= form.select :destination_area_eq, @areas, include_blank: "エリア" %>
         </div>
         <div class="mb-4">
-          <%= form.select :destination_google_places_api_type_display_name_eq, @types, include_blank: "カテゴリ", class: "block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
+          <%= form.select :destination_google_places_api_type_display_name_eq, @types, include_blank: "カテゴリ" %>
         </div>
       <% when bookmarks_destinations_path %>
         <div class="mb-4">
-          <%= form.select :area_eq, @areas, include_blank: "エリア", class: "block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
+          <%= form.select :area_eq, @areas, include_blank: "エリア" %>
         </div>
         <div class="mb-4">
-          <%= form.select :google_places_api_type_display_name_eq, @types, include_blank: "カテゴリ", class: "block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
+          <%= form.select :google_places_api_type_display_name_eq, @types, include_blank: "カテゴリ" %>
         </div>
       <% end %>
     <div>
