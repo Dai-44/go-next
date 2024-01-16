@@ -30,18 +30,18 @@
       <!-- ドロップダウンを開くボタン (気分) -->
       <div class="form-element">
         <%= button_tag type: 'button', id: 'dropdownFeelingButton', class: 'inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white rounded-lg bg-orange-400 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500', data: { dropdown_toggle: 'dropdownFeeling' } do %>
-          気分
+          いまの気分
           <%= content_tag :svg, class: 'w-2.5 h-2.5 ms-2.5', aria: { hidden: true }, xmlns: 'http://www.w3.org/2000/svg', fill: 'none', viewBox: '0 0 10 6' do %>
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
           <% end %>
         <% end %>
         <!-- ドロップダウンのコンテンツ (気分) -->
         <div id="dropdownFeeling" class="z-10 hidden bg-white rounded-lg shadow w-60 dark:bg-gray-700">
-          <ul class="px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownFeelingButton">
+          <ul class="px-2 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownFeelingButton">
             <div class="form-element space-y-2">
               <%= form.collection_radio_buttons :feeling, Feeling.all, :id, :name do |b| %>
                 <div class="flex items-center">
-                  <%= b.radio_button(class: "form-radio hidden") %>
+                  <%= b.radio_button(class: "form-radio") %>
                   <%= b.label(class: "ms-2 text-sm font-medium text-gray-900 dark:text-gray-300") %>
                 </div>
               <% end %>
