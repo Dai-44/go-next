@@ -2,10 +2,10 @@
   <%= render 'shared/search_place_form' %>
 </div>
 
-<div class="flex justify-center">
-  <div id="default-carousel" class="relative w-full p-5" data-carousel="slide">
+<div>
+  <div id="default-carousel" class="relative w-full p-5 flex justify-center" data-carousel="slide">
     <!-- カルーセルのラッパー -->
-    <div class="relative h-96 overflow-hidden rounded-lg md:h-96">
+    <div class="relative h-96 w-96 overflow-hidden rounded-lg">
       <% @response['places'].each_with_index do |place, index| %>
         <!-- カルーセル内の個々のアイテム -->
         <div class="<%= 'hidden' unless index.zero? %> duration-700 ease-in-out h-full" data-carousel-item>
