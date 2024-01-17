@@ -1,8 +1,4 @@
 <div>
-  <%= render 'shared/search_place_form' %>
-</div>
-
-<div>
   <div id="default-carousel" class="relative w-full p-5 flex justify-center" data-carousel="slide">
     <!-- カルーセルのラッパー -->
     <div class="relative h-96 w-96 overflow-hidden rounded-lg">
@@ -13,6 +9,7 @@
             <div class="h-full w-4/5 my-2 px-6">
               <span class="flex justify-center text-center w-full mb-2"><%= place['displayName']['text'] %></span>
               <div class="flex flex-col space-y-2 items-center w-full">
+                <%= image_tag @photos[index]['photoUri'] %>
                 <%= link_to '公式サイト', place['websiteUri'], target: '_blank', rel: 'noopener noreferrer' %>
                 <%= link_to 'ルート検索 (Yahoo!カーナビ)', "yjcarnavi://navi/select?lat=#{place['location']['latitude']}&lon=#{place['location']['longitude']}" %>
                 <%= link_to 'ルート検索 (Google Map)', '#', class: 'google-map-link', data: { lat: place['location']['latitude'], lng: place['location']['longitude'] } %>

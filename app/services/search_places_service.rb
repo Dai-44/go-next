@@ -33,16 +33,42 @@ class SearchPlacesService
     JSON.parse(response.body) # JSON形式で与えられたレスポンスのボディをRubyで扱えるデータ構造(この処理の場合はハッシュが返ってきた)に変換
   end
 
+  # Google Places APIへのリクエストを実行して画像データをレスポンスとして受け取るメソッド。searches#resultで呼び出す。
+  def self.fetch_place_photos(photo_resources)
+    photos_data = [] # APIレスポンスとして取得する画像データを格納する配列
+
+    # 各画像の
+    photo_resources.each do |photo_resource|
+      api_endpoint = "https://places.googleapis.com/v1/#{photo_resource}/media?maxHeightPx=400&maxWidthPx=400&key=#{API_KEY}"
+
+      # HTTPリクエストを実行するHTTPクライアントを作成
+      uri = URI(api_endpoint)
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+
+      # APIリクエスト内容を作成
+      request = Net::HTTP::Get.new(uri) # GETリクエストではボディは不要
+
+      # APIリクエストを実行し、得られたレスポンス(JSON)をresponseに格納
+      response = http.request(request)
+
+      # JSON形式で与えられたレスポンスのボディをRubyのデータ構造に変換し、配列に追加
+      photos_data << JSON.parse(response.body)
+    end
+
+    photos_data # レスポンスデータの配列を返す
+  end
+
   def self.build_field_mask
     [
       'places.types', 'places.addressComponents', 'places.formattedAddress', 'places.location',
-      'places.rating', 'places.googleMapsUri', 'places.websiteUri',
+      'places.rating', 'places.googleMapsUri', 'places.websiteUri', 'places.photos',
       'places.businessStatus', 'places.userRatingCount',
       'places.displayName', 'places.currentOpeningHours',
       'places.primaryType', 'places.restroom'
     ].join(',')
   end
 
-  # クラスメソッドであるbuild_field_maskをプライベート化。privateキーワードはインスタンスのコンテキストに基づいて動作するもので、クラスメソッドには適用されないためprivate_class_methodを用いている。
+  # build_field_maskをプライベート化。privateキーワードはインスタンスのコンテキストに基づいて動作するもので、クラスメソッドには適用されないためprivate_class_methodを用いている。
   private_class_method :build_field_mask
 end
