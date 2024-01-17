@@ -1,4 +1,4 @@
-<%= link_to 'ブックマーク', bookmarks_path(destination: {
+<%= link_to bookmarks_path(destination: {
     name: place['displayName']['text'],
     address: place['formattedAddress'],
     top_level_area: place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_1") }["longText"],
@@ -7,6 +7,8 @@
     longitude: place['location']['longitude'],
     type: place['primaryType']
   }), 
-  data: { turbo_method: :post }
-  %>
+  class: 'hover:text-slate-400',
+  data: { turbo_method: :post } do %>
+  <i class="fa-regular fa-bookmark"></i>
+<% end %>
   
