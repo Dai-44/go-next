@@ -5,6 +5,7 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :authentications
 
   has_many :drive_records, dependent: :destroy
+  has_many :visited_destinations, through: :drive_records, source: :destination
   has_many :bookmarks, dependent: :destroy
   has_many :bookmark_destinations, through: :bookmarks, source: :destination
 

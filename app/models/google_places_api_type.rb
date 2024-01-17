@@ -8,10 +8,6 @@ class GooglePlacesApiType < ApplicationRecord
       .where(feeling_type_mappings: { feeling_id: feeling_id })
   }
 
-  def self.get_display_name
-    pluck(:display_name)
-  end
-
   def self.ransackable_attributes(auth_object = nil)
     %w(display_name)
   end

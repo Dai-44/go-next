@@ -11,7 +11,7 @@
         <!-- カルーセル内の個々のアイテム -->
         <div class="<%= 'hidden' unless index.zero? %> duration-700 ease-in-out h-full" data-carousel-item>
           <div class="bg-white rounded-lg py-5 mx-5 h-full flex flex-col items-center text-slate-700">
-            <%= image_tag @photos[index]['photoUri'], class: "my-2 px-5" %>
+            <%#= image_tag @photos[index]['photoUri'], class: "my-2 px-5" %>
             <div class="h-full w-4/5 my-2 px-5">
               <div class="flex flex-row space-x-3 justify-center items-center w-full mb-2">
                 <%= link_to place['displayName']['text'], place['websiteUri'], class: "text-center font-bold underline hover:text-slate-400", target: '_blank', rel: 'noopener noreferrer' %>
