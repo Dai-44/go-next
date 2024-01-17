@@ -2,13 +2,13 @@
   <div>
     <h1 class="text-center font-bold text-slate-600 text-3xl mb-8">ブックマーク</h1>
   </div>
-  <div>
+  <div class="flex justify-center w-4/5">
     <%= render 'shared/search_form', q: @q, url: bookmarks_destinations_path %>
   </div>
-  <div class="bg-orange-100 rounded-3xl py-5 mx-5 flex flex-col items-center justify-center text-slate-600 w-96" >
+  <div class="bg-white rounded-lg py-5 mx-5 h-full flex flex-col items-center justify-center text-slate-700 w-96" >
     <% if @bookmark_destinations.present? %>
       <% @bookmark_destinations.each do |bookmark_destination| %>
-        <div class= "hover:bg-orange-300 font-bold rounded-sm border-b-2 border-slate-400 h-20 w-4/5 my-1 px-3">
+        <div class= "hover:bg-slate-100 font-bold rounded-sm border-b-2 border-slate-400 h-20 w-4/5 my-1 px-3">
           <%= link_to destination_path(bookmark_destination), class: "flex flex-col space-y-2 justify-center text-center w-full" do %>
             <span class="pt-2"><%= bookmark_destination.name %></span>
             <span class="text-xs"><%= bookmark_destination.address %></span>
