@@ -1,73 +1,72 @@
-<div>
-  <!-- マップの表示領域となる要素を定義。 -->
-  <div class="flex justify-center items-center">
-    <div id="map" class="h-64 w-11/12 md:w-96 rounded-lg"></div>
-  </div>
+<!-- マップの表示領域となる要素を定義。 -->
+<div class="flex justify-center items-center">
+  <div id="map" class="h-64 w-11/12 md:w-96 rounded-lg"></div>
+</div>
 
-  <div>
-    <div id="default-carousel" class="relative h-full w-full py-5 flex justify-center" data-carousel="slide">
-      <!-- カルーセルのラッパー -->
-      <div class="relative h-96 w-full md:w-96 overflow-hidden rounded-lg">
-        <% @response['places'].each_with_index do |place, index| %>
-          <!-- カルーセル内の個々のアイテム -->
-          <div class="<%= 'hidden' unless index.zero? %> duration-700 ease-in-out h-full" data-carousel-item>
-            <div class="bg-white rounded-lg py-5 mx-5 h-full flex flex-col items-center text-slate-700">
-              <%= image_tag @photos[index]['photoUri'], class: "my-2 px-5" %>
-              <div class="h-full w-4/5 my-2 px-5">
-                <div class="flex flex-row space-x-3 justify-center items-center w-full mb-2">
-                  <%= link_to place['displayName']['text'], place['websiteUri'], class: "text-center font-bold underline hover:text-slate-400", target: '_blank', rel: 'noopener noreferrer' %>
-                  <% if logged_in? %>
-                    <%= render 'destinations/bookmark_button', place: place %>
-                  <% end %>
-                </div>
-                <div class="flex flex-col space-y-2 items-center w-full">
-                  <%= link_to 'ルート検索 (Yahoo!カーナビ)', "yjcarnavi://navi/select?lat=#{place['location']['latitude']}&lon=#{place['location']['longitude']}" %>
-                  <%= link_to 'ルート検索 (Google Map)', '#', class: 'google-map-link', data: { lat: place['location']['latitude'], lng: place['location']['longitude'] } %>
-                  <% if logged_in? %>
-                    <%= link_to 'ここへ行く', drive_records_path(destination: {
-                        name: place['displayName']['text'],
-                        address: place['formattedAddress'],
-                        top_level_area: place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_1") }["longText"],
-                        second_level_area: place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_2") || component["types"].include?("locality") }["longText"],
-                        latitude: place['location']['latitude'],
-                        longitude: place['location']['longitude'],
-                        type: place['primaryType']
-                    }),
-                    data: { turbo_method: :post }
-                    %>
-                  <% end %>
-                </div>
+<div>
+  <div id="default-carousel" class="relative h-full w-full py-5 flex justify-center" data-carousel="slide">
+    <!-- カルーセルのラッパー -->
+    <div class="relative h-96 w-full md:w-96 overflow-hidden rounded-lg">
+      <% @response['places'].each_with_index do |place, index| %>
+        <!-- カルーセル内の個々のアイテム -->
+        <div class="<%= 'hidden' unless index.zero? %> duration-700 ease-in-out h-full" data-carousel-item>
+          <div class="bg-white rounded-lg py-5 mx-5 h-full flex flex-col items-center text-slate-700">
+            <%= image_tag @photos[index]['photoUri'], class: "my-2 px-5" %>
+            <div class="h-full w-4/5 my-2 px-5">
+              <div class="flex flex-row space-x-3 justify-center items-center w-full mb-2">
+                <%= link_to place['displayName']['text'], place['websiteUri'], class: "text-center font-bold underline hover:text-slate-400", target: '_blank', rel: 'noopener noreferrer' %>
+                <% if logged_in? %>
+                  <%= render 'destinations/bookmark_button', place: place %>
+                <% end %>
+              </div>
+              <div class="flex flex-col space-y-2 items-center w-full">
+                <%= link_to 'ルート検索 (Yahoo!カーナビ)', "yjcarnavi://navi/select?lat=#{place['location']['latitude']}&lon=#{place['location']['longitude']}" %>
+                <%= link_to 'ルート検索 (Google Map)', '#', class: 'google-map-link', data: { lat: place['location']['latitude'], lng: place['location']['longitude'] } %>
+                <% if logged_in? %>
+                  <%= link_to 'ここへ行く', drive_records_path(destination: {
+                      name: place['displayName']['text'],
+                      address: place['formattedAddress'],
+                      top_level_area: place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_1") }["longText"],
+                      second_level_area: place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_2") || component["types"].include?("locality") }["longText"],
+                      latitude: place['location']['latitude'],
+                      longitude: place['location']['longitude'],
+                      type: place['primaryType']
+                  }),
+                  data: { turbo_method: :post }
+                  %>
+                <% end %>
               </div>
             </div>
           </div>
-        <% end %>
-
-        <!-- カルーセルのインジケーター -->
-        <div class="absolute bottom-0 left-0 right-0 flex justify-center p-4">
-            <% @response['places'].each_with_index do |_, index| %>
-                <button type="button" class="w-3 h-3 bg-slate-100 rounded-full mx-2 focus:outline-none focus:ring" data-carousel-slide-to="<%= index %>"></button>
-            <% end %>
         </div>
-        <!-- カルーセルのコントロールボタン -->
-        <button type="button" class="absolute top-1/2 bottom-0 left-0 z-30 flex items-center justify-center w-10 h-10 mx-2 bg-white bg-opacity-75 rounded-full focus:outline-none focus:ring hover:bg-opacity-100" data-carousel-prev>
-            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-            </svg>
-        </button>
-        <button type="button" class="absolute top-1/2 bottom-0 right-0 z-30 flex items-center justify-center w-10 h-10 mx-2 bg-white bg-opacity-75 rounded-full focus:outline-none focus:ring hover:bg-opacity-100" data-carousel-next>
-            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-            </svg>
-        </button>
+      <% end %>
+
+      <!-- カルーセルのインジケーター -->
+      <div class="absolute bottom-0 left-0 right-0 flex justify-center p-4">
+          <% @response['places'].each_with_index do |_, index| %>
+              <button type="button" class="w-3 h-3 bg-slate-100 rounded-full mx-2 focus:outline-none focus:ring" data-carousel-slide-to="<%= index %>"></button>
+          <% end %>
       </div>
+
+      <!-- カルーセルのコントロールボタン -->
+      <button type="button" class="absolute top-1/2 bottom-0 left-0 z-30 flex items-center justify-center w-10 h-10 mx-2 bg-white bg-opacity-75 rounded-full focus:outline-none focus:ring hover:bg-opacity-100" data-carousel-prev>
+          <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+      </button>
+      <button type="button" class="absolute top-1/2 bottom-0 right-0 z-30 flex items-center justify-center w-10 h-10 mx-2 bg-white bg-opacity-75 rounded-full focus:outline-none focus:ring hover:bg-opacity-100" data-carousel-next>
+          <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+      </button>
     </div>
   </div>
+</div>
 
-  <div class="flex items-center justify-center">
-    <div class="flex justify-between space-x-8 pb-3 px-3">
-      <%= link_to 'ここへ向かう', '#', class: "bg-indigo-900 hover:bg-indigo-700 focus:outline-none focus:ring-indigo-500 text-white text-center py-3 px-6 w-40 rounded-full" %>
-      <%= link_to '再検索', '#', class: "hover:bg-slate-300 text-slate-600 text-center border border-slate-600 py-3 px-6 w-40 rounded-full" %>
-    </div>
+<div class="flex items-center justify-center">
+  <div class="flex justify-between space-x-8 pb-3 px-3">
+    <%= link_to 'ここへ向かう', '#', class: "bg-indigo-900 hover:bg-indigo-700 focus:outline-none focus:ring-indigo-500 text-white text-center py-3 px-6 w-40 rounded-full" %>
+    <%= link_to '再検索', '#', class: "hover:bg-slate-300 text-slate-600 text-center border border-slate-600 py-3 px-6 w-40 rounded-full" %>
   </div>
 </div>
 

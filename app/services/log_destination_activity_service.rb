@@ -8,8 +8,9 @@ class LogDestinationActivityService
   # 目的地またはブックマーク対象となる場所の特定と、その場所へのユーザーのドライブ履歴またはブックマークを生成する処理
   def call
     type = GooglePlacesApiType.find_by(name: @destination_info[:type])
+    address = @destination_info[:address].split.last
     # 名称と住所を条件にdestinationsテーブルを検索し、該当するレコードが存在すればそれを返し、存在しなければブロック内の値も含めて新たなレコードを生成する処理
-    destination = Destination.find_or_create_by(name: @destination_info[:name], address: @destination_info[:address]) do |new_destination|
+    destination = Destination.find_or_create_by(name: @destination_info[:name], address: address) do |new_destination|
                     new_destination.area = @destination_info[:top_level_area] + @destination_info[:second_level_area]
                     new_destination.latitude = @destination_info[:latitude]
                     new_destination.longitude = @destination_info[:longitude]
