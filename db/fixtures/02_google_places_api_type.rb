@@ -48,7 +48,10 @@ GooglePlacesApiType.seed(:id,
   { id: 47, name: "accounting", display_name: "会計事務所, 税務署" },
   { id: 48, name: "atm", display_name: "ATM" },
   { id: 49, name: "bank", display_name: "銀行" },
-  { id: 50, name: "vietnamese_restaurant", display_name: "ベトナム料理店" },
+  { id: 50, name: "vietnamese_restaurant", display_name: "ベトナム料理店" }
+)
+
+GooglePlacesApiType.seed(:id,
   { id: 51, name: "american_restaurant", display_name: "アメリカンレストラン" },
   { id: 52, name: "bakery", display_name: "ベーカリー" },
   { id: 53, name: "bar", display_name: "バー" },
@@ -151,7 +154,10 @@ GooglePlacesApiType.seed(:id,
   { id: 147, name: "tailor", display_name: "仕立て屋" },
   { id: 148, name: "travel_agency", display_name: "旅行代理店" },
   { id: 149, name: "veterinary_care", display_name: "獣医医療" },
-  { id: 150, name: "barber_shop", display_name: "理髪店" },
+  { id: 150, name: "barber_shop", display_name: "理髪店" } 
+)
+
+GooglePlacesApiType.seed(:id,
   { id: 151, name: "book_store", display_name: "書店" },
   { id: 152, name: "cell_phone_store", display_name: "携帯電話店" },
   { id: 153, name: "clothing_store", display_name: "衣料品店" },
