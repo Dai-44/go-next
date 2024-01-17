@@ -1,11 +1,18 @@
 <div>
   <h1 class="text-center font-bold text-slate-600 text-3xl mb-8">ドライブ履歴詳細</h1>
 </div>
-<div class="bg-blue-100 rounded-3xl p-5 mx-5 flex flex-col items-center text-slate-600 font-bold h-96">
-  <h2 class="text-xl p-3"><%= @drive_record_destination.name %></h2>
-  <p class="text-sm"><%= @drive_record_destination.address %></p>
+<div class="bg-white rounded-lg p-5 m-5 flex flex-col items-center text-slate-700 h-96">
+  <% if @drive_record_destination.website_uri.present? %>
+    <%= link_to @drive_record_destination.name, @drive_record_destination.website_uri, class: "text-xl font-bold p-3 underline hover:text-slate-400", target: '_blank', rel: 'noopener noreferrer' %>
+  <% else %>
+    <h2 class="text-xl font-bold p-3"><%= @drive_record_destination.name %></h2>
+  <% end %>
+  <p class="text-sm font-semibold"><%= @drive_record_destination.address %></p>
   <p class="py-5">日付: <%= @drive_record_destination.created_at %></p>
 </div>
-<div class="text-center mt-10">
-  <p><%= link_to 'ドライブ履歴一覧へ戻る', drive_records_path, class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-1/4" %></p>
+<div class="flex items-center justify-center mt-8">
+  <div class="flex justify-between space-x-8 pb-3 px-3">
+    <%= link_to ' もう一度行く', '#', class: "bg-indigo-900 hover:bg-indigo-700 focus:outline-none focus:ring-indigo-500 text-white text-center py-3 px-6 w-40 rounded-full" %>
+    <%= link_to '一覧へ戻る', drive_records_path, class: "hover:bg-slate-300 text-slate-600 text-center border border-slate-600 py-3 px-6 w-40 rounded-full" %>
+  </div>
 </div>

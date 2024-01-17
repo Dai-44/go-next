@@ -14,19 +14,16 @@
  *= require_self
  */
 
-/* app/views/searches/new.html.erbのチェックボックス/ラジオボタンの状態に応じて適用される背景色のスタイル */
-
-/* 選択されていないときに適用するスタイル */
-.label-color {
-  background-color: #06B6D4; /* Tailwindのbg-cyan-500に相当 */
+/* app/views/searches/new.html.erbで、フォームの表示と非表示をスライド式で切り替えるためのスタイル */
+.max-h-0 {
+  max-height: 0;
 }
 
-/* チェックボックスが選択されているときに適用するスタイル */
-.form-checkbox:checked + .label-color {
-  background-color: #0E7490; /* bg-cyan-700に相当 */
+.max-h-screen {
+  max-height: 100vh; /* ビューポートの高さに合わせる */
 }
 
-/* ラジオボタンが選択されているときに適用するスタイル */
-.form-radio:checked + .label-color {
-  background-color: #0E7490; /* bg-cyan-700に相当 */
+/* app/views/searches/new.html.erbで、表示中のカルーセルアイテムのインジケーターに色を付けるためのスタイル */
+.active-indicator {
+  background-color: #94a3b8
 }

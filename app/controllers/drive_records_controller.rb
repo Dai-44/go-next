@@ -1,12 +1,8 @@
 class DriveRecordsController < ApplicationController
-  include Searchable
-
   def index
     @q = current_user.drive_records.ransack(params[:q])
     @drive_records = @q.result(distinct: true).includes(:destination).order(created_at: :desc).page(params[:page])
-    # 検索時の選択肢となるデータを用意
-    load_search_options
-    load_additional_search_options
+    load_search_options # 検索時の選択肢となるデータを用意
   end
 
   def show
@@ -29,11 +25,13 @@ class DriveRecordsController < ApplicationController
   private
 
   def destination_params
-    params.require(:destination).permit(:name, :address, :top_level_area, :second_level_area, :latitude, :longitude, :type)
+    params.require(:destination).permit(:name, :address, :top_level_area, :second_level_area, :latitude, :longitude, :website_uri, :type)
   end
 
-  # ドライブ履歴の検索時に特有の選択肢となるデータを取得してインスタンス変数に格納する処理
-  def load_additional_search_options
-    @visited_months = DriveRecord.get_unique_visited_months
+  # 検索時の選択肢となるデータを取得してインスタンス変数に格納する処理
+  def load_search_options
+    @areas = current_user.visited_destinations.get_unique_areas
+    @types = current_user.visited_destinations.map(&:google_places_api_type).uniq.map(&:display_name).sort
+    @visited_months = current_user.drive_records.get_unique_visited_months
   end
 end

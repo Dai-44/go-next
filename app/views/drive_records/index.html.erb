@@ -1,27 +1,25 @@
-<div class="flex flex-col justify-between min-h-screen">
+<div class="flex flex-col items-center">
   <div>
-    <div>
-      <h1 class="text-center font-bold text-slate-600 text-3xl mb-8">ドライブ履歴</h1>
-    </div>
-    <div>
-      <%= render 'shared/search_form', q: @q, url: drive_records_path %>
-    </div>
-    <div class="bg-blue-100 rounded-3xl py-5 mx-5 flex flex-col items-center justify-center text-slate-600">
-      <% if @drive_records.present? %>
-        <% @drive_records.each do |drive_record| %>
-          <div class= "hover:bg-blue-300 font-bold rounded-sm border-b-2 border-slate-400 h-20 w-4/5 my-1 px-3">
-            <%= link_to drive_record_path(drive_record), class: "flex flex-col space-y-2 justify-center text-center w-full" do%>
-              <span class="pt-2"><%= drive_record.destination.name %></span>
-              <span class="text-xs"><%= drive_record.destination.address %></span>
-            <% end %>
-          </div>
-        <% end %>
-      <% else %>
-        <p>ドライブ履歴がありません</p>
+    <h1 class="text-center font-bold text-slate-600 text-3xl mb-8">ドライブ履歴</h1>
+  </div>
+  <div class="flex justify-center w-4/5">
+    <%= render 'shared/search_form', q: @q, url: drive_records_path %>
+  </div>
+  <div class="bg-white rounded-lg py-5 mx-5 h-full flex flex-col items-center justify-center text-slate-700 w-96">
+    <% if @drive_records.present? %>
+      <% @drive_records.each do |drive_record| %>
+        <div class= "hover:bg-slate-100 font-bold rounded-sm border-b-2 border-slate-400 h-20 w-4/5 my-1 px-3">
+          <%= link_to drive_record_path(drive_record), class: "flex flex-col space-y-2 justify-center text-center w-full" do%>
+            <span class="pt-2"><%= drive_record.destination.name %></span>
+            <span class="text-xs"><%= drive_record.destination.address %></span>
+          <% end %>
+        </div>
       <% end %>
-    </div>
+    <% else %>
+      <p>ドライブ履歴がありません</p>
+    <% end %>
   </div>
-  <div>
-    <%= paginate @drive_records%>
-  </div>
+</div>
+<div>
+  <%= paginate @drive_records%>
 </div>
