@@ -13,7 +13,7 @@
         <!-- ドロップダウンを開くボタン (カテゴリ) の親要素 -->
         <div class="form-element relative">
           <%= button_tag type: 'button', id: 'dropdownSearchButton', class: 'inline-flex items-center px-4 py-2 text-md font-medium text-center text-slate-600 rounded-lg shadow-sm bg-white border-2 border-indigo-300 hover:border-indigo-500 focus:border-indigo-400 focus:ring focus:ring-indigo-200 focus:ring-opacity-50', data: { dropdown_toggle: 'dropdownSearch' } do %>
-            外すカテゴリ
+            除外カテゴリ(任意)
             <%= content_tag :svg, class: 'w-2.5 h-2.5 ms-2.5', aria: { hidden: true }, xmlns: 'http://www.w3.org/2000/svg', fill: 'none', viewBox: '0 0 10 6' do %>
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
             <% end %>
