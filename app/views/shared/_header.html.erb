@@ -1,11 +1,46 @@
 <header>
-  <nav class='flex items-center justify-between bg-orange-500 h-16 text-sm text-slate-50 font-bold p-3'>
-    <%= link_to 'トップページ', root_path, class: 'inline-block' %>
-    <div class='flex space-x-3 items-center'>
-      <%= link_to 'ドライブ履歴', drive_records_path %>
-      <%= link_to 'ブックマーク', bookmarks_destinations_path %>
-      <%= link_to 'プロフィール', profile_path %>
-      <%= link_to 'ログアウト', logout_path, data: { turbo_method: :delete } %>
+  <nav class='flex items-center justify-between h-16 text-sm text-slate-600 font-bold p-3 relative'>
+    <!-- ハンバーガーアイコン -->
+    <div id="hamburger" class="cursor-pointer">
+      <i class="fas fa-bars fa-2x"></i>
     </div>
+
+    <!-- ドロップダウンメニュー -->
+    <div id="menu" class="hidden absolute bg-white shadow-md rounded-md mt-2 py-2 w-64 top-12 z-10">
+      <ul class="flex flex-col">
+        <li><%= link_to 'ドライブ履歴', drive_records_path, class: 'block px-4 py-2 hover:bg-gray-100' %></li>
+        <li><%= link_to 'ブックマーク', bookmarks_destinations_path, class: 'block px-4 py-2 hover:bg-gray-100' %></li>
+        <li><%= link_to 'プロフィール', profile_path, class: 'block px-4 py-2 hover:bg-gray-100' %></li>
+        <li><%= link_to 'ログアウト', logout_path, class: 'block px-4 py-2 hover:bg-gray-100', data: { turbo_method: :delete } %></li>
+        <li class='border-t my-4'></li>
+        <li><%= link_to '利用規約', '#', class: 'block px-4 py-1 hover:bg-gray-100 text-xs' %></li>
+        <li><%= link_to 'プライバシーポリシー', '#', class: 'block px-4 py-1 hover:bg-gray-100 text-xs' %></li>
+        <li><%= link_to 'お問い合わせ', '#', class: 'block px-4 py-1 hover:bg-gray-100 text-xs' %></li>
+        <li class='block px-4 pt-4 pb-2 hover:bg-gray-100 text-xs font-semibold'>Copyright © ...次、どこ行く？</li>
+      </ul>
+    </div>
+
+    <%= link_to root_path, class: 'inline-block' do %>
+      <%= image_tag 'logo_without_appname.png', size: "50x50", class: 'rounded-full' %>
+    <% end %>
   </nav>
 </header>
+
+<script>
+  // ハンバーガーメニューのクリックイベントリスナー
+  document.getElementById('hamburger').addEventListener('click', function () {
+    document.getElementById('menu').classList.toggle('hidden');
+    event.stopPropagation(); // ドキュメントへのイベント伝播を防ぐ
+  });
+
+  // ドキュメント全体のクリックイベントリスナー
+  document.addEventListener('click', function (event) {
+    const menu = document.getElementById('menu');
+    const hamburger = document.getElementById('hamburger');
+
+    // クリックされた要素がドロップダウンメニューやハンバーガーアイコンでない場合
+    if (!menu.contains(event.target) && !hamburger.contains(event.target)) {
+      menu.classList.add('hidden'); // ドロップダウンメニューを閉じる
+    }
+  });
+</script>
