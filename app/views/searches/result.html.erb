@@ -1,3 +1,8 @@
+<!-- マップの表示領域となる要素を定義。 -->
+<div class="flex justify-center items-center">
+  <div id="map" class="h-64 w-96 rounded-lg"></div>
+</div>
+
 <div>
   <div id="default-carousel" class="relative w-full p-5 flex justify-center" data-carousel="slide">
     <!-- カルーセルのラッパー -->
@@ -5,12 +10,16 @@
       <% @response['places'].each_with_index do |place, index| %>
         <!-- カルーセル内の個々のアイテム -->
         <div class="<%= 'hidden' unless index.zero? %> duration-700 ease-in-out h-full" data-carousel-item>
-          <div class="bg-blue-100 rounded-3xl py-5 mx-5 h-full flex flex-col items-center text-slate-600 font-bold">
-            <div class="h-full w-4/5 my-2 px-6">
-              <span class="flex justify-center text-center w-full mb-2"><%= place['displayName']['text'] %></span>
+          <div class="bg-white rounded-lg py-5 mx-5 h-full flex flex-col items-center text-slate-700">
+            <%= image_tag @photos[index]['photoUri'], class: "my-2 px-5" %>
+            <div class="h-full w-4/5 my-2 px-5">
+              <div class="flex flex-row space-x-3 justify-center items-center w-full mb-2">
+                <%= link_to place['displayName']['text'], place['websiteUri'], class: "text-center font-bold underline hover:text-slate-400", target: '_blank', rel: 'noopener noreferrer' %>
+                <% if logged_in? %>
+                  <%= render 'destinations/bookmark_button', place: place %>
+                <% end %>
+              </div>
               <div class="flex flex-col space-y-2 items-center w-full">
-                <%= image_tag @photos[index]['photoUri'] %>
-                <%= link_to '公式サイト', place['websiteUri'], target: '_blank', rel: 'noopener noreferrer' %>
                 <%= link_to 'ルート検索 (Yahoo!カーナビ)', "yjcarnavi://navi/select?lat=#{place['location']['latitude']}&lon=#{place['location']['longitude']}" %>
                 <%= link_to 'ルート検索 (Google Map)', '#', class: 'google-map-link', data: { lat: place['location']['latitude'], lng: place['location']['longitude'] } %>
                 <% if logged_in? %>
@@ -25,7 +34,6 @@
                   }),
                   data: { turbo_method: :post }
                   %>
-                  <%= render 'destinations/bookmark_button', place: place %>
                 <% end %>
               </div>
             </div>
@@ -36,7 +44,7 @@
       <!-- カルーセルのインジケーター -->
       <div class="absolute bottom-0 left-0 right-0 flex justify-center p-4">
           <% @response['places'].each_with_index do |_, index| %>
-              <button type="button" class="w-3 h-3 bg-white rounded-full mx-2 focus:outline-none focus:ring" data-carousel-slide-to="<%= index %>"></button>
+              <button type="button" class="w-3 h-3 bg-slate-100 rounded-full mx-2 focus:outline-none focus:ring" data-carousel-slide-to="<%= index %>"></button>
           <% end %>
       </div>
       <!-- カルーセルのコントロールボタン -->
@@ -53,11 +61,6 @@
     </div>
   </div>
 </div>
-
-<!-- マップの表示領域となる要素を定義。 -->
-<div class="flex justify-center items-center">
-  <div id="map" class="h-64 w-96 rounded-lg"></div>
-</div> 
 
 <script>
   // ページのDOM要素が全て読み込まれたら、ブラウザのセッションストレージに格納されている緯度と経度のデータを取得し、上記フォーム内の該当するhidden_fieldに設定する処理
