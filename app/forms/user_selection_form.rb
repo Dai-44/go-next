@@ -12,7 +12,6 @@ class UserSelectionForm
   attribute :longitude, :float
 
   with_options presence: true do
-    validates :type
     validates :feeling
     validates :drive_range
     validates :latitude

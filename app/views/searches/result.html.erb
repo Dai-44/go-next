@@ -30,6 +30,7 @@
                       second_level_area: place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_2") || component["types"].include?("locality") }["longText"],
                       latitude: place['location']['latitude'],
                       longitude: place['location']['longitude'],
+                      website_uri: place['websiteUri'],
                       type: place['primaryType']
                   }),
                   data: { turbo_method: :post }
@@ -65,7 +66,7 @@
 
 <div class="flex items-center justify-center">
   <div class="flex justify-between space-x-8 pb-3 px-3">
-    <%= link_to 'ここへ向かう', '#', class: "bg-indigo-900 hover:bg-indigo-700 focus:outline-none focus:ring-indigo-500 text-white text-center py-3 px-6 w-40 rounded-full" %>
+    <%= link_to 'ここに行く', '#', class: "bg-indigo-900 hover:bg-indigo-700 focus:outline-none focus:ring-indigo-500 text-white text-center py-3 px-6 w-40 rounded-full" %>
     <%= link_to '再検索', '#', class: "hover:bg-slate-300 text-slate-600 text-center border border-slate-600 py-3 px-6 w-40 rounded-full" %>
   </div>
 </div>
