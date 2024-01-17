@@ -98,7 +98,10 @@ GooglePlacesApiType.seed(:id,
   { id: 97, name: "fire_station", display_name: "消防署" },
   { id: 98, name: "local_government_office", display_name: "地方自治体事務所" },
   { id: 99, name: "police", display_name: "警察署" },
-  { id: 100, name: "post_office", display_name: "郵便局" },
+  { id: 100, name: "post_office", display_name: "郵便局" }
+)
+
+GooglePlacesApiType.seed(:id,
   { id: 101, name: "dental_clinic", display_name: "歯科クリニック" },
   { id: 102, name: "dentist", display_name: "歯医者" },
   { id: 103, name: "doctor", display_name: "医師" },
@@ -198,7 +201,10 @@ GooglePlacesApiType.seed(:id,
   { id: 197, name: "administrative_area_level_4", display_name: "行政区画レベル4" },
   { id: 198, name: "administrative_area_level_5", display_name: "行政区画レベル5" },
   { id: 199, name: "administrative_area_level_6", display_name: "行政区画レベル6" },
-  { id: 200, name: "administrative_area_level_7", display_name: "行政区画レベル7" },
+  { id: 200, name: "administrative_area_level_7", display_name: "行政区画レベル7" }
+)
+
+GooglePlacesApiType.seed(:id,
   { id: 201, name: "continent", display_name: "大陸" },
   { id: 202, name: "establishment", display_name: "施設" },
   { id: 203, name: "floor", display_name: "階" },
