@@ -19,7 +19,7 @@ class SearchesController < ApplicationController
   def result
     @response = SearchPlacesService.search_places(session[:request_params])
     photo_resources = fetch_place_photo_names(@response)
-    #@photos = SearchPlacesService.fetch_place_photos(photo_resources) # 各場所の画像データを取得する処理。現状ではリクエストの度にAPIへのリクエストが実行されてしまうので、キャッシュを利用した画像の保持などを検討する。
+    @photos = SearchPlacesService.fetch_place_photos(photo_resources) # 各場所の画像データを取得する処理。現状ではリクエストの度にAPIへのリクエストが実行されてしまうので、キャッシュを利用した画像の保持などを検討する。
   end
 
   private
