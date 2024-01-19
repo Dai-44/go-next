@@ -1,12 +1,16 @@
 <header>
   <nav class='flex items-center justify-between h-16 text-sm text-slate-600 font-bold p-3 relative'>
+    <%= link_to root_path, class: 'inline-block' do %>
+      <%= image_tag 'logo_without_appname.png', size: "50x50", class: 'rounded-full' %>
+    <% end %>
+
     <!-- ハンバーガーアイコン -->
     <div id="hamburger" class="cursor-pointer">
       <i class="fas fa-bars fa-2x"></i>
     </div>
 
     <!-- ドロップダウンメニュー -->
-    <div id="menu" class="hidden absolute bg-white shadow-md rounded-md mt-2 py-2 w-64 top-12 z-10">
+    <div id="menu" class="hidden absolute bg-white shadow-md rounded-md mt-2 py-2 w-64 top-12 right-3 z-10">
       <ul class="flex flex-col">
         <li><%= link_to 'ログイン', login_path, class: 'block px-4 py-2 hover:bg-gray-100' %></li>
         <li><%= link_to '新規登録', new_user_path, class: 'block px-4 py-2 hover:bg-gray-100' %></li>
@@ -17,10 +21,6 @@
         <li class='block px-4 pt-4 pb-2 hover:bg-gray-100 text-xs font-semibold'>Copyright © ...次、どこ行く？</li>
       </ul>
     </div>
-
-    <%= link_to root_path, class: 'inline-block' do %>
-      <%= image_tag 'logo_without_appname.png', size: "50x50", class: 'rounded-full' %>
-    <% end %>
   </nav>
 </header>
 
