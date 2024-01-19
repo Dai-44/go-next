@@ -10,9 +10,62 @@
   <p class="text-sm font-semibold"><%= @drive_record_destination.address %></p>
   <p class="py-5">日付: <%= @drive_record_destination.created_at %></p>
 </div>
-<div class="flex items-center justify-center mt-8">
-  <div class="flex justify-between space-x-8 pb-3 px-3">
-    <%= link_to ' もう一度行く', '#', class: "bg-indigo-900 hover:bg-indigo-700 focus:outline-none focus:ring-indigo-500 text-white text-center py-3 px-6 w-40 rounded-full" %>
-    <%= link_to '一覧へ戻る', drive_records_path, class: "hover:bg-slate-300 text-slate-600 text-center border border-slate-600 py-3 px-6 w-40 rounded-full" %>
+
+<!-- オーバーレイ -->
+<div id="overlay" class="hidden fixed inset-0 bg-slate-900 bg-opacity-50 z-20"></div>
+
+<div class="flex items-center justify-center">
+  <div class="flex items-center justify-between space-x-14 py-3 relative">
+    <!-- ドロップダウンを開くボタン -->
+    <div>
+      <%= button_tag type: 'button', id: 'dropdownDepartureButton', class: 'bg-indigo-900 hover:bg-indigo-700 text-white focus:outline-none py-3 px-6 mt-3 w-40 rounded-full', data: { dropdown_toggle: 'dropdownDeparture' } do %>
+        もう一度行く
+      <% end %>
+
+      <!-- ドロップダウンのコンテンツ -->
+      <div id="dropdownDeparture" class="hidden absolute z-30 top-1 left-1/2 transform -translate-x-1/2 w-11/12 rounded-lg shadow-lg bg-slate-50 ring-1 ring-black ring-opacity-5">
+        <div class="flex flex-col justify-center h-full">
+          <div class="flex flex-row items-center justify-center space-x-3 mt-5">
+            <%= link_to "Yahoo!カーナビで行く", "yjcarnavi://navi/select?lat=#{@drive_record_destination.latitude}&lon=#{@drive_record_destination.longitude}", class: "text-sm text-gray-700 border-2 border-blue-500 hover:border-blue-700 hover:bg-blue-200 rounded-full px-3 py-2 transition-colors duration-200 ease-in-out" %>
+            <%= link_to "Google Mapで行く", "https://www.google.com/maps/dir/?api=1&destination=#{@drive_record_destination.latitude},#{@drive_record_destination.longitude}&travelmode=driving", class: "text-sm text-gray-700 border-2 border-red-500 hover:border-red-700 hover:bg-red-200 rounded-full px-3 py-2 transition-colors duration-200 ease-in-out" %>
+          </div>
+          <div class="text-xs ml-4 mt-2 pb-1">
+          ※ Yahoo!カーナビアプリ の<br>&emsp;インストールが必要です
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%= link_to '一覧へ戻る', drive_records_path, class: "hover:bg-slate-50 text-slate-600 text-center border border-slate-600 py-3 px-6 mt-3 w-40 rounded-full" %>
   </div>
 </div>
+
+<script>
+  // 「もう一度行く」ボタンをクリックした際のドロップダウン表示処理
+  document.addEventListener('DOMContentLoaded', () => {
+    const dropdownDepartureButton = document.getElementById('dropdownDepartureButton');
+    const dropdownDepartureContent = document.getElementById('dropdownDeparture');
+    const overlay = document.getElementById('overlay');
+
+    // 「ここへ行く」ボタンをクリックした際にドロップダウンを表示するイベント
+    dropdownDepartureButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      dropdownDepartureContent.classList.toggle('hidden');
+      overlay.classList.toggle('hidden'); // オーバーレイの表示を切り替える
+    });
+
+    // オーバーレイをクリックしたときにドロップダウンを閉じる
+    overlay.addEventListener('click', () => {
+        dropdownDepartureContent.classList.add('hidden');
+        overlay.classList.add('hidden');
+    });
+
+    // ドロップダウン要素以外の場所がクリックされたらドロップダウンを閉じる
+    document.addEventListener('click', (event) => {
+      if (!dropdownDepartureButton.contains(event.target) && !dropdownDepartureContent.contains(event.target)) {
+          dropdownDepartureContent.classList.add('hidden');
+          overlay.classList.add('hidden');
+      }
+    });
+  });
+</script>
