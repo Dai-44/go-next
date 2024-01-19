@@ -19,22 +19,6 @@
                   <%= render 'destinations/bookmark_button', place: place %>
                 <% end %>
               </div>
-              <div class="flex flex-col space-y-2 items-center w-full">
-                <% if logged_in? %>
-                  <%= link_to 'ここへ行く', drive_records_path(destination: {
-                      name: place['displayName']['text'],
-                      address: place['formattedAddress'],
-                      top_level_area: place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_1") }["longText"],
-                      second_level_area: place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_2") || component["types"].include?("locality") }["longText"],
-                      latitude: place['location']['latitude'],
-                      longitude: place['location']['longitude'],
-                      website_uri: place['websiteUri'],
-                      type: place['primaryType']
-                  }),
-                  data: { turbo_method: :post }
-                  %>
-                <% end %>
-              </div>
             </div>
           </div>
         </div>
