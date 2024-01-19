@@ -1,6 +1,5 @@
 class SearchesController < ApplicationController
-  skip_before_action :require_login, only: %i[index new create result]
-  def index; end
+  skip_before_action :require_login, only: %i[new create result]
 
   def new
     @user_selection = UserSelectionForm.new
