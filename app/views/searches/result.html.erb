@@ -1,40 +1,22 @@
 <!-- マップの表示領域となる要素を定義。 -->
-<div class="flex justify-center items-center">
+<div class="flex justify-center">
   <div id="map" class="h-64 w-11/12 md:w-96 rounded-lg"></div>
 </div>
 
 <div>
-  <div id="default-carousel" class="relative h-full w-full py-5 flex justify-center" data-carousel="slide">
+  <div id="default-carousel" class="relative h-full py-5 flex justify-center" data-carousel="slide">
     <!-- カルーセルのラッパー -->
     <div class="relative h-96 w-full md:w-96 overflow-hidden rounded-lg">
       <% @response['places'].each_with_index do |place, index| %>
         <!-- カルーセル内の個々のアイテム -->
-        <div class="<%= 'hidden' unless index.zero? %> duration-700 ease-in-out h-full" data-carousel-item>
-          <div class="bg-white rounded-lg py-5 mx-5 h-full flex flex-col items-center text-slate-700">
+        <div class="<%= 'hidden' unless index.zero? %> h-full" data-carousel-item  data-latitude="<%= place['location']['latitude'] %>" data-longitude="<%= place['location']['longitude']%>" >
+          <div class="bg-white rounded-lg py-4 mx-5 h-full flex flex-col items-center text-slate-700">
             <%= image_tag @photos[index]['photoUri'], class: "my-2 px-5" %>
             <div class="h-full w-4/5 my-2 px-5">
               <div class="flex flex-row space-x-3 justify-center items-center w-full mb-2">
                 <%= link_to place['displayName']['text'], place['websiteUri'], class: "text-center font-bold underline hover:text-slate-400", target: '_blank', rel: 'noopener noreferrer' %>
                 <% if logged_in? %>
                   <%= render 'destinations/bookmark_button', place: place %>
-                <% end %>
-              </div>
-              <div class="flex flex-col space-y-2 items-center w-full">
-                <%= link_to 'ルート検索 (Yahoo!カーナビ)', "yjcarnavi://navi/select?lat=#{place['location']['latitude']}&lon=#{place['location']['longitude']}" %>
-                <%= link_to 'ルート検索 (Google Map)', '#', class: 'google-map-link', data: { lat: place['location']['latitude'], lng: place['location']['longitude'] } %>
-                <% if logged_in? %>
-                  <%= link_to 'ここへ行く', drive_records_path(destination: {
-                      name: place['displayName']['text'],
-                      address: place['formattedAddress'],
-                      top_level_area: place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_1") }["longText"],
-                      second_level_area: place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_2") || component["types"].include?("locality") }["longText"],
-                      latitude: place['location']['latitude'],
-                      longitude: place['location']['longitude'],
-                      website_uri: place['websiteUri'],
-                      type: place['primaryType']
-                  }),
-                  data: { turbo_method: :post }
-                  %>
                 <% end %>
               </div>
             </div>
@@ -50,12 +32,12 @@
       </div>
 
       <!-- カルーセルのコントロールボタン -->
-      <button type="button" class="absolute top-1/2 bottom-0 left-0 z-30 flex items-center justify-center w-10 h-10 mx-2 bg-white bg-opacity-75 rounded-full focus:outline-none focus:ring hover:bg-opacity-100" data-carousel-prev>
+      <button type="button" class="absolute top-1/2 bottom-0 left-0 z-10 flex items-center justify-center w-10 h-10 mx-2 bg-white bg-opacity-75 rounded-full focus:outline-none focus:ring hover:bg-opacity-100" data-carousel-prev>
           <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
           </svg>
       </button>
-      <button type="button" class="absolute top-1/2 bottom-0 right-0 z-30 flex items-center justify-center w-10 h-10 mx-2 bg-white bg-opacity-75 rounded-full focus:outline-none focus:ring hover:bg-opacity-100" data-carousel-next>
+      <button type="button" class="absolute top-1/2 bottom-0 right-0 z-10 flex items-center justify-center w-10 h-10 mx-2 bg-white bg-opacity-75 rounded-full focus:outline-none focus:ring hover:bg-opacity-100" data-carousel-next>
           <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
           </svg>
@@ -64,27 +46,37 @@
   </div>
 </div>
 
+<!-- オーバーレイ -->
+<div id="overlay" class="hidden fixed inset-0 bg-slate-900 bg-opacity-50 z-20"></div>
+
 <div class="flex items-center justify-center">
-  <div class="flex justify-between space-x-8 pb-3 px-3">
-    <%= link_to 'ここに行く', '#', class: "bg-indigo-900 hover:bg-indigo-700 focus:outline-none focus:ring-indigo-500 text-white text-center py-3 px-6 w-40 rounded-full" %>
-    <%= link_to '再検索', '#', class: "hover:bg-slate-300 text-slate-600 text-center border border-slate-600 py-3 px-6 w-40 rounded-full" %>
+  <div class="flex items-center justify-between space-x-14 py-3 relative">
+    <!-- ドロップダウンを開くボタン -->
+    <div>
+      <%= button_tag type: 'button', id: 'dropdownDepartureButton', class: 'bg-indigo-900 hover:bg-indigo-700 text-white focus:outline-none py-3 px-6 mt-3 w-40 rounded-full', data: { dropdown_toggle: 'dropdownDeparture' } do %>
+        ここへ行く
+      <% end %>
+
+      <!-- ドロップダウンのコンテンツ -->
+      <div id="dropdownDeparture" class="hidden absolute z-30 top-1 left-1/2 transform -translate-x-1/2 w-11/12 rounded-lg shadow-lg bg-slate-50 ring-1 ring-black ring-opacity-5">
+        <div class="flex flex-col justify-center h-full">
+          <div class="flex flex-row items-center justify-center space-x-3 mt-5">
+            <%= link_to "Yahoo!カーナビで行く", "#", class: "yahoo-navi-link text-sm text-gray-700 border-2 border-blue-500 hover:border-blue-700 hover:bg-blue-200 rounded-full px-3 py-2 transition-colors duration-200 ease-in-out" %>
+            <%= link_to "Google Mapで行く", "#", class: "google-map-link text-sm text-gray-700 border-2 border-red-500 hover:border-red-700 hover:bg-red-200 rounded-full px-3 py-2 transition-colors duration-200 ease-in-out" %>
+          </div>
+          <div class="text-xs ml-4 mt-2 pb-1">
+          ※ Yahoo!カーナビアプリ の<br>&emsp;インストールが必要です
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%= link_to '再検索', root_path, class: "hover:bg-slate-50 text-slate-600 text-center border border-slate-600 py-3 px-6 mt-3 w-40 rounded-full" %>
   </div>
 </div>
 
 <script>
-  // ページのDOM要素が全て読み込まれたら、ブラウザのセッションストレージに格納されている緯度と経度のデータを取得し、上記フォーム内の該当するhidden_fieldに設定する処理
-  // 現在地の緯度と経度のデータは、ユーザーがフォームで選択した内容とまとめてコントローラに送って処理したいため、hidden_fieldに設定する
-  document.addEventListener('DOMContentLoaded', (event) => {
-  const latitude = sessionStorage.getItem('latitude');
-  const longitude = sessionStorage.getItem('longitude');
-
-  document.getElementById('hidden_latitude').value = latitude;
-  document.getElementById('hidden_longitude').value = longitude;
-  });
-
-
-  // Searches#resultから受け取った各場所のデータ(@response['places'])を変数に格納
-  const places = <%= @response['places'].to_json.html_safe %>;
+  const places = <%= @response['places'].to_json.html_safe %>; // Searches#resultから受け取った各場所のデータ(@response['places'])を変数に格納
   let markers = []; // マーカーを格納する配列
 
   function initMap() {
@@ -148,20 +140,20 @@
     });
   }
 
+  // カルーセルアイテムの表示切り替え処理
   document.addEventListener('DOMContentLoaded', () => {
-    // カルーセルアイテムの取得
-    const items = document.querySelectorAll('[data-carousel-item]');
-    // インジケーターの取得
-    const indicators = document.querySelectorAll('[data-carousel-slide-to]');
+    const items = document.querySelectorAll('[data-carousel-item]'); // カルーセルアイテムの取得
+    const indicators = document.querySelectorAll('[data-carousel-slide-to]'); // インジケーターの取得
+    // カルーセル外部の「ここへ行く」ボタンクリックで表示される、ドロップダウンアイテム内のリンク要素(表示されているカルーセルアイテムに対応する場所に応じてパラメータを変えるもの)を取得
+    const yahooNaviLink = document.querySelector('#dropdownDeparture a.yahoo-navi-link');
+    const googleMapLink = document.querySelector('#dropdownDeparture a.google-map-link');
 
-    // 現在表示されているアイテムのインデックス
-    let currentIndex = 0;
+    let currentIndex = 0; // 現在表示されているアイテムのインデックス
 
+    // カルーセルアイテムの表示切り替えに連動してインジケーターのスタイルを切り替える処理
     function updateIndicators(newIndex) {
-      // 現在アクティブなインジケーターのクラスを削除
-      indicators[currentIndex].classList.remove('active-indicator');
-      // 新しいインジケーターにアクティブクラスを追加
-      indicators[newIndex].classList.add('active-indicator');
+      indicators[currentIndex].classList.remove('active-indicator'); // 現在アクティブなインジケーターのアクティブクラスを削除
+      indicators[newIndex].classList.add('active-indicator'); // 新しいインジケーターにアクティブクラスを追加
     }
 
     // 指定されたインデックスのアイテムに移動する関数
@@ -173,6 +165,16 @@
       }
       items[currentIndex].classList.add('hidden'); // 現在のアイテムを非表示
       items[index].classList.remove('hidden'); // 新しいアイテムを表示
+
+      // 新しいアイテムの緯度経度を取得
+      const newItem = items[index];
+      const latitude = newItem.getAttribute('data-latitude');
+      const longitude = newItem.getAttribute('data-longitude');
+
+      // カルーセル外部の「ここへ行く」ボタンクリックで表示される、ドロップダウンアイテム内のリンクを更新
+      yahooNaviLink.href = `yjcarnavi://navi/select?lat=${latitude}&lon=${longitude}`;
+      googleMapLink.href = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}&travelmode=driving`;
+
       updateIndicators(index); // インジケーターの更新
       updateMarkers(index); // マーカーの表示を更新
       currentIndex = index; // 現在のインデックスを更新
@@ -200,31 +202,31 @@
     updateIndicators(0);
   });
 
-  // ページが読み込まれた後に実行されるイベントリスナー
+  // 「ここへ行く」ボタンをクリックした際のドロップダウン表示処理
   document.addEventListener('DOMContentLoaded', () => {
-    // クラス名 'google-map-link' を持つすべてのリンクを取得
-    const googleMapLinks = document.querySelectorAll('.google-map-link')
-    // 各リンクにイベントリスナーを設定
-    googleMapLinks.forEach(link => {
-      link.addEventListener('click', (event) => {
-        // デフォルトのアクション（リンクの遷移）を防止
-        event.preventDefault()
-        // クリックされたリンクから目的地の緯度と経度を取得
-        const destinationLat = event.currentTarget.getAttribute('data-lat');
-        const destinationLng = event.currentTarget.getAttribute('data-lng')
-        // ユーザーの現在地を取得
-        navigator.geolocation.getCurrentPosition((position) => {
-          // 現在地の緯度と経度を取得
-          const originLat = position.coords.latitude;
-          const originLng = position.coords.longitude
-          // Googleマップのルート探索URLを生成し、新しいタブで開く
-          const googleMapsUri = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLng}&destination=${destinationLat},${destinationLng}`;
-          window.open(googleMapsUri, '_blank', 'noopener,noreferrer');
-        }, (error) => {
-          // 現在地の取得に失敗した場合のエラーハンドリング
-          alert('現在地を取得できませんでした。');
-        });
-      });
+    const dropdownDepartureButton = document.getElementById('dropdownDepartureButton');
+    const dropdownDepartureContent = document.getElementById('dropdownDeparture');
+    const overlay = document.getElementById('overlay');
+
+    // 「ここへ行く」ボタンをクリックした際にドロップダウンを表示するイベント
+    dropdownDepartureButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      dropdownDepartureContent.classList.toggle('hidden');
+      overlay.classList.toggle('hidden'); // オーバーレイの表示を切り替える
+    });
+
+    // オーバーレイをクリックしたときにドロップダウンを閉じる
+    overlay.addEventListener('click', () => {
+        dropdownDepartureContent.classList.add('hidden');
+        overlay.classList.add('hidden');
+    });
+
+    // ドロップダウン要素以外の場所がクリックされたらドロップダウンを閉じる
+    document.addEventListener('click', (event) => {
+      if (!dropdownDepartureButton.contains(event.target) && !dropdownDepartureContent.contains(event.target)) {
+          dropdownDepartureContent.classList.add('hidden');
+          overlay.classList.add('hidden');
+      }
     });
   });
 </script>
