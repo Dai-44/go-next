@@ -22,6 +22,9 @@
                 <%= render "destinations/bookmark_button", place: place %>
               <% end %>
             </div>
+            <div>
+              <%= format_opening_hours(place) %> <!-- 現在の曜日の営業時間を示す文字列を生成するメソッド。app/helpers/searches_helper.rbで定義している。 -->
+            </div>
           </div>
         </div>
       <% end %>
