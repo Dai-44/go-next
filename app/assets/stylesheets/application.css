@@ -23,7 +23,14 @@
   max-height: 100vh; /* ビューポートの高さに合わせる */
 }
 
-/* app/views/searches/new.html.erbで、表示中のカルーセルアイテムのインジケーターに色を付けるためのスタイル */
+/* app/views/searches/result.html.erbで、表示中のカルーセルアイテムのインジケーターに色を付けるためのスタイル */
 .active-indicator {
   background-color: #94a3b8
+}
+
+/* app/views/searches/result.html.erbで、画像の表示サイズを調整するスタイル  */
+.carousel-image {
+  width: 80%; /* 幅を親要素に合わせる */
+  max-height: 250px; /* 最大高さを指定 */
+  object-fit: contain; /* 画像のアスペクト比を保持しつつ、指定した範囲に収める */
 }
