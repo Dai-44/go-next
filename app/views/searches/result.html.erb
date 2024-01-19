@@ -11,11 +11,15 @@
         <!-- カルーセル内の個々のアイテム -->
         <div class="<%= 'hidden' unless index.zero? %> h-full" data-carousel-item  data-latitude="<%= place['location']['latitude'] %>" data-longitude="<%= place['location']['longitude']%>" >
           <div class="bg-white rounded-lg py-4 mx-5 h-full flex flex-col space-y-2 items-center text-slate-700">
-            <%= image_tag @photos[index]['photoUri'], class: "carousel-image my-t px-5" %>
+            <% if @photos %>
+              <%#= image_tag @photos[index]['photoUri'], class: "carousel-image my-t px-5" %>
+            <% else %>
+              <%= image_tag "sample_image.png", class: "carousel-image my-t px-5" %>
+            <% end %>
             <div class="flex flex-row space-x-2 justify-center items-center mx-1">
               <%= link_to place['displayName']['text'], place['websiteUri'], class: "text-center font-bold underline hover:text-slate-400", target: '_blank', rel: 'noopener noreferrer' %>
               <% if logged_in? %>
-                <%= render 'destinations/bookmark_button', place: place %>
+                <%= render "destinations/bookmark_button", place: place %>
               <% end %>
             </div>
           </div>
