@@ -1,7 +1,7 @@
 module SearchesHelper
   # 現在の曜日に基づいて、引数に渡された場所の営業時間に関する文字列を生成する処理
   def format_opening_hours(place)
-    return '情報がありません' if place['currentOpeningHours']['weekdayDescriptions'].nil? # 対象となる情報がAPIのレスポンスに含まれない場合の処理
+    return "営業時間: 対象情報がありません" if place['currentOpeningHours'].nil? || place['currentOpeningHours']['weekdayDescriptions'].nil? # 対象となる情報がAPIのレスポンスに含まれない場合の処理
 
     current_day_index = Time.zone.now.wday
     weekday_descriptions = place['currentOpeningHours']['weekdayDescriptions']
