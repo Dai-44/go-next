@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_19_091124) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_22_071441) do
   create_table "authentications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "provider", null: false
@@ -40,6 +40,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_19_091124) do
     t.datetime "updated_at", null: false
     t.string "area", null: false
     t.string "website_uri"
+    t.string "google_places_api_id"
     t.index ["google_places_api_type_id"], name: "index_destinations_on_google_places_api_type_id"
   end
 

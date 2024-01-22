@@ -1,14 +1,28 @@
-<%= link_to bookmarks_path(destination: {
-    name: place['displayName']['text'],
-    address: place['formattedAddress'],
-    top_level_area: place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_1") }["longText"],
-    second_level_area: place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_2") || component["types"].include?("locality") }["longText"],
-    latitude: place['location']['latitude'],
-    longitude: place['location']['longitude'],
-    type: place['primaryType']
-  }), 
-  class: 'hover:text-slate-400',
-  data: { turbo_method: :post } do %>
-  <i class="fa-regular fa-bookmark"></i>
+<!-- ブックマークの対象となるplaceには、一度もブックマークされていない状態ならAPIからのレスポンスデータが割り当てられる一方、一度ブックマークされた後に解除された状態なら該当するDestinationレコードが割り当てられる。どちらの場合かに応じてリンクのパラメータを変える。 -->
+<% if place.is_a?(Destination) %>
+  <%= link_to bookmarks_path(destination: {
+      place_id: place.google_places_api_id
+    }),
+    id: "js-bookmark-button-for-place-#{place.google_places_api_id}",
+    class: 'hover:text-slate-400',
+    data: { turbo_method: :post } do %>
+    <i class="fa-regular fa-bookmark"></i>
+  <% end %>
+<% else %>
+  <%= link_to bookmarks_path(destination: {
+      name: place['displayName']['text'],
+      address: place['formattedAddress'],
+      top_level_area: place['addressComponents'].find { |component| component['types'].include?('administrative_area_level_1') }['longText'],
+      second_level_area: place['addressComponents'].find { |component| component['types'].include?('administrative_area_level_2') || component['types'].include?('locality') }['longText'],
+      latitude: place['location']['latitude'],
+      longitude: place['location']['longitude'],
+      type: place['primaryType'],
+      website_uri: place['websiteUri'],
+      place_id: place['id']
+    }),
+    id: "js-bookmark-button-for-place-#{place['id']}",
+    class: 'hover:text-slate-400',
+    data: { turbo_method: :post } do %>
+    <i class="fa-regular fa-bookmark"></i>
+  <% end %>
 <% end %>
-  
