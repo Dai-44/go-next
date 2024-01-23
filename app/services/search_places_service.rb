@@ -37,7 +37,6 @@ class SearchPlacesService
   def self.fetch_place_photos(photo_resources)
     photos_data = [] # APIレスポンスとして取得する画像データを格納する配列
 
-    # 各画像の
     photo_resources.each do |photo_resource|
       api_endpoint = "https://places.googleapis.com/v1/#{photo_resource}/media?maxHeightPx=400&maxWidthPx=400&key=#{API_KEY}"
 
@@ -61,9 +60,9 @@ class SearchPlacesService
 
   def self.build_field_mask
     [
-      'places.types', 'places.addressComponents', 'places.formattedAddress', 'places.location',
-      'places.rating', 'places.googleMapsUri', 'places.websiteUri', 'places.photos',
-      'places.businessStatus', 'places.userRatingCount',
+      'places.id', 'places.types', 'places.addressComponents', 'places.formattedAddress',
+      'places.location', 'places.rating', 'places.googleMapsUri', 'places.websiteUri',
+      'places.photos', 'places.businessStatus', 'places.userRatingCount',
       'places.displayName', 'places.currentOpeningHours',
       'places.primaryType', 'places.restroom'
     ].join(',')

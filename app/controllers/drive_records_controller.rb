@@ -17,15 +17,18 @@ class DriveRecordsController < ApplicationController
       destination_params,
       record_type: 'drive_record'
     )
-    if service.call
-      redirect_to root_path, flash: { success: "ドライブ履歴を保存しました" } # 処理後は仮でルートパスに遷移しているが、実際は経路案内を表示する画面に遷移させる。画面のUI/UXを整える過程で修正する。
+    service.call
+
+    respond_to do |format|
+      format.json { render json: { status: 'success' } }
+      format.html { redirect_back fallback_location: root_path }
     end
   end
 
   private
 
   def destination_params
-    params.require(:destination).permit(:name, :address, :top_level_area, :second_level_area, :latitude, :longitude, :website_uri, :type)
+    params.require("destination").permit("name", "address", "top_level_area", "second_level_area", "latitude", "longitude", "website_uri", "type", "place_id")
   end
 
   # 検索時の選択肢となるデータを取得してインスタンス変数に格納する処理
