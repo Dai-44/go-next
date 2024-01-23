@@ -8,8 +8,12 @@
     <!-- カルーセルのラッパー -->
     <div class="relative h-96 w-11/12 overflow-hidden rounded-lg">
       <% @response['places'].each_with_index do |place, index| %>
+        <!-- 以下二行は、カルーセルアイテムに設定するdata-top-level-areaとdata-second-level-area属性で用いる変数を定義している。ActiveRecordモデルではなくAPIからのレスポンスデータをベースに抽出する値であり、コントローラ側での変数の定義と代入が難しく感じたため、不適切ながら、現状では一時的な処理としてviewファイルに記述している。 -->
+        <% top_level_area = place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_1") }["longText"] %>
+        <% second_level_area = place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_2") || component["types"].include?("locality") }["longText"] %>
+
         <!-- カルーセル内の個々のアイテム -->
-        <div class="<%= 'hidden' unless index.zero? %> h-full" data-carousel-item  data-latitude="<%= place['location']['latitude'] %>" data-longitude="<%= place['location']['longitude']%>" >
+        <div class="<%= 'hidden' unless index.zero? %> h-full" data-carousel-item data-name="<%= place['displayName']['text'] %>" data-address="<%= place['formattedAddress'] %>" data-top-level-area ="<%= top_level_area %>" data-second-level-area ="<%= second_level_area %>" data-latitude="<%= place['location']['latitude'] %>" data-longitude="<%= place['location']['longitude']%>" data-type ="<%= place['primaryType'] %>" data-website-uri ="<%= place['websiteUri'] %>" data-place-id="<%= place['id'] %>">
           <div class="bg-white rounded-lg py-4 mx-5 h-full flex flex-col space-y-2 items-center text-slate-700">
             <% if @photos %>
               <%= image_tag @photos[index]['photoUri'], class: "carousel-image my-t px-5" %>
@@ -55,28 +59,33 @@
 <div id="overlay" class="hidden fixed inset-0 bg-slate-900 bg-opacity-50 z-20"></div>
 
 <div class="flex items-center justify-center">
-  <div class="flex items-center justify-between space-x-14 py-3 relative">
+  <div class="flex items-center justify-between space-x-10 py-3 relative">
     <!-- ドロップダウンを開くボタン -->
-    <div>
-      <%= button_tag type: 'button', id: 'dropdownDepartureButton', class: 'bg-indigo-900 hover:bg-indigo-700 text-white focus:outline-none py-3 px-6 mt-3 w-40 rounded-full', data: { dropdown_toggle: 'dropdownDeparture' } do %>
-        ここへ行く
+    <div class="w-40 text-center mt-3">
+      <% if logged_in? %>
+        <%= link_to 'ここへ行く', '#', remote: true, id: 'dropdownDepartureLink', class: 'bg-indigo-900 hover:bg-indigo-700 text-white focus:outline-none py-3 px-8 rounded-full' %>
+      <% else %>
+        <%= button_tag type: 'button', id: 'dropdownDepartureButton', class: 'bg-indigo-900 hover:bg-indigo-700 text-white focus:outline-none py-3 px-6 w-40 rounded-full' do %>
+          ここへ行く
+        <% end %>
       <% end %>
 
       <!-- ドロップダウンのコンテンツ -->
       <div id="dropdownDeparture" class="hidden absolute z-30 top-1 left-1/2 transform -translate-x-1/2 w-11/12 rounded-lg shadow-lg bg-slate-50 ring-1 ring-black ring-opacity-5">
         <div class="flex flex-col justify-center h-full">
           <div class="flex flex-row items-center justify-center space-x-3 mt-5">
-            <%= link_to "Yahoo!カーナビで行く", "#", class: "yahoo-navi-link text-sm text-gray-700 border-2 border-blue-500 hover:border-blue-700 hover:bg-blue-200 rounded-full px-3 py-2 transition-colors duration-200 ease-in-out" %>
-            <%= link_to "Google Mapで行く", "#", class: "google-map-link text-sm text-gray-700 border-2 border-red-500 hover:border-red-700 hover:bg-red-200 rounded-full px-3 py-2 transition-colors duration-200 ease-in-out" %>
+            <%= link_to "Yahoo!カーナビで行く", "#", class: "yahoo-navi-link text-xs text-gray-700 border-2 border-blue-500 hover:border-blue-700 hover:bg-blue-200 rounded-full px-3 py-2 transition-colors duration-200 ease-in-out" %>
+            <%= link_to "Google Mapで行く", "#", class: "google-map-link text-xs text-gray-700 border-2 border-red-500 hover:border-red-700 hover:bg-red-200 rounded-full px-3 py-2 transition-colors duration-200 ease-in-out" %>
           </div>
-          <div class="text-xs ml-4 mt-2 pb-1">
+          <div class="text-xs text-left ml-4 mt-2 pb-1">
           ※ Yahoo!カーナビアプリ の<br>&emsp;インストールが必要です
           </div>
         </div>
       </div>
     </div>
-
-    <%= link_to '再検索', root_path, class: "hover:bg-slate-50 text-slate-600 text-center border border-slate-600 py-3 px-6 mt-3 w-40 rounded-full" %>
+    <div class="w-40 text-center mt-3">
+      <%= link_to '再検索', root_path, class: "hover:bg-slate-50 text-slate-600 border border-slate-600 py-3 px-12 rounded-full" %>
+    </div>
   </div>
 </div>
 
@@ -161,6 +170,82 @@
       indicators[newIndex].classList.add('active-indicator'); // 新しいインジケーターにアクティブクラスを追加
     }
 
+    // ログインユーザー向けの「ここへ行く」リンクに含むパラメータを、カルーセルアイテムの表示切り替えに連動して更新する処理
+    function updateGoToLink(index) {
+      const item = items[index];
+      const goToLink = document.getElementById('dropdownDepartureLink');
+
+      // 各カルーセルアイテムに定義されたデータ属性の値を別の関数(handleGoToLinkClick)で利用できるよう、goToLinkカスタム属性として設定
+      goToLink.setAttribute('data-name', item.getAttribute('data-name'));
+      goToLink.setAttribute('data-address', item.getAttribute('data-address'));
+      goToLink.setAttribute('data-top-level-area', item.getAttribute('data-top-level-area'));
+      goToLink.setAttribute('data-second-level-area', item.getAttribute('data-second-level-area'));
+      goToLink.setAttribute('data-latitude', item.getAttribute('data-latitude'));
+      goToLink.setAttribute('data-longitude', item.getAttribute('data-longitude'));
+      goToLink.setAttribute('data-type', item.getAttribute('data-type'));
+      goToLink.setAttribute('data-website-uri', item.getAttribute('data-website-uri'));
+      goToLink.setAttribute('data-place-id', item.getAttribute('data-place-id'));
+
+      setupGoToLinkEvent();
+    }
+
+    // ログインユーザー向けの「ここへ行く」リンクに新しいイベントハンドラを設定する関数
+    function setupGoToLinkEvent() {
+      const goToLink = document.getElementById('dropdownDepartureLink');
+      goToLink.removeEventListener('click', handleGoToLinkClick); // 古いイベントハンドラを削除
+      goToLink.addEventListener('click', handleGoToLinkClick); // 新しいイベントハンドラを追加
+    }
+
+    // ログインユーザー向けの「ここへ行く」リンクがクリックされたときのイベントハンドラ
+    function handleGoToLinkClick(event) {
+      event.preventDefault();
+      const goToLink = event.currentTarget; // クリックされたリンク要素
+
+      // updateGoToLinkで設定したカスタム属性からデータを取得
+      const name = goToLink.getAttribute('data-name');
+      const address = goToLink.getAttribute('data-address');
+      const topLevelArea = goToLink.getAttribute('data-top-level-area');
+      const secondLevelArea = goToLink.getAttribute('data-second-level-area');
+      const latitude = goToLink.getAttribute('data-latitude');
+      const longitude = goToLink.getAttribute('data-longitude');
+      const type = goToLink.getAttribute('data-type');
+      const websiteUri = goToLink.getAttribute('data-website-uri');
+      const placeId = goToLink.getAttribute('data-place-id');
+
+      const url = `/drive_records`;
+
+      // Ajaxを使用してPOSTリクエストを送信
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          destination: {
+            name: name,
+            address: address,
+            top_level_area: topLevelArea,
+            second_level_area: secondLevelArea,
+            latitude: latitude,
+            longitude: longitude,
+            type: type,
+            website_uri: websiteUri,
+            place_id: placeId
+          }
+        })
+      }).then(response => {
+        if (response.ok) {
+          // ドロップダウンを表示する関数の実行
+          toggleDropdown();
+        } else {
+          throw new Error('Network response was not ok.');
+        }
+      }).catch(error => {
+        console.error('There has been a problem with your fetch operation:', error);
+      });
+    }
+
     // 指定されたインデックスのアイテムに移動する関数
     function moveToItem(index) {
       if (index >= items.length) {
@@ -183,6 +268,7 @@
       updateIndicators(index); // インジケーターの更新
       updateMarkers(index); // マーカーの表示を更新
       currentIndex = index; // 現在のインデックスを更新
+      updateGoToLink(index); // カルーセル外部の「ここへ行く」リンクに設定する、ドライブ履歴生成のためのリンクの更新
     }
 
     // インジケーターのクリックイベント処理
@@ -205,34 +291,36 @@
 
     // 初期状態で最初のアイテムのインジケーターをアクティブにする
     updateIndicators(0);
+    // 初期状態で、最初のアイテムに関するドライブ履歴生成のためのリンクを「ここに行く」リンクの遷移先として設定する(ログインユーザーに対してのみ)
+    updateGoToLink(0);
   });
 
-  // 「ここへ行く」ボタンをクリックした際のドロップダウン表示処理
-  document.addEventListener('DOMContentLoaded', () => {
-    const dropdownDepartureButton = document.getElementById('dropdownDepartureButton');
+  // ドロップダウンの表示/非表示を定義する関数
+  function toggleDropdown() {
     const dropdownDepartureContent = document.getElementById('dropdownDeparture');
     const overlay = document.getElementById('overlay');
+    dropdownDepartureContent.classList.toggle('hidden');
+    overlay.classList.toggle('hidden');
+  }
 
-    // 「ここへ行く」ボタンをクリックした際にドロップダウンを表示するイベント
-    dropdownDepartureButton.addEventListener('click', (event) => {
-      event.preventDefault();
-      dropdownDepartureContent.classList.toggle('hidden');
-      overlay.classList.toggle('hidden'); // オーバーレイの表示を切り替える
-    });
+  function closeDropdown() {
+    const dropdownDepartureContent = document.getElementById('dropdownDeparture');
+    const overlay = document.getElementById('overlay');
+    dropdownDepartureContent.classList.add('hidden');
+    overlay.classList.add('hidden');
+  }
+
+  // 全ユーザー向けのドロップダウン制御イベント
+  document.addEventListener('DOMContentLoaded', () => {
+    // 未ログインユーザー向けの「ここへ行く」ボタンが存在する場合
+    const dropdownDepartureButton = document.getElementById('dropdownDepartureButton');
+    if (dropdownDepartureButton) {
+      dropdownDepartureButton.addEventListener('click', toggleDropdown);
+    }
 
     // オーバーレイをクリックしたときにドロップダウンを閉じる
-    overlay.addEventListener('click', () => {
-        dropdownDepartureContent.classList.add('hidden');
-        overlay.classList.add('hidden');
-    });
-
-    // ドロップダウン要素以外の場所がクリックされたらドロップダウンを閉じる
-    document.addEventListener('click', (event) => {
-      if (!dropdownDepartureButton.contains(event.target) && !dropdownDepartureContent.contains(event.target)) {
-          dropdownDepartureContent.classList.add('hidden');
-          overlay.classList.add('hidden');
-      }
-    });
+    const overlay = document.getElementById('overlay');
+    overlay.addEventListener('click', closeDropdown);
   });
 </script>
 
