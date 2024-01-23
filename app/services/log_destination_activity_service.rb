@@ -10,7 +10,9 @@ class LogDestinationActivityService
     type = GooglePlacesApiType.find_by(name: @destination_info[:type])
     address = @destination_info[:address].split.last
     # 名称と住所を条件にdestinationsテーブルを検索し、該当するレコードが存在すればそれを返し、存在しなければブロック内の値も含めて新たなレコードを生成する処理
-    destination = Destination.find_or_create_by(name: @destination_info[:name], address: address) do |new_destination|
+    @destination = Destination.find_or_create_by(google_places_api_id: @destination_info[:place_id]) do |new_destination|
+                    new_destination.name = @destination_info[:name]
+                    new_destination.address = address
                     new_destination.area = @destination_info[:top_level_area] + @destination_info[:second_level_area]
                     new_destination.latitude = @destination_info[:latitude]
                     new_destination.longitude = @destination_info[:longitude]
@@ -26,11 +28,15 @@ class LogDestinationActivityService
     end
   end
 
+  def destination
+    @destination
+  end
+
   private
 
   def create_drive_record(destination)
     visited_month = Date.today.strftime("%Y年%-m月")
-    @user.drive_records.create(destination: destination, visited_month: visited_month) # 基本的にはdrive_recordsレコードの保存処理の失敗は想定されないが、予期せぬ原因で失敗した場合の対応も追って記述しておく。
+    @user.drive_records.create(destination: destination, visited_month: visited_month)
   end
 
   def create_bookmark(destination)

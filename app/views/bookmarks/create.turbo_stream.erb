@@ -1,0 +1,3 @@
+<%= turbo_stream.replace "js-bookmark-button-for-place-#{@destination.google_places_api_id}" do %>
+  <%= render 'destinations/unbookmark', place: @destination %>
+<% end %>

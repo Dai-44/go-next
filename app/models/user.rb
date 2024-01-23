@@ -23,9 +23,7 @@ class User < ApplicationRecord
     bookmark_destinations.destroy(destination)
   end
 
-  def bookmark?(place)
-    # view側で扱っている場所の情報はAPIからのレスポンスデータに過ぎず、末尾のようなinclude?メソッドを実行するにはDestinationインスタンスに変換する必要があるため、まずDestinationインスタンスを生成してdestinationに格納する処理を実装している。
-    destination = Destination.find_by(name: place['displayName']['text'], address: place['formattedAddress'])
+  def bookmark?(destination)
     bookmark_destinations.include?(destination)
   end
 end

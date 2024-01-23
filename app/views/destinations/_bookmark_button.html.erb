@@ -1,5 +1,9 @@
-<% if current_user&.bookmark?(place) %>
-  <%= render 'destinations/unbookmark', place: place %>
+<!-- placeは単なるAPIからのレスポンスデータであり、データベースに保存されたレコードではない。従い、対象となる場所がブックマークされているか否かを判定するbookmark?メソッドを実行するには、まずplaceに対応するDestinationインスタンスへと変換する必要がある。viewでのSQL発行と変数への代入は不適切であるものの、他に適切な記述箇所を定められなかったため、現状では本ファイルに記述している。 -->
+<!-- また、bookmark?メソッドの戻り値に応じて、呼び出すパーシャルのローカル変数に渡すオブジェクトを変える。trueの場合は取得したDestinationレコードを用いてブックマーク解除リンクを実装するが、falseの場合は該当するplace(Google Place APIから取得したデータ)を用いてブックマークリンクを実装する。 -->
+
+<% target_destination = Destination.find_by(google_places_api_id: place['id']) %>
+<% if current_user&.bookmark?(target_destination) %>
+  <%= render 'destinations/unbookmark', place: target_destination %>
 <% else %>
   <%= render 'destinations/bookmark', place: place %>
 <% end %>

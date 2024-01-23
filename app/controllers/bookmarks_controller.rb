@@ -6,20 +6,28 @@ class BookmarksController < ApplicationController
       destination_params,
       record_type: 'bookmark'
     )
-    if service.call
-      redirect_to root_path, flash: { success: "ブックマークしました" } # 処理後は仮でルートパスに遷移しているが、実際は経路案内を表示する画面に遷移させる。画面のUI/UXを整える過程で修正する。
+    service.call
+
+    # ブックマーク処理実行後の遷移先であるcreate.turbo_stream.erbで用いるインスタンス変数の設定
+    @destination = service.destination
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to root_path, flash: { success: "ブックマークしました" } }
     end
   end
 
   def destroy
-    destination = current_user.bookmark_destinations.find_by(id: params[:id]) # 受けたリクエストのパラメータを元に、削除対象となるブックマークに紐づくDestinationレコードを特定。自らに関連するレコードのみが削除の候補となるよう、current_userを起点として検索を実行。
-    current_user.unbookmark(destination)
-    redirect_to root_path, status: :see_other, flash: { success: "ブックマークを削除しました" } # 処理後は仮でルートパスに遷移しているが、実際は経路案内を表示する画面に遷移させる。画面のUI/UXを整える過程で修正する。
+    @destination = current_user.bookmark_destinations.find_by(id: params[:id]) # 受けたリクエストのパラメータを元に、削除対象となるブックマークに紐づくDestinationレコードを特定。自らに関連するレコードのみが削除の候補となるよう、current_userを起点として検索を実行。
+    current_user.unbookmark(@destination)
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to root_path, flash: { success: "ブックマークを解除しました" } }
+    end
   end
 
   private
 
   def destination_params
-    params.require(:destination).permit(:name, :address, :top_level_area, :second_level_area, :latitude, :longitude, :type)
+    params.require(:destination).permit(:name, :address, :top_level_area, :second_level_area, :latitude, :longitude, :type, :website_uri, :place_id)
   end
 end
