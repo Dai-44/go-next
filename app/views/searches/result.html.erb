@@ -14,7 +14,7 @@
 
         <!-- カルーセル内の個々のアイテム -->
         <div class="<%= 'hidden' unless index.zero? %> h-full" data-carousel-item data-name="<%= place['displayName']['text'] %>" data-address="<%= place['formattedAddress'] %>" data-top-level-area ="<%= top_level_area %>" data-second-level-area ="<%= second_level_area %>" data-latitude="<%= place['location']['latitude'] %>" data-longitude="<%= place['location']['longitude']%>" data-type ="<%= place['primaryType'] %>" data-website-uri ="<%= place['websiteUri'] %>" data-place-id="<%= place['id'] %>">
-          <div class="bg-white rounded-lg py-4 mx-5 h-full flex flex-col space-y-2 items-center text-slate-700">
+          <div class="bg-white rounded-lg py-4 mx-5 h-full flex flex-col space-y-1.5 items-center text-slate-700">
             <% if @photos %>
               <%= image_tag @photos[index]['photoUri'], class: "carousel-image my-t px-5" %>
             <% else %>
