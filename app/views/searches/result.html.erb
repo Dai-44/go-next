@@ -13,7 +13,7 @@
         <% second_level_area = place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_2") || component["types"].include?("locality") }["longText"] %>
 
         <!-- カルーセル内の個々のアイテム -->
-        <div class="<%= 'hidden' unless index.zero? %> h-full" data-carousel-item data-name="<%= place['displayName']['text'] %>" data-address="<%= place['formattedAddress'] %>" data-top-level-area ="<%= top_level_area %>" data-second-level-area ="<%= second_level_area %>" data-latitude="<%= place['location']['latitude'] %>" data-longitude="<%= place['location']['longitude']%>" data-type ="<%= place['primaryType'] %>" data-website-uri ="<%= place['websiteUri'] %>" data-place-id="<%= place['id'] %>">
+        <div class="<%= 'hidden' unless index.zero? %> h-full" data-carousel-item data-name="<%= place['displayName']['text'] %>" data-address="<%= place['formattedAddress'] %>" data-top-level-area ="<%= top_level_area %>" data-second-level-area ="<%= second_level_area %>" data-latitude="<%= place['location']['latitude'] %>" data-longitude="<%= place['location']['longitude']%>" data-type ="<%= place['primaryType'] %>" data-website-uri ="<%= place['websiteUri'] %>" data-photo-uri="<%= @photos ? @photos[index]['photoUri'] : nil %>" data-place-id="<%= place['id'] %>">
           <div class="bg-white rounded-lg py-4 mx-5 h-full flex flex-col space-y-1.5 items-center text-slate-700">
             <% if @photos %>
               <%= image_tag @photos[index]['photoUri'], class: "image-size px-5" %>
@@ -187,6 +187,7 @@
       goToLink.setAttribute('data-longitude', item.getAttribute('data-longitude'));
       goToLink.setAttribute('data-type', item.getAttribute('data-type'));
       goToLink.setAttribute('data-website-uri', item.getAttribute('data-website-uri'));
+      goToLink.setAttribute('data-photo-uri', item.getAttribute('data-photo-uri'));
       goToLink.setAttribute('data-place-id', item.getAttribute('data-place-id'));
 
       setupGoToLinkEvent();
@@ -213,6 +214,7 @@
       const longitude = goToLink.getAttribute('data-longitude');
       const type = goToLink.getAttribute('data-type');
       const websiteUri = goToLink.getAttribute('data-website-uri');
+      const photoUri = goToLink.getAttribute('data-photo-uri');
       const placeId = goToLink.getAttribute('data-place-id');
 
       const url = `/drive_records`;
@@ -234,6 +236,7 @@
             longitude: longitude,
             type: type,
             website_uri: websiteUri,
+            photo_uri: photoUri,
             place_id: placeId
           }
         })
