@@ -17,6 +17,7 @@ class LogDestinationActivityService
                     new_destination.latitude = @destination_info[:latitude]
                     new_destination.longitude = @destination_info[:longitude]
                     new_destination.website_uri = @destination_info[:website_uri]
+                    new_destination.photo_uri = @destination_info[:photo_uri]
                     new_destination.google_places_api_type = type
                   end
 

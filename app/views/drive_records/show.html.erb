@@ -8,8 +8,15 @@
     <% else %>
       <h2 class="text-lg font-bold p-3"><%= @drive_record_destination.name %></h2>
     <% end %>
+
     <p class="text-sm font-semibold"><%= @drive_record_destination.address %></p>
-    <p class="py-5">日付: <%= @drive_record_destination.created_at %></p>
+    <p class="py-3">日付: <%= format_date_with_year(@drive_record) %></p>
+
+    <% if @drive_record_destination.photo_uri.present? %>
+      <%= image_tag @drive_record_destination.photo_uri, class: "image-size my-4 px-5" %>
+    <% else %>
+      <%= image_tag "sample_image.png", class: "image-size my-4 px-5" %>
+    <% end %>
   </div>
 
   <!-- オーバーレイ -->
@@ -33,6 +40,7 @@
           ※ Yahoo!カーナビアプリ の<br>&emsp;インストールが必要です
           </div>
         </div>
+      </div>
 
       <%= link_to '一覧へ戻る', drive_records_path, class: "hover:bg-slate-50 text-slate-600 text-center border border-slate-600 py-3 px-6 mt-3 w-40 rounded-full" %>
     </div>

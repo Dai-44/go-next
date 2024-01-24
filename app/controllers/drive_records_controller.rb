@@ -28,7 +28,7 @@ class DriveRecordsController < ApplicationController
   private
 
   def destination_params
-    params.require("destination").permit("name", "address", "top_level_area", "second_level_area", "latitude", "longitude", "website_uri", "type", "place_id")
+    params.require("destination").permit("name", "address", "top_level_area", "second_level_area", "latitude", "longitude", "website_uri", "photo_uri", "type", "place_id")
   end
 
   # 検索時の選択肢となるデータを取得してインスタンス変数に格納する処理

@@ -1,30 +1,33 @@
 <!-- マップの表示領域となる要素を定義。 -->
 <div class="flex justify-center">
-  <div id="map" class="h-56 w-4/5 rounded-lg"></div>
+  <div id="map" class="h-56 w-4/5 md:w-96 rounded-lg"></div>
 </div>
 
 <div>
   <div id="default-carousel" class="relative h-full py-5 flex justify-center" data-carousel="slide">
     <!-- カルーセルのラッパー -->
-    <div class="relative h-96 w-11/12 overflow-hidden rounded-lg">
+    <div class="relative h-96 w-11/12 md:w-96 overflow-hidden rounded-lg">
       <% @response['places'].each_with_index do |place, index| %>
         <!-- 以下二行は、カルーセルアイテムに設定するdata-top-level-areaとdata-second-level-area属性で用いる変数を定義している。ActiveRecordモデルではなくAPIからのレスポンスデータをベースに抽出する値であり、コントローラ側での変数の定義と代入が難しく感じたため、不適切ながら、現状では一時的な処理としてviewファイルに記述している。 -->
         <% top_level_area = place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_1") }["longText"] %>
         <% second_level_area = place["addressComponents"].find { |component| component["types"].include?("administrative_area_level_2") || component["types"].include?("locality") }["longText"] %>
 
         <!-- カルーセル内の個々のアイテム -->
-        <div class="<%= 'hidden' unless index.zero? %> h-full" data-carousel-item data-name="<%= place['displayName']['text'] %>" data-address="<%= place['formattedAddress'] %>" data-top-level-area ="<%= top_level_area %>" data-second-level-area ="<%= second_level_area %>" data-latitude="<%= place['location']['latitude'] %>" data-longitude="<%= place['location']['longitude']%>" data-type ="<%= place['primaryType'] %>" data-website-uri ="<%= place['websiteUri'] %>" data-place-id="<%= place['id'] %>">
-          <div class="bg-white rounded-lg py-4 mx-5 h-full flex flex-col space-y-2 items-center text-slate-700">
+        <div class="<%= 'hidden' unless index.zero? %> h-full" data-carousel-item data-name="<%= place['displayName']['text'] %>" data-address="<%= place['formattedAddress'] %>" data-top-level-area ="<%= top_level_area %>" data-second-level-area ="<%= second_level_area %>" data-latitude="<%= place['location']['latitude'] %>" data-longitude="<%= place['location']['longitude']%>" data-type ="<%= place['primaryType'] %>" data-website-uri ="<%= place['websiteUri'] %>" data-photo-uri="<%= @photos ? @photos[index]['photoUri'] : nil %>" data-place-id="<%= place['id'] %>">
+          <div class="bg-white rounded-lg py-4 mx-5 h-full flex flex-col space-y-1 items-center text-slate-700">
             <% if @photos %>
-              <%= image_tag @photos[index]['photoUri'], class: "carousel-image my-t px-5" %>
+              <%= image_tag @photos[index]['photoUri'], class: "image-size px-5" %>
             <% else %>
-              <%= image_tag "sample_image.png", class: "carousel-image my-t px-5" %>
+              <%= image_tag "sample_image.png", class: "image-size px-5" %>
             <% end %>
             <div class="flex flex-row space-x-2 justify-center items-center mx-1">
               <%= link_to place['displayName']['text'], place['websiteUri'], class: "text-center font-bold underline hover:text-slate-400", target: '_blank', rel: 'noopener noreferrer' %>
               <% if logged_in? %>
-                <%= render "destinations/bookmark_button", place: place %>
+                <%= render "destinations/bookmark_button", place: place, photo_uri: @photos ? @photos[index]['photoUri'] : nil %>
               <% end %>
+            </div>
+            <div>
+              <%= format_address(place) %> <!-- APIからのレスポンスに含まれる住所データを元に、住所を示す文字列を生成するメソッド。app/helpers/searches_helper.rbで定義している。 -->
             </div>
             <div>
               <%= format_opening_hours(place) %> <!-- 現在の曜日の営業時間を示す文字列を生成するメソッド。app/helpers/searches_helper.rbで定義している。 -->
@@ -184,6 +187,7 @@
       goToLink.setAttribute('data-longitude', item.getAttribute('data-longitude'));
       goToLink.setAttribute('data-type', item.getAttribute('data-type'));
       goToLink.setAttribute('data-website-uri', item.getAttribute('data-website-uri'));
+      goToLink.setAttribute('data-photo-uri', item.getAttribute('data-photo-uri'));
       goToLink.setAttribute('data-place-id', item.getAttribute('data-place-id'));
 
       setupGoToLinkEvent();
@@ -210,6 +214,7 @@
       const longitude = goToLink.getAttribute('data-longitude');
       const type = goToLink.getAttribute('data-type');
       const websiteUri = goToLink.getAttribute('data-website-uri');
+      const photoUri = goToLink.getAttribute('data-photo-uri');
       const placeId = goToLink.getAttribute('data-place-id');
 
       const url = `/drive_records`;
@@ -231,6 +236,7 @@
             longitude: longitude,
             type: type,
             website_uri: websiteUri,
+            photo_uri: photoUri,
             place_id: placeId
           }
         })
