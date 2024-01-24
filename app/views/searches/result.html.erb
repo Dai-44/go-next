@@ -16,14 +16,14 @@
         <div class="<%= 'hidden' unless index.zero? %> h-full" data-carousel-item data-name="<%= place['displayName']['text'] %>" data-address="<%= place['formattedAddress'] %>" data-top-level-area ="<%= top_level_area %>" data-second-level-area ="<%= second_level_area %>" data-latitude="<%= place['location']['latitude'] %>" data-longitude="<%= place['location']['longitude']%>" data-type ="<%= place['primaryType'] %>" data-website-uri ="<%= place['websiteUri'] %>" data-place-id="<%= place['id'] %>">
           <div class="bg-white rounded-lg py-4 mx-5 h-full flex flex-col space-y-1.5 items-center text-slate-700">
             <% if @photos %>
-              <%= image_tag @photos[index]['photoUri'], class: "carousel-image my-t px-5" %>
+              <%= image_tag @photos[index]['photoUri'], class: "image-size px-5" %>
             <% else %>
-              <%= image_tag "sample_image.png", class: "carousel-image my-t px-5" %>
+              <%= image_tag "sample_image.png", class: "image-size px-5" %>
             <% end %>
             <div class="flex flex-row space-x-2 justify-center items-center mx-1">
               <%= link_to place['displayName']['text'], place['websiteUri'], class: "text-center font-bold underline hover:text-slate-400", target: '_blank', rel: 'noopener noreferrer' %>
               <% if logged_in? %>
-                <%= render "destinations/bookmark_button", place: place %>
+                <%= render "destinations/bookmark_button", place: place, photo_uri: @photos ? @photos[index]['photoUri'] : nil %>
               <% end %>
             </div>
             <div>

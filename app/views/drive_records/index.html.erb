@@ -9,7 +9,7 @@
     <% if @drive_records.present? %>
       <% @drive_records.each do |drive_record| %>
         <div class= "hover:bg-slate-100 font-bold rounded-sm border-b-2 border-slate-400 h-20 w-11/12 my-1 px-3">
-          <%= link_to drive_record_path(drive_record), class: "flex flex-row space-x-4 w-full h-full" do %>
+          <%= link_to drive_record_path(drive_record), class: "flex flex-row space-x-6 w-full h-full" do %>
             <!-- 左側のブロック（日付） -->
             <div class="flex items-center">
               <span><%= format_date(drive_record) %></span>
