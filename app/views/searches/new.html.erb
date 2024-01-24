@@ -3,36 +3,14 @@
 </div>
 
 <div id="search-form" class="transition-all ease-in-out duration-500 max-h-0 overflow-hidden m-3">
-  <%= form_with model: @user_selection, url: searches_path, class: "py-3", data: { turbo: false } do |form| %>
+  <%= form_with model: @user_selection, url: searches_path, class: "py-3 h-64", data: { turbo: false } do |form| %>
     <%= render 'shared/error_messages', object: form.object %>
     <%= form.hidden_field :latitude, id: 'hidden_latitude' %>
     <%= form.hidden_field :longitude, id: 'hidden_longitude' %>
 
     <div>
-      <div class="flex flex-row justify-center items-center space-x-6">
-        <!-- ドロップダウンを開くボタン (カテゴリ) の親要素 -->
-        <div class="form-element relative">
-          <%= button_tag type: 'button', id: 'dropdownTypeButton', class: 'inline-flex items-center px-4 py-2 text-md font-medium text-center text-slate-600 rounded-lg shadow-sm bg-white border-2 border-indigo-300 hover:border-indigo-500 focus:border-indigo-400 focus:ring focus:ring-indigo-200 focus:ring-opacity-50', data: { dropdown_toggle: 'dropdownType' } do %>
-            除外カテゴリ(任意)
-            <%= content_tag :svg, class: 'w-2.5 h-2.5 ms-2.5', aria: { hidden: true }, xmlns: 'http://www.w3.org/2000/svg', fill: 'none', viewBox: '0 0 10 6' do %>
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-            <% end %>
-          <% end %>
-          <!-- ドロップダウンのコンテンツ (カテゴリ) -->
-          <div id="dropdownType" class="absolute z-10 top-16 left-10 hidden bg-white rounded-lg shadow w-60 dark:bg-gray-700">
-            <ul class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownTypeButton">
-              <div class="form-element space-y-2 flex flex-col justify-center">
-                <%= form.collection_check_boxes :type, GooglePlacesApiType.limit(15), :name, :display_name, include_hidden: false do |b| %>
-                  <div class="flex items-center">
-                    <%= b.check_box(class: "w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600") %>
-                    <%= b.label(class: "ms-2 text-sm font-medium text-gray-900 dark:text-gray-300") %>
-                  </div>
-                <% end %>
-              </div>
-            </ul>
-          </div>
-        </div>
-        <!-- ドロップダウンを開くボタン (気分) -->
+      <div class="flex flex-row justify-center items-center space-x-3">
+        <!-- ドロップダウンを開くボタン -->
         <div class="form-element relative">
           <%= button_tag type: 'button', id: 'dropdownFeelingButton', class: 'inline-flex items-center px-4 py-2 text-md font-medium text-center text-slate-600 rounded-lg shadow-sm bg-white border-2 border-indigo-300 hover:border-indigo-500 focus:border-indigo-400 focus:ring focus:ring-indigo-200 focus:ring-opacity-50', data: { dropdown_toggle: 'dropdownFeeling' } do %>
             いまの気分
@@ -40,8 +18,8 @@
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
             <% end %>
           <% end %>
-          <!-- ドロップダウンのコンテンツ (気分) -->
-          <div id="dropdownFeeling" class="absolute z-10 top-16 right-10 hidden bg-white rounded-lg shadow w-60 dark:bg-gray-700">
+          <!-- ドロップダウンのコンテンツ -->
+          <div id="dropdownFeeling" class="absolute z-10 top-14 left-0 hidden bg-white rounded-lg shadow w-60 dark:bg-gray-700">
             <ul class="px-2 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownFeelingButton">
               <div class="form-element space-y-2">
                 <%= form.collection_radio_buttons :feeling, Feeling.all, :id, :name do |b| %>
@@ -54,9 +32,7 @@
             </ul>
           </div>
         </div>
-      </div>
 
-      <div class="flex flex-row justify-center items-center space-x-4 mt-4">
         <!-- 運転範囲の選択 -->
         <div class="form-element">
           <%= form.select :drive_range, options_for_select(@user_selection.drive_time_options), { include_blank: 'どのくらい走る？' }, class: "form-select block rounded-md shadow-sm text-slate-600 bg-white border-2 border-indigo-300 hover:border-indigo-500 focus:border-indigo-400 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" %>
@@ -66,7 +42,7 @@
         <div class="form-element">
           <%= form.submit '検索', class: "bg-indigo-900 hover:bg-indigo-600 focus:outline-none text-white font-bold py-2 px-4 rounded" %>
         </div>
-      <div>
+      </div>
     </div>
   <% end %>
 </div>
@@ -82,9 +58,6 @@
           // 位置情報の取得に成功したら、隠しフィールドに値をセット
           document.getElementById('hidden_latitude').value = position.coords.latitude;
           document.getElementById('hidden_longitude').value = position.coords.longitude;
-
-          sessionStorage.setItem('latitude', position.coords.latitude); // 検索結果表示画面(searches/result)の検索フォームにも、取得した緯度と経度の情報を渡す必要があるため、ブラウザのセッションストレージに格納しておく。
-          sessionStorage.setItem('longitude', position.coords.longitude);
 
           // 位置情報の取得後、フォームを表示
           showForm(searchForm);
@@ -110,16 +83,8 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    const dropdownTypeButton = document.getElementById('dropdownTypeButton');
-    const dropdownTypeContent = document.getElementById('dropdownType');
     const dropdownFeelingButton = document.getElementById('dropdownFeelingButton');
     const dropdownFeelingContent = document.getElementById('dropdownFeeling');
-  
-    // カテゴリのドロップダウン制御
-    dropdownTypeButton.addEventListener('click', (event) => {
-      dropdownTypeContent.classList.toggle('hidden');
-      event.stopPropagation(); // ドキュメントのイベント伝播を停止
-    });
 
     // 気分のドロップダウン制御
     dropdownFeelingButton.addEventListener('click', (event) => {
@@ -129,9 +94,6 @@
 
     // ドロップダウン要素以外の場所がクリックされたらドロップダウンを閉じる
     document.addEventListener('click', (event) => {
-      if (!dropdownTypeButton.contains(event.target) && !dropdownTypeContent.contains(event.target)) {
-        dropdownTypeContent.classList.add('hidden');
-      }
       if (!dropdownFeelingButton.contains(event.target) && !dropdownFeelingContent.contains(event.target)) {
         dropdownFeelingContent.classList.add('hidden');
       }
