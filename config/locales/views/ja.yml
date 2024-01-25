@@ -1,2 +1,28 @@
 ja:
-    
+  users:
+    new:
+      title: 'ユーザー登録'
+  usersessions:
+    new:
+      title: 'ログイン'
+  searches:
+    result:
+      title: '検索結果'
+  drive_records:
+    index:
+      title: 'ドライブ履歴一覧'
+    show:
+      title: 'ドライブ履歴詳細'
+  destinations:
+    bookmarks:
+      title: 'ブックマーク一覧'
+  profiles:
+    show:
+      title: 'プロフィール'
+    edit:
+      title: 'プロフィール編集'
+  static_pages:
+    terms_of_service:
+      title: '利用規約'
+    privacy_policy:
+      title: 'プライバシーポリシー'
