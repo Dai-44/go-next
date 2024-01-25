@@ -3,22 +3,22 @@
   <div>
     <h1 class="text-center font-bold text-slate-600 text-3xl mb-8">ドライブ履歴</h1>
   </div>
-  <div class="flex justify-center w-4/5">
+  <div class="flex justify-center w-11/12">
     <%= render 'shared/search_form', q: @q, url: drive_records_path %>
   </div>
-  <div class="bg-white rounded-lg py-5 mx-5 h-full flex flex-col items-center justify-center text-slate-700 w-96">
+  <div class="bg-white rounded-lg py-5 h-full flex flex-col items-center justify-center text-slate-700 w-11/12 md:w-96">
     <% if @drive_records.present? %>
       <% @drive_records.each do |drive_record| %>
-        <div class= "hover:bg-slate-100 font-bold rounded-sm border-b-2 border-slate-400 h-20 w-11/12 my-1 px-3">
-          <%= link_to drive_record_path(drive_record), class: "flex flex-row space-x-6 w-full h-full" do %>
+        <div class= "hover:bg-slate-100 rounded-sm border-b-2 border-slate-400 h-20 w-11/12 my-1">
+          <%= link_to drive_record_path(drive_record), class: "flex flex-row space-x-3 w-full h-full" do %>
             <!-- 左側のブロック（日付） -->
-            <div class="flex items-center">
+            <div class="flex items-center font-bold">
               <span><%= format_date(drive_record) %></span>
             </div>
 
             <!-- 右側のブロック（目的地の名前と住所） -->
             <div class="flex flex-col justify-center">
-              <span class="text-sm mb-2"><%= drive_record.destination.name %></span>
+              <span class="text-sm mb-2 font-bold"><%= drive_record.destination.name %></span>
               <span class="text-xs"><%= drive_record.destination.address %></span>
             </div>
           <% end %>
