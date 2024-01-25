@@ -28,6 +28,6 @@ class BookmarksController < ApplicationController
   private
 
   def destination_params
-    params.require(:destination).permit(:name, :address, :top_level_area, :second_level_area, :latitude, :longitude, :type, :website_uri, :place_id)
+    params.require(:destination).permit(:name, :address, :top_level_area, :second_level_area, :latitude, :longitude, :type, :website_uri, :photo_uri, :place_id)
   end
 end

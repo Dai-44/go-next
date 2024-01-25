@@ -1,74 +1,115 @@
-<div class="flex justify-center items-center mx-auto">
-  <%= button_tag '行き先を探す', type: 'button', id: 'toggle-form-button', class: 'bg-indigo-900 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-lg text-white font-bold py-3 px-6 rounded-lg my-4' %>
-</div>
+<div id="page-top"></div>
+<div class="flex justify-center items-center flex-col mx-auto">
+  <header class="text-center text-lg ">
+    <%= image_tag 'logo_with_appname.png', size: "350x250", class: "mx-auto" %>
+    <p>「〇〇？」</p>
+    <p>「〇〇？」</p>
+    <p class="mt-10 mx-3">...次、どこ行く？ は、〇〇なサービスです。</p>
+  </header>
 
-<div id="search-form" class="transition-all ease-in-out duration-500 max-h-0 overflow-hidden m-3">
-  <%= form_with model: @user_selection, url: searches_path, class: "py-3", data: { turbo: false } do |form| %>
-    <%= render 'shared/error_messages', object: form.object %>
-    <%= form.hidden_field :latitude, id: 'hidden_latitude' %>
-    <%= form.hidden_field :longitude, id: 'hidden_longitude' %>
+  <div class="text-sm text-center mt-10 mb-1">
+    \ さっそく使ってみる /
+  </div>
+  <%= button_tag '行き先を探す', type: 'button', id: 'toggle-form-button', class: 'bg-indigo-900 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-lg text-white font-bold rounded-lg py-3 px-10 mb-3' %>
+  <div class="text-xs text-center">
+    ※ 応答がない場合、お手数ですが<br>&emsp;画面をリロードした上で再度お試しください。
+  </div>
 
-    <div>
-      <div class="flex flex-row justify-center items-center space-x-6">
-        <!-- ドロップダウンを開くボタン (カテゴリ) の親要素 -->
-        <div class="form-element relative">
-          <%= button_tag type: 'button', id: 'dropdownTypeButton', class: 'inline-flex items-center px-4 py-2 text-md font-medium text-center text-slate-600 rounded-lg shadow-sm bg-white border-2 border-indigo-300 hover:border-indigo-500 focus:border-indigo-400 focus:ring focus:ring-indigo-200 focus:ring-opacity-50', data: { dropdown_toggle: 'dropdownType' } do %>
-            除外カテゴリ(任意)
-            <%= content_tag :svg, class: 'w-2.5 h-2.5 ms-2.5', aria: { hidden: true }, xmlns: 'http://www.w3.org/2000/svg', fill: 'none', viewBox: '0 0 10 6' do %>
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+  <div id="search-form" class="transition-all ease-in-out duration-500 max-h-0 overflow-hidden m-3">
+    <%= form_with model: @user_selection, url: searches_path, class: "py-3 h-52", data: { turbo: false } do |form| %>
+      <%= render 'shared/error_messages', object: form.object %>
+      <%= form.hidden_field :latitude, id: 'hidden_latitude' %>
+      <%= form.hidden_field :longitude, id: 'hidden_longitude' %>
+
+      <div>
+        <div class="flex flex-row justify-center items-center space-x-3">
+          <!-- ドロップダウンを開くボタン -->
+          <div class="form-element relative">
+            <%= button_tag type: 'button', id: 'dropdownFeelingButton', class: 'inline-flex items-center px-4 py-2 text-md font-medium text-center text-slate-600 rounded-lg shadow-sm bg-white border-2 border-indigo-300 hover:border-indigo-500 focus:border-indigo-400 focus:ring focus:ring-indigo-200 focus:ring-opacity-50', data: { dropdown_toggle: 'dropdownFeeling' } do %>
+              いまの気分
+              <%= content_tag :svg, class: 'w-2.5 h-2.5 ms-2.5', aria: { hidden: true }, xmlns: 'http://www.w3.org/2000/svg', fill: 'none', viewBox: '0 0 10 6' do %>
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+              <% end %>
             <% end %>
-          <% end %>
-          <!-- ドロップダウンのコンテンツ (カテゴリ) -->
-          <div id="dropdownType" class="absolute z-10 top-16 left-10 hidden bg-white rounded-lg shadow w-60 dark:bg-gray-700">
-            <ul class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownTypeButton">
-              <div class="form-element space-y-2 flex flex-col justify-center">
-                <%= form.collection_check_boxes :type, GooglePlacesApiType.limit(15), :name, :display_name, include_hidden: false do |b| %>
-                  <div class="flex items-center">
-                    <%= b.check_box(class: "w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600") %>
-                    <%= b.label(class: "ms-2 text-sm font-medium text-gray-900 dark:text-gray-300") %>
-                  </div>
-                <% end %>
-              </div>
-            </ul>
+            <!-- ドロップダウンのコンテンツ -->
+            <div id="dropdownFeeling" class="absolute z-10 top-14 left-0 hidden bg-white rounded-lg shadow w-60 dark:bg-gray-700">
+              <ul class="px-2 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownFeelingButton">
+                <div class="form-element space-y-2">
+                  <%= form.collection_radio_buttons :feeling, Feeling.all, :id, :name do |b| %>
+                    <div class="flex items-center">
+                      <%= b.radio_button(class: "form-radio") %>
+                      <%= b.label(class: "ms-2 text-sm font-medium text-gray-900 dark:text-gray-300") %>
+                    </div>
+                  <% end %>
+                </div>
+              </ul>
+            </div>
           </div>
-        </div>
-        <!-- ドロップダウンを開くボタン (気分) -->
-        <div class="form-element relative">
-          <%= button_tag type: 'button', id: 'dropdownFeelingButton', class: 'inline-flex items-center px-4 py-2 text-md font-medium text-center text-slate-600 rounded-lg shadow-sm bg-white border-2 border-indigo-300 hover:border-indigo-500 focus:border-indigo-400 focus:ring focus:ring-indigo-200 focus:ring-opacity-50', data: { dropdown_toggle: 'dropdownFeeling' } do %>
-            いまの気分
-            <%= content_tag :svg, class: 'w-2.5 h-2.5 ms-2.5', aria: { hidden: true }, xmlns: 'http://www.w3.org/2000/svg', fill: 'none', viewBox: '0 0 10 6' do %>
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-            <% end %>
-          <% end %>
-          <!-- ドロップダウンのコンテンツ (気分) -->
-          <div id="dropdownFeeling" class="absolute z-10 top-16 right-10 hidden bg-white rounded-lg shadow w-60 dark:bg-gray-700">
-            <ul class="px-2 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownFeelingButton">
-              <div class="form-element space-y-2">
-                <%= form.collection_radio_buttons :feeling, Feeling.all, :id, :name do |b| %>
-                  <div class="flex items-center">
-                    <%= b.radio_button(class: "form-radio") %>
-                    <%= b.label(class: "ms-2 text-sm font-medium text-gray-900 dark:text-gray-300") %>
-                  </div>
-                <% end %>
-              </div>
-            </ul>
+
+          <!-- 運転範囲の選択 -->
+          <div class="form-element">
+            <%= form.select :drive_range, options_for_select(@user_selection.drive_time_options), { include_blank: 'どのくらい走る？' }, class: "form-select block rounded-md shadow-sm text-slate-600 bg-white border-2 border-indigo-300 hover:border-indigo-500 focus:border-indigo-400 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" %>
+          </div>
+
+          <!-- 検索ボタン -->
+          <div class="form-element">
+            <%= form.submit '検索', class: "bg-indigo-900 hover:bg-indigo-600 focus:outline-none text-white font-bold py-2 px-4 rounded" %>
           </div>
         </div>
       </div>
+    <% end %>
+  </div>
 
-      <div class="flex flex-row justify-center items-center space-x-4 mt-4">
-        <!-- 運転範囲の選択 -->
-        <div class="form-element">
-          <%= form.select :drive_range, options_for_select(@user_selection.drive_time_options), { include_blank: 'どのくらい走る？' }, class: "form-select block rounded-md shadow-sm text-slate-600 bg-white border-2 border-indigo-300 hover:border-indigo-500 focus:border-indigo-400 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" %>
-        </div>
-
-        <!-- 検索ボタン -->
-        <div class="form-element">
-          <%= form.submit '検索', class: "bg-indigo-900 hover:bg-indigo-600 focus:outline-none text-white font-bold py-2 px-4 rounded" %>
-        </div>
-      <div>
+  <div class="flex flex-col space-y-6 w-4/5 text-center">
+    <div class="flex items-center my-6">
+      <hr class="flex-grow border-t border-2 border-slate-500">
+      <span class="text-lg text-center font-bold text-slate-700 w-2/5 px-1 md:w-1/3">何ができる？</span>
+      <hr class="flex-grow border-t border-2 border-slate-500">
     </div>
-  <% end %>
+
+    <div class="bg-white rounded-lg shadow-xl px-5 py-3 mx-3">
+      <h1 class="text-lg font-bold text-slate-700 md:text-xl ">検索</h1>
+      <p class="mt-5 text-sm">検索ができます</p>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-xl px-5 py-3 mx-3">
+      <h1 class="text-lg font-bold text-slate-700 md:text-xl ">検索結果の閲覧</h1>
+      <p class="mt-5 text-sm">検索結果の閲覧ができます</p>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-xl px-5 py-3 mx-3">
+      <h1 class="text-lg font-bold text-slate-700 md:text-xl ">目的地へ行く</h1>
+      <div class="mt-5 text-sm">
+      <p class="mb-2">Yahoo!カーナビまたはGoogleマップを利用して経路案内を開始できます</p>
+      <p class="text-xs">※ Yahoo!カーナビでの経路案内には、別途Yahoo!カーナビアプリのインストールが必要となります</p>
+    </div>
+  </div>
+  <div class="flex flex-col space-y-6 text-center">
+    <div class="flex items-center my-6">
+      <hr class="flex-grow border-t border-2 border-slate-500">
+      <span class="text-lg text-center font-bold text-slate-700 w-2/5 md:w-1/3">ログインすると...</span>
+      <hr class="flex-grow border-t border-2 border-slate-500">
+    </div>
+
+    <div class="flex flex-col space-y-6 text-center">
+      <div class="bg-white rounded-lg shadow-xl px-5 py-3 mx-3">
+        <h1 class="text-lg font-bold text-slate-700 md:text-xl ">ブックマーク</h1>
+        <p class="mt-5 text-sm">ブックマークの登録, 閲覧ができます</p>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-xl px-5 py-3 mx-3">
+        <h1 class="text-lg font-bold text-slate-700 md:text-xl ">ドライブ履歴</h1>
+        <p class="mt-5 text-sm">ドライブ履歴の閲覧ができます</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex justify-center flex-row mx-2">
+    <%= button_tag '行き先を探す', type: 'button', id: "scrollToTop", class: 'bg-indigo-900 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-sm text-white font-bold rounded-lg w-40 py-3 px-4 mx-2' %>
+    <%= link_to login_path, class: 'bg-emerald-400 hover:bg-emerald-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 text-sm text-white font-bold rounded-lg w-40 py-3 px-4 mx-2' do %>
+      ログインして<br>始める
+    <% end %>
+  </div>
 </div>
 
 <script>
@@ -82,9 +123,6 @@
           // 位置情報の取得に成功したら、隠しフィールドに値をセット
           document.getElementById('hidden_latitude').value = position.coords.latitude;
           document.getElementById('hidden_longitude').value = position.coords.longitude;
-
-          sessionStorage.setItem('latitude', position.coords.latitude); // 検索結果表示画面(searches/result)の検索フォームにも、取得した緯度と経度の情報を渡す必要があるため、ブラウザのセッションストレージに格納しておく。
-          sessionStorage.setItem('longitude', position.coords.longitude);
 
           // 位置情報の取得後、フォームを表示
           showForm(searchForm);
@@ -110,16 +148,8 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    const dropdownTypeButton = document.getElementById('dropdownTypeButton');
-    const dropdownTypeContent = document.getElementById('dropdownType');
     const dropdownFeelingButton = document.getElementById('dropdownFeelingButton');
     const dropdownFeelingContent = document.getElementById('dropdownFeeling');
-  
-    // カテゴリのドロップダウン制御
-    dropdownTypeButton.addEventListener('click', (event) => {
-      dropdownTypeContent.classList.toggle('hidden');
-      event.stopPropagation(); // ドキュメントのイベント伝播を停止
-    });
 
     // 気分のドロップダウン制御
     dropdownFeelingButton.addEventListener('click', (event) => {
@@ -129,12 +159,21 @@
 
     // ドロップダウン要素以外の場所がクリックされたらドロップダウンを閉じる
     document.addEventListener('click', (event) => {
-      if (!dropdownTypeButton.contains(event.target) && !dropdownTypeContent.contains(event.target)) {
-        dropdownTypeContent.classList.add('hidden');
-      }
       if (!dropdownFeelingButton.contains(event.target) && !dropdownFeelingContent.contains(event.target)) {
         dropdownFeelingContent.classList.add('hidden');
       }
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const scrollToTopButton = document.getElementById('scrollToTop');
+
+    scrollToTopButton.addEventListener('click', function(event) {
+      event.preventDefault();
+      window.scrollTo({
+        top: document.getElementById('page-top').offsetTop,
+        behavior: 'smooth'
+      });
     });
   });
 </script>

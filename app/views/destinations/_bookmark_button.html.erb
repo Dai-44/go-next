@@ -5,5 +5,5 @@
 <% if current_user&.bookmark?(target_destination) %>
   <%= render 'destinations/unbookmark', place: target_destination %>
 <% else %>
-  <%= render 'destinations/bookmark', place: place %>
+  <%= render 'destinations/bookmark', place: place, photo_uri: photo_uri %>
 <% end %>
