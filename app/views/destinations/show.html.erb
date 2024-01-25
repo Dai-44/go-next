@@ -49,7 +49,7 @@
 
 
 <script>
-  // 「もう一度行く」ボタンをクリックした際のドロップダウン表示処理
+  // 「ここへ行く」ボタンをクリックした際のドロップダウン表示処理
   document.addEventListener('DOMContentLoaded', () => {
     const dropdownDepartureButton = document.getElementById('dropdownDepartureButton');
     const dropdownDepartureContent = document.getElementById('dropdownDeparture');
@@ -66,14 +66,6 @@
     overlay.addEventListener('click', () => {
         dropdownDepartureContent.classList.add('hidden');
         overlay.classList.add('hidden');
-    });
-
-    // ドロップダウン要素以外の場所がクリックされたらドロップダウンを閉じる
-    document.addEventListener('click', (event) => {
-      if (!dropdownDepartureButton.contains(event.target) && !dropdownDepartureContent.contains(event.target)) {
-          dropdownDepartureContent.classList.add('hidden');
-          overlay.classList.add('hidden');
-      }
     });
   });
 </script>

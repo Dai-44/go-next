@@ -246,10 +246,10 @@
           // ドロップダウンを表示する関数の実行
           toggleDropdown();
         } else {
-          throw new Error('Network response was not ok.');
+          throw new Error('不具合が発生しました。お手数ですがもう一度お試しください。');
         }
       }).catch(error => {
-        console.error('There has been a problem with your fetch operation:', error);
+        console.error('不具合が発生しました。お手数ですがもう一度お試しください。 ', error);
       });
     }
 
