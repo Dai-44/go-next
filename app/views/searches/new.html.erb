@@ -124,6 +124,10 @@
           document.getElementById('hidden_latitude').value = position.coords.latitude;
           document.getElementById('hidden_longitude').value = position.coords.longitude;
 
+          // 検索実行後の遷移先である`searches/result`でのマップ表示に現在地の緯度および経度を用いるため、位置情報をセッションストレージに保存
+          sessionStorage.setItem('latitude', position.coords.latitude);
+          sessionStorage.setItem('longitude', position.coords.longitude);
+
           // 位置情報の取得後、フォームを表示
           showForm(searchForm);
         }, (error) => {
