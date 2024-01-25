@@ -11,12 +11,10 @@ class UserSelectionForm
   attribute :latitude, :float
   attribute :longitude, :float
 
-  with_options presence: true do
-    validates :feeling
-    validates :drive_range
-    validates :latitude
-    validates :longitude
-  end
+  validates :feeling, presence: { message:'いまの気分を選択してください' }
+  validates :drive_range, presence: { message:'どのくらい走りたいか選択してください' }
+  validates :latitude, presence: { message:'現在地の緯度および経度を取得に失敗しました。お手数ですが、画面をリロードした上で再度お試しください。' }
+  validates :longitude, presence: { message:'現在地の緯度および経度を取得に失敗しました。お手数ですが、画面をリロードした上で再度お試しください' }
 
   def initialize(attributes = {})
     super(attributes)
