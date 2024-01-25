@@ -2,6 +2,7 @@ ja:
   users:
     new:
       title: 'ユーザー登録'
+      validates_password: '(6文字以上)'
   usersessions:
     new:
       title: 'ログイン'

@@ -20,6 +20,6 @@ module SearchesHelper
     day_of_week = opening_hours_for_today.split(':').first
 
     # 表示したい文字列を組み立てる
-    "営業時間 (#{day_of_week}) : #{opening_hours_for_today.split(':')[1].strip}"
+    "営業時間(#{day_of_week}) : #{opening_hours_for_today.split(':')[1].strip}"
   end
 end
