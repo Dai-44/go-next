@@ -3,7 +3,7 @@
   <div>
     <h1 class="text-center font-bold text-slate-600 text-3xl mb-8">ドライブ履歴詳細</h1>
   </div>
-  <div class="bg-white rounded-lg p-5 m-5 flex flex-col items-center text-slate-700 h-96 w-96">
+  <div class="bg-white rounded-lg p-5 m-5 flex flex-col items-center text-slate-700 h-96 w-11/12 md:w-96">
     <% if @drive_record_destination.website_uri.present? %>
       <%= link_to @drive_record_destination.name, @drive_record_destination.website_uri, class: "text-lg font-bold p-3 underline hover:text-slate-400", target: '_blank', rel: 'noopener noreferrer' %>
     <% else %>
@@ -23,8 +23,8 @@
   <!-- オーバーレイ -->
   <div id="overlay" class="hidden fixed inset-0 bg-slate-900 bg-opacity-50 z-20"></div>
 
-  <div class="flex flex-col">
-    <div class="flex justify-between space-x-14 py-3 relative">
+  <div class="flex flex-col w-11/12 md:w-96">
+    <div class="flex justify-between space-x-10 py-3 relative">
       <!-- ドロップダウンを開くボタン -->
       <%= button_tag type: 'button', id: 'dropdownDepartureButton', class: 'bg-indigo-900 hover:bg-indigo-700 text-white focus:outline-none py-3 px-6 mt-3 w-40 rounded-full', data: { dropdown_toggle: 'dropdownDeparture' } do %>
         もう一度行く
