@@ -1,0 +1,20 @@
+<footer id='footer' class='bg-gray-300 text-slate-600 py-3 rounded-sm'>
+  <div class='container mx-auto px-4'>
+    <div class='flex flex-col justify-center items-center text-xs'>
+      <ul class='flex space-x-2'>
+        <li>
+          <%= link_to '利用規約', terms_of_service_path, class: 'block p-1 hover:text-slate-900 hover:underline' %>
+        </li>
+        <li>
+          <%= link_to 'プライバシーポリシー', privacy_policy_path, class: 'block p-1 hover:text-slate-900 hover:underline' %>
+        </li>
+        <li>
+          <%= link_to 'お問い合わせ', 'https://docs.google.com/forms/d/e/1FAIpQLSeiiBjgLOac4fuan8ekHdrhE1LlBb5tUGYeBwB1Wgs99wQINg/viewform?usp=sf_link', class: 'block p-1 hover:text-slate-900 hover:underline', target: '_blank', rel: 'noopener noreferrer' %>
+        </li>
+      </ul>
+      <div class='font-semibold pt-1'>
+        <p>Copyright © ...次、どこ行く？</p>
+      </div>
+    </div>
+  </div>
+</footer>
