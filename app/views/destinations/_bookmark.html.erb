@@ -6,7 +6,7 @@
     id: "js-bookmark-button-for-place-#{place.google_places_api_id}",
     class: 'hover:text-slate-400',
     data: { turbo_method: :post } do %>
-    <i class="fa-regular fa-bookmark"></i>
+    <i class="fa-regular fa-bookmark w-4 h-6 mt-1"></i>
   <% end %>
 <% else %>
   <%= link_to bookmarks_path(destination: {
@@ -24,6 +24,6 @@
     id: "js-bookmark-button-for-place-#{place['id']}",
     class: 'hover:text-slate-400',
     data: { turbo_method: :post } do %>
-    <i class="fa-regular fa-bookmark"></i>
+    <i class="fa-regular fa-bookmark w-4 h-6 mt-1"></i>
   <% end %>
 <% end %>
