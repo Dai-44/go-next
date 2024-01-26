@@ -13,12 +13,24 @@
         <%= f.email_field :email, class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm' %>
       </div>
       <div class="mb-4">
-        <%= f.label :password,  class: 'block text-sm font-medium text-gray-700 inline-block mr-2' %><span class="text-xs md:text-sm text-gray-500 inline-block"><%= t(".validates_password") %></span>
-        <%= f.password_field :password, class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm' %>
+        <%= f.label :password, class: 'block text-sm font-medium text-gray-700 inline-block mr-2' %>
+        <span class="text-xs md:text-sm text-gray-500 inline-block"><%= t(".validates_password") %></span>
+        <div id="inputBox1" class="relative">
+          <%= f.password_field :password, id: 'password1', class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm' %>
+          <span id="view1" class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 cursor-pointer">
+            <i class="far fa-eye"></i>
+          </span>
+        </div>
       </div>
       <div class="mb-6">
-        <%= f.label :password_confirmation, class: 'block text-sm font-medium text-gray-700 inline-block mr-2' %><span class="text-xs md:text-sm text-gray-500 inline-block"><%= t(".validates_password") %></span>
-        <%= f.password_field :password_confirmation, class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm' %>
+        <%= f.label :password_confirmation, class: 'block text-sm font-medium text-gray-700 inline-block mr-2' %>
+        <span class="text-xs md:text-sm text-gray-500 inline-block"><%= t(".validates_password") %></span>
+        <div id="inputBox2" class="relative">
+          <%= f.password_field :password_confirmation, id: 'password2', class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm' %>
+          <span id="view2" class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 cursor-pointer">
+            <i class="far fa-eye"></i>
+          </span>
+        </div>
       </div>
       <div class="mb-6 flex justify-center">
         <%= f.submit '登録', class: 'bg-indigo-700 hover:bg-indigo-600 focus:outline-none border border-transparent rounded-md shadow-sm w-2/3 text-center text-white py-2 px-4 text-sm font-medium' %>
@@ -29,3 +41,31 @@
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    let viewIcon1 = document.getElementById('view1');
+    let passwordInput1 = document.getElementById('password1');
+
+    viewIcon1.addEventListener('click', function() {
+      togglePasswordView(passwordInput1, viewIcon1);
+    });
+
+    let viewIcon2 = document.getElementById('view2');
+    let passwordInput2 = document.getElementById('password2');
+
+    viewIcon2.addEventListener('click', function() {
+      togglePasswordView(passwordInput2, viewIcon2);
+    });
+
+    function togglePasswordView(input, icon) {
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.innerHTML = '<i class="far fa-eye-slash"></i>'; // 表示されている時のアイコン
+      } else {
+        input.type = 'password';
+        icon.innerHTML = '<i class="far fa-eye"></i>'; // 非表示の時のアイコン
+      }
+    }
+  });
+</script>
