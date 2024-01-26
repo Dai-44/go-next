@@ -166,11 +166,27 @@
     });
   }
 
+  // ページのロード後、カルーセルアイテム切り替え前の初期状態で、「ここへ行く」リンクを押して表示されるYahoo!カーナビおよびGoogleマップリンクの目的地を、1件目に表示される場所の緯度と経度を用いて設定する処理
+  document.addEventListener('DOMContentLoaded', () => {
+    const items = document.querySelectorAll('[data-carousel-item]');
+    const yahooNaviLink = document.querySelector('#dropdownDeparture a.yahoo-navi-link');
+    const googleMapLink = document.querySelector('#dropdownDeparture a.google-map-link');
+
+    if (items.length > 0) {
+      const firstItem = items[0];
+      const latitude = firstItem.getAttribute('data-latitude');
+      const longitude = firstItem.getAttribute('data-longitude');
+
+      yahooNaviLink.href = `yjcarnavi://navi/select?lat=${latitude}&lon=${longitude}`;
+      googleMapLink.href = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}&travelmode=driving`;
+    }
+  });
+
   // カルーセルアイテムの表示切り替え処理
   document.addEventListener('DOMContentLoaded', () => {
     const items = document.querySelectorAll('[data-carousel-item]'); // カルーセルアイテムの取得
     const indicators = document.querySelectorAll('[data-carousel-slide-to]'); // インジケーターの取得
-    // カルーセル外部の「ここへ行く」ボタンクリックで表示される、ドロップダウンアイテム内のリンク要素(表示されているカルーセルアイテムに対応する場所に応じてパラメータを変えるもの)を取得
+    // カルーセル外部の「ここへ行く」リンククリックで表示される、ドロップダウンアイテム内のリンク要素(表示されているカルーセルアイテムに対応する場所に応じてパラメータを変えるもの)を取得
     const yahooNaviLink = document.querySelector('#dropdownDeparture a.yahoo-navi-link');
     const googleMapLink = document.querySelector('#dropdownDeparture a.google-map-link');
 
