@@ -2,7 +2,7 @@ ja:
   users:
     new:
       title: 'ユーザー登録'
-      validates_password: '(6文字以上)'
+      validates_password: '(英数字含む6文字以上)'
   usersessions:
     new:
       title: 'ログイン'

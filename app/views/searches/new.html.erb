@@ -2,9 +2,11 @@
 <div class="flex justify-center items-center flex-col mx-auto">
   <header class="text-center text-lg ">
     <%= image_tag 'logo_with_appname.png', size: "350x250", class: "mx-auto" %>
-    <p>「〇〇？」</p>
-    <p>「〇〇？」</p>
-    <p class="mt-10 mx-3">...次、どこ行く？ は、〇〇なサービスです。</p>
+    <p class="text-slate-800">「思っていたよりも予定が早く済んじゃった...」</p>
+    <p class="text-slate-800">「この辺りで面白いスポットはないかな？」</p>
+    <p class="mt-10 mx-6 text-sm text-slate-800">ドライブ中に思いがけないフリータイムができたとき。</p>
+    <p class="mt-2 mx-6 text-sm text-slate-800">...次、どこ行く？ が、次の行き先を決めるお手伝いをします。</p>
+    <p class="mt-5 mx-6 text-sm text-slate-800">どこに行こうか決まらず悩む時間を、<br>楽しいドライブの時間に変えてみませんか？</p>
   </header>
 
   <div class="text-sm text-center mt-10 mb-1">
@@ -12,7 +14,7 @@
   </div>
   <%= button_tag '行き先を探す', type: 'button', id: 'toggle-form-button', class: 'bg-indigo-900 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-lg text-white font-bold rounded-lg py-3 px-10 mb-3' %>
   <div class="text-xs text-center">
-    ※ 応答がない場合、お手数ですが<br>&emsp;画面をリロードした上で再度お試しください。
+    ※ 応答がない場合、お手数ですが<br>&emsp;画面を再読み込みしてお試しください。
   </div>
 
   <div id="search-form" class="transition-all ease-in-out duration-500 max-h-0 overflow-hidden m-3">
@@ -21,95 +23,78 @@
       <%= form.hidden_field :latitude, id: 'hidden_latitude' %>
       <%= form.hidden_field :longitude, id: 'hidden_longitude' %>
 
-      <div>
-        <div class="flex flex-row justify-center items-center space-x-3 mb-5">
-          <!-- ドロップダウンを開くボタン -->
-          <div class="form-element relative">
-            <%= button_tag type: 'button', id: 'dropdownFeelingButton', class: 'inline-flex items-center px-4 py-2 text-md font-medium text-center text-slate-600 rounded-lg shadow-sm bg-white border-2 border-indigo-300 hover:border-indigo-500 focus:border-indigo-400 focus:ring focus:ring-indigo-200 focus:ring-opacity-50', data: { dropdown_toggle: 'dropdownFeeling' } do %>
-              いまの気分
-              <%= content_tag :svg, class: 'w-2.5 h-2.5 ms-2.5', aria: { hidden: true }, xmlns: 'http://www.w3.org/2000/svg', fill: 'none', viewBox: '0 0 10 6' do %>
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-              <% end %>
-            <% end %>
-            <!-- ドロップダウンのコンテンツ -->
-            <div id="dropdownFeeling" class="absolute z-10 top-14 left-0 hidden bg-white rounded-lg shadow w-60 dark:bg-gray-700">
-              <ul class="px-2 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownFeelingButton">
-                <div class="form-element space-y-2">
-                  <%= form.collection_radio_buttons :feeling, Feeling.all, :id, :name do |b| %>
-                    <div class="flex items-center">
-                      <%= b.radio_button(class: "form-radio") %>
-                      <%= b.label(class: "ms-2 text-sm font-medium text-gray-900 dark:text-gray-300") %>
-                    </div>
-                  <% end %>
-                </div>
-              </ul>
-            </div>
-          </div>
-
-          <!-- 運転範囲の選択 -->
-          <div class="form-element">
-            <%= form.select :drive_range, options_for_select(@user_selection.drive_time_options), { include_blank: 'どのくらい走る？' }, class: "form-select block rounded-md shadow-sm text-slate-600 bg-white border-2 border-indigo-300 hover:border-indigo-500 focus:border-indigo-400 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" %>
-          </div>
+      <div class="flex flex-col justify-center items-center space-y-3 mb-5">
+        <div class="form-element">
+          <%= form.select :feeling, options_from_collection_for_select(Feeling.all, :id, :name), { include_blank: 'いまの気分は？' }, class: "form-select block rounded-md shadow-sm text-slate-600 bg-white border-2 border-indigo-300 hover:border-indigo-500 focus:border-indigo-400 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-72" %>
         </div>
-
-        <div class="flex justify-center items-center">
-          <!-- 検索ボタン -->
-          <div class="form-element">
-            <%= form.submit '検索', class: "bg-indigo-900 hover:bg-indigo-600 focus:outline-none text-white font-bold py-2 px-4 rounded" %>
-          </div>
+        <!-- 運転範囲の選択 -->
+        <div class="form-element">
+          <%= form.select :drive_range, options_for_select(@user_selection.drive_time_options), { include_blank: 'どのくらい走る？' }, class: "form-select block rounded-md shadow-sm text-slate-600 bg-white border-2 border-indigo-300 hover:border-indigo-500 focus:border-indigo-400 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-72" %>
+        </div>
+        <!-- 検索ボタン -->
+        <div class="form-element w-">
+          <%= form.submit '検索', class: "bg-indigo-900 hover:bg-indigo-600 focus:outline-none text-white font-bold w-32 py-2 px-4 mt-3 rounded-lg" %>
         </div>
       </div>
     <% end %>
   </div>
 
   <div class="flex flex-col space-y-6 w-4/5 text-center">
-    <div class="flex items-center my-6">
-      <hr class="flex-grow border-t border-2 border-slate-500">
-      <span class="text-lg text-center font-bold text-slate-700 w-2/5 px-1 md:w-1/3">何ができる？</span>
-      <hr class="flex-grow border-t border-2 border-slate-500">
+    <div class="flex items-center my-1">
+      <hr class="flex-grow border-t border-2 border-slate-500 w-1/5">
+      <span class="text-lg text-center font-bold text-slate-700 w-1/2 px-1 md:w-1/3">使い方</span>
+      <hr class="flex-grow border-t border-2 border-slate-500 w-1/5">
     </div>
 
-    <div class="bg-white rounded-lg shadow-xl px-5 py-3 mx-3">
-      <h1 class="text-lg font-bold text-slate-700 md:text-xl ">検索</h1>
-      <p class="mt-5 text-sm">検索ができます</p>
+    <div class="bg-white rounded-lg shadow-xl px-5 py-4 mx-3">
+      <h1 class="text-lg font-bold text-slate-700 md:text-xl ">検索する</h1>
+      <p class="mt-3 text-sm">いまの気分と走行時間を指定して<br>付近のスポットを検索できます。</p>
+      <%= image_tag 'how-to-use_search.png', size: "200x200", class: "mt-5 mx-auto rounded-lg" %>
     </div>
 
-    <div class="bg-white rounded-lg shadow-xl px-5 py-3 mx-3">
-      <h1 class="text-lg font-bold text-slate-700 md:text-xl ">検索結果の閲覧</h1>
-      <p class="mt-5 text-sm">検索結果の閲覧ができます</p>
+    <div class="bg-white rounded-lg shadow-xl px-5 py-4 mx-3">
+      <h1 class="text-lg font-bold text-slate-700 md:text-xl ">行き先を決める</h1>
+      <p class="mt-3 text-sm">検索結果から行きたい場所を選び<br>「ここへ行く」をクリックします。</p>
+      <%= image_tag 'how-to-use_see-result.png', size: "200x400", class: "mt-5 mx-auto rounded-lg" %>
     </div>
 
-    <div class="bg-white rounded-lg shadow-xl px-5 py-3 mx-3">
+    <div class="bg-white rounded-lg shadow-xl px-5 py-4 mx-3">
       <h1 class="text-lg font-bold text-slate-700 md:text-xl ">目的地へ行く</h1>
-      <div class="mt-5 text-sm">
-      <p class="mb-2">Yahoo!カーナビまたはGoogleマップを利用して経路案内を開始できます</p>
-      <p class="text-xs">※ Yahoo!カーナビでの経路案内には、別途Yahoo!カーナビアプリのインストールが必要となります</p>
+      <p class="text-sm mt-3">目的地へのドライブには<br>Yahoo!カーナビ / Googleマップの<br>経路案内を利用できます</p>
+      <%= image_tag 'how-to-use_start-navi.png', size: "200x400", class: "mt-5 mx-auto rounded-lg" %>
     </div>
   </div>
-  <div class="flex flex-col space-y-6 text-center">
-    <div class="flex items-center my-6">
-      <hr class="flex-grow border-t border-2 border-slate-500">
-      <span class="text-lg text-center font-bold text-slate-700 w-2/5 md:w-1/3">ログインすると...</span>
-      <hr class="flex-grow border-t border-2 border-slate-500">
+
+  <div class="flex flex-col space-y-6 w-4/5 text-center mb-6">
+    <div class="flex items-center mt-10 mb-3">
+      <hr class="flex-grow border-t border-2 border-slate-500 w-1/6 px-1">
+      <span class="text-lg text-center font-bold text-slate-700 w-1/2 px-1 md:w-1/3">ログインすると...</span>
+      <hr class="flex-grow border-t border-2 border-slate-500 w-1/6 px-1">
     </div>
 
-    <div class="flex flex-col space-y-6 text-center">
-      <div class="bg-white rounded-lg shadow-xl px-5 py-3 mx-3">
-        <h1 class="text-lg font-bold text-slate-700 md:text-xl ">ブックマーク</h1>
-        <p class="mt-5 text-sm">ブックマークの登録, 閲覧ができます</p>
-      </div>
+    <div class="bg-white rounded-lg shadow-xl px-5 py-4 mx-3">
+      <h1 class="text-lg font-bold text-slate-700 md:text-xl ">ブックマーク</h1>
+      <p class="text-sm mt-3">気になるスポットは<br>ブックマークしておき<br>後で訪れる計画を立てましょう。</p>
+      <%= image_tag 'how-to-use_bookmark.png', size: "200x400", class: "mt-5 mx-auto rounded-lg" %>
+      <%= image_tag 'how-to-use_bookmark-index.png', size: "200x400", class: "mt-5 mx-auto rounded-lg" %>
+      <%= image_tag 'how-to-use_bookmark-show.png', size: "200x400", class: "mt-5 mx-auto rounded-lg" %>
+    </div>
 
-      <div class="bg-white rounded-lg shadow-xl px-5 py-3 mx-3">
-        <h1 class="text-lg font-bold text-slate-700 md:text-xl ">ドライブ履歴</h1>
-        <p class="mt-5 text-sm">ドライブ履歴の閲覧ができます</p>
-      </div>
+    <div class="bg-white rounded-lg shadow-xl px-5 py-4 mx-3">
+      <h1 class="text-lg font-bold text-slate-700 md:text-xl ">ドライブ履歴</h1>
+      <p class="text-sm mt-3">過去のドライブの履歴を見返して<br>次のドライブの参考にしましょう。</p>
+      <%= image_tag 'how-to-use_drive-record.png', size: "200x400", class: "mt-5 mx-auto rounded-lg" %>
+      <%= image_tag 'how-to-use_drive-record-index.png', size: "200x400", class: "mt-5 mx-auto rounded-lg" %>
+      <%= image_tag 'how-to-use_drive-record-show.png', size: "200x400", class: "mt-5 mx-auto rounded-lg" %>
     </div>
   </div>
 
   <div class="flex justify-center flex-row mx-2">
-    <%= button_tag '行き先を探す', type: 'button', id: "scrollToTop", class: 'bg-indigo-900 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-sm text-white font-bold rounded-lg w-40 py-3 px-4 mx-2' %>
-    <%= link_to login_path, class: 'bg-emerald-400 hover:bg-emerald-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 text-sm text-white font-bold rounded-lg w-40 py-3 px-4 mx-2' do %>
-      ログインして<br>始める
+    <%= button_tag '行き先を探す', type: 'button', id: "scrollToTop", class: 'bg-indigo-900 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-sm text-white font-bold rounded-lg w-32 py-3 px-4 mx-2' %>
+    <% unless logged_in? %>
+      <%= link_to login_path, class: 'bg-emerald-400 hover:bg-emerald-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 text-sm text-white text-center font-bold rounded-lg w-32 py-3 px-4 mx-2' do %>
+        ログインして<br>始める
+      <% end %>
     <% end %>
   </div>
 </div>

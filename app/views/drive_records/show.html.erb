@@ -3,20 +3,20 @@
   <div>
     <h1 class="text-center font-bold text-slate-600 text-3xl mb-8">ドライブ履歴詳細</h1>
   </div>
-  <div class="bg-white rounded-lg p-5 m-5 flex flex-col items-center text-slate-700 h-96 w-11/12 md:w-96">
+  <div class="bg-white rounded-lg p-3 m-5 flex flex-col items-center text-slate-700 h-96 w-11/12 md:w-96">
     <% if @drive_record_destination.website_uri.present? %>
-      <%= link_to @drive_record_destination.name, @drive_record_destination.website_uri, class: "text-lg font-bold p-3 underline hover:text-slate-400", target: '_blank', rel: 'noopener noreferrer' %>
+      <%= link_to @drive_record_destination.name, @drive_record_destination.website_uri, class: "text-lg font-bold pt-2 pb-1 underline hover:text-slate-400", target: '_blank', rel: 'noopener noreferrer' %>
     <% else %>
-      <h2 class="text-lg font-bold p-3"><%= @drive_record_destination.name %></h2>
+      <h2 class="text-lg font-bold p-2"><%= @drive_record_destination.name %></h2>
     <% end %>
 
     <p class="text-sm font-semibold"><%= @drive_record_destination.address %></p>
-    <p class="py-3">日付: <%= format_date_with_year(@drive_record) %></p>
+    <p class="py-2">日付: <%= format_date_with_year(@drive_record) %></p>
 
     <% if @drive_record_destination.photo_uri.present? %>
-      <%= image_tag @drive_record_destination.photo_uri, class: "image-size my-4 px-5" %>
+      <%= image_tag @drive_record_destination.photo_uri, class: "image-size my-2 px-5" %>
     <% else %>
-      <%= image_tag "sample_image.png", class: "image-size my-4 px-5" %>
+      <%= image_tag "sample_image.png", class: "image-size my-2 px-5" %>
     <% end %>
   </div>
 
@@ -43,7 +43,7 @@
         </div>
       </div>
 
-      <%= link_to '一覧へ戻る', drive_records_path, class: "hover:bg-slate-50 text-slate-600 text-center border border-slate-600 py-3 px-6 mt-3 w-40 rounded-full" %>
+      <%= link_to '戻る', drive_records_path, class: "hover:bg-slate-50 text-slate-600 text-center border border-slate-600 py-3 px-6 mt-3 w-40 rounded-full" %>
     </div>
     <div class="text-xs text-left">
       ※ 応答がない場合、お手数ですが<br>&emsp;画面をリロードした上で<br>&emsp;再度お試しください。
