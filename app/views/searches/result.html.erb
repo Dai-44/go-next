@@ -63,7 +63,7 @@
 <div id="overlay" class="hidden fixed inset-0 bg-slate-900 bg-opacity-50 z-20"></div>
 
 <div class="flex items-center justify-center">
-  <div class="flex items-center justify-between space-x-10 py-3 relative">
+  <div class="flex items-center justify-between space-x-6 py-3 relative">
     <!-- ドロップダウンを開くボタン -->
     <div class="w-40 text-center mt-3">
       <% if logged_in? %>
@@ -75,14 +75,22 @@
       <% end %>
 
       <!-- ドロップダウンのコンテンツ -->
-      <div id="dropdownDeparture" class="hidden absolute z-30 top-1 left-1/2 transform -translate-x-1/2 w-11/12 rounded-lg shadow-lg bg-slate-50 ring-1 ring-black ring-opacity-5">
+      <div id="dropdownDeparture" class="hidden absolute z-30 top-1 left-1/2 transform -translate-x-1/2 w-full rounded-lg shadow-lg bg-slate-50 ring-1 ring-black ring-opacity-5">
         <div class="flex flex-col justify-center h-full">
-          <div class="flex flex-row items-center justify-center space-x-3 mt-5">
-            <%= link_to "Yahoo!カーナビで行く", "#", class: "yahoo-navi-link text-xs text-gray-700 border-2 border-blue-500 hover:border-blue-700 hover:bg-blue-200 rounded-full px-3 py-2 transition-colors duration-200 ease-in-out" %>
-            <%= link_to "Google Mapで行く", "#", class: "google-map-link text-xs text-gray-700 border-2 border-red-500 hover:border-red-700 hover:bg-red-200 rounded-full px-3 py-2 transition-colors duration-200 ease-in-out" %>
+          <div class="flex flex-row items-center justify-center space-x-2 mt-5">
+            <%= link_to "#", class: "yahoo-navi-link border-2 border-red-300 hover:border-red-400 hover:bg-red-200 rounded-full px-3 py-2 transition-colors duration-200 ease-in-out flex items-center space-x-2" do %>
+              <%= image_tag 'yahoo_japan_icon.png', class: "mx-auto w-5 h-3" %>
+              <span class="text-xs text-gray-700">Yahoo!カーナビで行く</span>
+            <% end %>
+            <%= link_to "#", class: "google-map-link border-2 border-yellow-300 hover:border-yellow-400 hover:bg-yellow-200 rounded-full px-3 py-2 transition-colors duration-200 ease-in-out flex items-center space-x-2" do %>
+              <img class="w-3 h-3" src="https://www.svgrepo.com/show/475656/google-color.svg" loading="lazy" alt="google logo">
+              <span class="text-xs text-gray-700">Google Mapで行く</span>
+            <% end %>
           </div>
           <div class="text-xs text-left ml-4 mt-2 pb-1">
-          ※ Yahoo!カーナビアプリ の<br>&emsp;インストールが必要です
+            <a href="#" id="navi-app-link">
+              ※ <span class="text-blue-600 hover:underline">Yahoo!カーナビアプリの<br>&emsp;インストール</span>が必要です
+            </a>
           </div>
         </div>
       </div>
@@ -328,6 +336,19 @@
     // オーバーレイをクリックしたときにドロップダウンを閉じる
     const overlay = document.getElementById('overlay');
     overlay.addEventListener('click', closeDropdown);
+  });
+
+  // デバイスに応じてYahoo!カーナビのインストールリンクを出し分ける処理
+  document.addEventListener('DOMContentLoaded', function() {
+    const naviAppLink = document.getElementById('navi-app-link');
+
+    if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+      // iOSデバイスの場合のApp Storeへのリンク
+      naviAppLink.setAttribute('href', 'https://apps.apple.com/app/id890808217');
+    } else if (navigator.userAgent.match(/Android/i)) {
+      // Androidデバイスの場合のGoogle Playへのリンク
+      naviAppLink.setAttribute('href', 'https://play.google.com/store/apps/details?id=jp.co.yahoo.android.apps.navi&hl=ja&gl=US&pli=1');
+    }
   });
 </script>
 
