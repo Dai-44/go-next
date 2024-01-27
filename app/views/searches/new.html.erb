@@ -2,11 +2,11 @@
 <div class="flex justify-center items-center flex-col mx-auto">
   <header class="text-center text-lg ">
     <%= image_tag 'logo_with_appname.png', size: "350x250", class: "mx-auto" %>
-    <p class="text-slate-800">「思っていたよりも予定が早く済んじゃった...」</p>
-    <p class="text-slate-800">「この辺りで面白いスポットはないかな？」</p>
-    <p class="mt-10 mx-6 text-sm text-slate-800">ドライブ中に思いがけないフリータイムができたとき。</p>
-    <p class="mt-2 mx-6 text-sm text-slate-800">...次、どこ行く？ が、次の行き先を決めるお手伝いをします。</p>
-    <p class="mt-5 mx-6 text-sm text-slate-800">どこに行こうか決まらず悩む時間を、<br>楽しいドライブの時間に変えてみませんか？</p>
+    <p class="text-slate-800 text-sm font-bold">「思っていたよりも予定が早く済んじゃった...」</p>
+    <p class="text-slate-800 text-sm font-bold">「この辺りで面白いスポットはないかな？」</p>
+    <p class="mt-8 mx-3 text-sm text-slate-800">ドライブ中に思いがけないフリータイムができたとき。</p>
+    <p class="mt-2 mx-3 text-sm text-slate-800">...次、どこ行く？ が<br>次の行き先を決めるお手伝いをします。</p>
+    <p class="mt-8 mx-3 text-sm text-slate-800">どこに行こうか決まらず悩む時間を、<br>楽しいドライブの時間に変えてみませんか？</p>
   </header>
 
   <div class="text-sm text-center mt-10 mb-1">
@@ -48,20 +48,21 @@
 
     <div class="bg-white rounded-lg shadow-xl px-5 py-4 mx-3">
       <h1 class="text-lg font-bold text-slate-700 md:text-xl ">検索する</h1>
-      <p class="mt-3 text-sm">いまの気分と走行時間を指定して<br>付近のスポットを検索できます。</p>
-      <%= image_tag 'how-to-use_search.png', size: "200x200", class: "mt-5 mx-auto rounded-lg" %>
+      <p class="mt-3 text-sm">いまの気分と走行時間を指定して<br>付近のスポットを検索できます</p>
+      <%= image_tag 'how-to-use_search.png', size: "200x200", class: "mt-5 mx-auto border rounded-lg" %>
     </div>
 
     <div class="bg-white rounded-lg shadow-xl px-5 py-4 mx-3">
       <h1 class="text-lg font-bold text-slate-700 md:text-xl ">行き先を決める</h1>
-      <p class="mt-3 text-sm">検索結果から行きたい場所を選び<br>「ここへ行く」をクリックします。</p>
-      <%= image_tag 'how-to-use_see-result.png', size: "200x400", class: "mt-5 mx-auto rounded-lg" %>
+      <p class="mt-3 text-sm">検索結果から行きたい場所を選び<br>「ここへ行く」をクリックします</p>
+      <%= image_tag 'how-to-use_see-result.gif', size: "200x400", class: "mt-5 mx-auto border rounded-lg" %>
     </div>
 
     <div class="bg-white rounded-lg shadow-xl px-5 py-4 mx-3">
       <h1 class="text-lg font-bold text-slate-700 md:text-xl ">目的地へ行く</h1>
       <p class="text-sm mt-3">目的地へのドライブには<br>Yahoo!カーナビ / Googleマップの<br>経路案内を利用できます</p>
-      <%= image_tag 'how-to-use_start-navi.png', size: "200x400", class: "mt-5 mx-auto rounded-lg" %>
+      <%= image_tag 'how-to-use_yahoo-carnavi.jpg', size: "200x400", class: "mt-5 mx-auto border rounded-lg" %>
+      <%= image_tag 'how-to-use_google-map-navi.jpg', size: "200x400", class: "mt-5 mx-auto border rounded-lg" %>
     </div>
   </div>
 
@@ -74,18 +75,15 @@
 
     <div class="bg-white rounded-lg shadow-xl px-5 py-4 mx-3">
       <h1 class="text-lg font-bold text-slate-700 md:text-xl ">ブックマーク</h1>
-      <p class="text-sm mt-3">気になるスポットは<br>ブックマークしておき<br>後で訪れる計画を立てましょう。</p>
-      <%= image_tag 'how-to-use_bookmark.png', size: "200x400", class: "mt-5 mx-auto rounded-lg" %>
-      <%= image_tag 'how-to-use_bookmark-index.png', size: "200x400", class: "mt-5 mx-auto rounded-lg" %>
-      <%= image_tag 'how-to-use_bookmark-show.png', size: "200x400", class: "mt-5 mx-auto rounded-lg" %>
+      <p class="text-sm mt-3">「今日は行かないけど、気になる... !」<br>という場所をブックマークできます<br>後で訪れる計画を立ててみましょう</p>
+      <%= image_tag 'how-to-use_bookmark.gif', size: "200x400", class: "mt-5 mx-auto border rounded-lg" %>
+      <%= image_tag 'how-to-use_bookmark-show.gif', size: "200x400", class: "mt-5 mx-auto border rounded-lg" %>
     </div>
 
     <div class="bg-white rounded-lg shadow-xl px-5 py-4 mx-3">
       <h1 class="text-lg font-bold text-slate-700 md:text-xl ">ドライブ履歴</h1>
-      <p class="text-sm mt-3">過去のドライブの履歴を見返して<br>次のドライブの参考にしましょう。</p>
-      <%= image_tag 'how-to-use_drive-record.png', size: "200x400", class: "mt-5 mx-auto rounded-lg" %>
-      <%= image_tag 'how-to-use_drive-record-index.png', size: "200x400", class: "mt-5 mx-auto rounded-lg" %>
-      <%= image_tag 'how-to-use_drive-record-show.png', size: "200x400", class: "mt-5 mx-auto rounded-lg" %>
+      <p class="text-sm mt-3">過去のドライブの履歴を見返せます<br>次のドライブの参考にしてみましょう</p>
+      <%= image_tag 'how-to-use_drive_record.gif', size: "200x400", class: "mt-5 mx-auto border rounded-lg" %>
     </div>
   </div>
 
