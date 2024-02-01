@@ -4,4 +4,30 @@ module ApplicationHelper
 
     page_title.empty? ? base_title : page_title + ' | ' + base_title
   end
+
+  def default_meta_tags
+    {
+      site: '...次、どこ行く？',
+      title: '...次、どこ行く？',
+      reverse: true,
+      charset: 'utf-8',
+      description: 'ドライブの途中で次の行き先探しに困ったとき、その場の気分に近い目的地を検索できるサービスです。',
+      canonical: request.original_url,
+      separator: '|',
+      og: {
+        site_name: :site,
+        title: :title,
+        description: :description,
+        type: 'website',
+        url: request.original_url,
+        image: image_url('logo_with_appname.png'),
+        local: 'ja-JP'
+      },
+      # X用の設定
+      twitter: {
+        card: 'summary_large_image', # Xで表示する場合は大きいカードにする
+        image: image_url('logo_with_appname.png')
+      }
+    }
+  end
 end
