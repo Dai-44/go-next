@@ -98,7 +98,7 @@
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('turbo:load', () => {
     const toggleButton = document.getElementById('toggle-form-button');
     const searchForm = document.getElementById('search-form');
 
@@ -135,24 +135,6 @@
       formElement.classList.remove('max-h-screen');
     }
   }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    const dropdownFeelingButton = document.getElementById('dropdownFeelingButton');
-    const dropdownFeelingContent = document.getElementById('dropdownFeeling');
-
-    // 気分のドロップダウン制御
-    dropdownFeelingButton.addEventListener('click', (event) => {
-      dropdownFeelingContent.classList.toggle('hidden');
-      event.stopPropagation(); // ドキュメントのイベント伝播を停止
-    });
-
-    // ドロップダウン要素以外の場所がクリックされたらドロップダウンを閉じる
-    document.addEventListener('click', (event) => {
-      if (!dropdownFeelingButton.contains(event.target) && !dropdownFeelingContent.contains(event.target)) {
-        dropdownFeelingContent.classList.add('hidden');
-      }
-    });
-  });
 
   document.addEventListener('DOMContentLoaded', function() {
     const scrollToTopButton = document.getElementById('scrollToTop');
