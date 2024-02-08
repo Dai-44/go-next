@@ -104,6 +104,9 @@
 <script>
   const places = <%= @response['places'].to_json.html_safe %>; // Searches#resultから受け取った各場所のデータ(@response['places'])を変数に格納
   let markers = []; // マーカーを格納する配列
+  let routes = []; // ルートの取得結果を保持する配列
+  let directionsRenderer; // directionsRendererをグローバルスコープで定義
+  let map; // moveToItem関数(カルーセルアイテム切り替え時の処理)からmapを参照してルートの表示切り替えを実現できるよう、グローバルスコープでmapを宣言
 
   function initMap() {
   // ブラウザのセッションストレージから現在地の緯度と経度を取得
@@ -114,12 +117,17 @@
     const currentLocation = { lat: latitude, lng: longitude };
 
     // 'map'をidに持つ要素に表示する地図を作成
-    const map = new google.maps.Map(document.getElementById('map'), {
+    map = new google.maps.Map(document.getElementById('map'), {
       zoom: 9,
       center: currentLocation,
       disableDefaultUI: true,
       mapTypeId: 'terrain'
     });
+
+    let directionsService = new google.maps.DirectionsService();
+    directionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
+    directionsRenderer.setMap(map);
+    let promises = []; // 各ルート取得処理のPromiseを保持する配列
 
     // 現在地を示す青丸のアイコンを作成
     function setCurrentLocationMaker(map, position){
@@ -139,8 +147,8 @@
 
     // 現在地を示す青丸のアイコンを表示
     setCurrentLocationMaker(map, currentLocation);
+
     // 検索結果として表示する各場所に対して繰り返し処理を定義し、マーカーを作成
-    // 繰り返し処理の中で各マーカーに紐づく情報ウィンドウも作成し、マーカークリック時に表示されるようイベントハンドラを定義
     places.forEach(function(place) {
       const markerPosition = {
         lat: parseFloat(place['location']['latitude']),
@@ -154,7 +162,37 @@
         visible: false, // 初期状態では非表示に設定
       });
       markers.push(marker);
-    })
+
+      // ルート取得の非同期処理をPromiseでラップし、promises配列に追加
+      let promise = new Promise((resolve, reject) => {
+        directionsService.route({
+          origin: currentLocation,
+          destination: markerPosition,
+          travelMode: google.maps.TravelMode.DRIVING,
+          avoidHighways: true
+        }, function(response, status) {
+          if (status === 'OK') {
+            resolve(response); // ルート取得成功
+          } else {
+            reject('Route request failed due to ' + status); // ルート取得失敗
+          }
+        });
+      });
+      promises.push(promise);
+    });
+
+    // すべてのルート取得処理が完了した後の処理
+    Promise.all(promises).then(results => {
+      routes = results; // 取得したルートをroutes配列に格納
+
+      // 最初のルートをマップ上に表示
+      if (routes.length > 0) {
+        directionsRenderer.setDirections(routes[0]);
+      }
+    }).catch(error => {
+      console.error("Error: ", error);
+    });
+
     // 初期表示するカルーセルアイテムに対応するマーカーを表示
     updateMarkers(0);
   }
@@ -299,6 +337,13 @@
       updateIndicators(index); // インジケーターの更新
       updateMarkers(index); // マーカーの表示を更新
       currentIndex = index; // 現在のインデックスを更新
+      // ルート表示を更新
+      if (routes.length > index) { // 選択されたアイテムに対応するルートが存在する場合
+        directionsRenderer.setMap(null);
+        directionsRenderer.setMap(map);
+        directionsRenderer.setDirections(routes[index]); // ルートを表示
+      }
+
       updateGoToLink(index); // カルーセル外部の「ここへ行く」リンクに設定する、ドライブ履歴生成のためのリンクの更新
     }
 
