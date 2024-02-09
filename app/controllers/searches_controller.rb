@@ -1,5 +1,5 @@
 class SearchesController < ApplicationController
-  skip_before_action :require_login, only: %i[new create result]
+  skip_before_action :require_login, only: %i[new create result retry]
 
   def new
     @user_selection = UserSelectionForm.new
@@ -19,6 +19,10 @@ class SearchesController < ApplicationController
     @response = SearchPlacesService.search_places(session[:request_params])
     photo_resources = fetch_place_photo_names(@response)
     @photos = SearchPlacesService.fetch_place_photos(photo_resources) # 各場所の画像データを取得する処理。現状ではリクエストの度にAPIへのリクエストが実行されてしまうので、キャッシュを利用した画像の保持などを検討する。
+  end
+
+  def retry
+    @user_selection = UserSelectionForm.new
   end
 
   private
