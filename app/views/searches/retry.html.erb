@@ -38,6 +38,9 @@
           </div>
         <% end %>
         <div id="dropdown-type-content" class="hidden absolute z-30 top-[-40px] left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow w-80 mt-3 p-3 dark:bg-gray-700 ring-1 ring-black ring-opacity-5">
+          <button type="button" id="close-button" class="absolute top-0 right-0 mt-2 mr-2 text-gray-700 hover:text-gray-500 dark:text-gray-300 dark:hover:text-white">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </button>
           <div class="form-element grid grid-cols-2 gap-x-3 gap-y-3 justify-center py-2">
             <%= form.collection_check_boxes :type, GooglePlacesApiType.limit(15), :name, :display_name, include_hidden: false do |b| %>
               <div class="flex items-center">
@@ -92,11 +95,12 @@
   document.addEventListener('turbo:load', () => {
     const dropdownTypeButton = document.getElementById('dropdown-type-button');
     const overlay = document.getElementById('overlay');
+    const closeButton = document.getElementById('close-button');
 
     dropdownTypeButton.addEventListener('click', toggleDropdown);
 
-    // オーバーレイをクリックしたときにドロップダウンを閉じる
-    overlay.addEventListener('click', closeDropdown);
+    // ドロップダウン内の×ボタンをクリックしたときにドロップダウンを閉じる
+    closeButton.addEventListener('click', closeDropdown);
   });
 
   // ドロップダウンの表示/非表示を定義する関数
