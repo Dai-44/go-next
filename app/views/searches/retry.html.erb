@@ -1,0 +1,138 @@
+<div class="flex justify-center items-center flex-col mx-auto">
+  <div>
+    <h1 class="text-center font-bold text-slate-600 text-3xl mb-8">行き先を探す</h1>
+  </div>
+
+  <div class="w-3/4">
+    <h3 class="text-left font-bold text-slate-800 text-lg my-4">1. 現在地を取得</h3>
+  </div>
+
+  <%= button_tag '取得する', type: 'button', id: 'get-location-button', class: "bg-indigo-900 hover:bg-indigo-600 focus:outline-none text-white font-bold w-32 py-2 px-4 my-3 rounded-lg" %>
+
+  <div class="w-3/4">
+    <h3 class="text-left font-bold text-slate-800 text-lg my-4">2. 条件を選んで検索</h3>
+  </div>
+
+  <%= form_with model: @user_selection, url: searches_path, class: "py-3 h-52 relative", data: { turbo: false } do |form| %>
+    <%= render 'shared/error_messages', object: form.object %>
+    <%= form.hidden_field :latitude, id: 'hidden_latitude' %>
+    <%= form.hidden_field :longitude, id: 'hidden_longitude' %>
+    <div class="flex flex-col justify-center items-center space-y-4 mb-5">
+      <!-- いまの気分の選択 -->
+      <div class="form-element">
+        <%= form.select :feeling, options_from_collection_for_select(Feeling.all, :id, :name), { include_blank: 'いまの気分は？ (必須)' }, class: "form-select block rounded-md shadow-sm text-slate-600 bg-white border-2 border-indigo-300 hover:border-indigo-500 focus:border-indigo-400 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-72" %>
+      </div>
+      <!-- 運転範囲の選択 -->
+      <div class="form-element">
+        <%= form.select :drive_range, options_for_select(@user_selection.drive_time_options), { include_blank: 'どのくらい走る？ (必須)' }, class: "form-select block rounded-md shadow-sm text-slate-600 bg-white border-2 border-indigo-300 hover:border-indigo-500 focus:border-indigo-400 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-72" %>
+      </div>
+
+      <!-- 今日すでに行った場所の選択 -->
+      <div class="form-element">
+        <%= button_tag type: 'button', id: 'dropdown-type-button', class: 'flex flex-row items-center justify-between px-3 py-2 text-left text-md font-medium text-slate-600 rounded-lg shadow-sm bg-white border-2 border-indigo-300 hover:border-indigo-500 focus:border-indigo-400 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-72' do %>
+          <div>今日どこに行っていた？</div>
+          <div>
+            <%= content_tag :svg, class: 'w-4 h-4 ml-2', xmlns: 'http://www.w3.org/2000/svg', viewBox: '3 2 13 15', fill: 'rgba(71, 85, 105, 0.7)' do %>
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            <% end %>
+          </div>
+        <% end %>
+        <div id="dropdown-type-content" class="hidden absolute z-30 top-[-40px] left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow w-80 mt-3 p-3 dark:bg-gray-700 ring-1 ring-black ring-opacity-5">
+          <button type="button" id="close-button" class="absolute top-0 right-0 mt-2 mr-2 text-gray-700 hover:text-gray-500 dark:text-gray-300 dark:hover:text-white">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </button>
+          <div class="form-element grid grid-cols-2 gap-x-3 gap-y-3 justify-center py-2">
+            <%= form.collection_check_boxes :type, GooglePlacesApiType.limit(15), :name, :display_name, include_hidden: false do |b| %>
+              <div class="flex items-center">
+                <%= b.check_box(class: "w-4 h-4 mr-1 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600") %>
+                <%= b.label(class: "ms-2 text-xs font-medium text-gray-900 dark:text-gray-300") %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <!-- 検索ボタン -->
+      <div class="form-element">
+        <%= form.submit '検索する', class: "bg-indigo-900 hover:bg-indigo-600 focus:outline-none text-white font-bold w-32 py-2 px-4 rounded-lg mt-4" %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- オーバーレイ -->
+  <div id="overlay" class="hidden fixed inset-0 bg-slate-900 bg-opacity-50 z-20"></div>
+</div>
+
+<script>
+  const getLocationButton = document.getElementById('get-location-button');
+
+  // 位置情報を取得する処理
+  getLocationButton.addEventListener('click', () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        // 位置情報の取得に成功したら、隠しフィールドに値をセット
+        document.getElementById('hidden_latitude').value = position.coords.latitude;
+        document.getElementById('hidden_longitude').value = position.coords.longitude;
+
+        // 検索実行後の遷移先である`searches/result`でのマップ表示に現在地の緯度および経度を用いるため、位置情報をセッションストレージに保存
+        sessionStorage.setItem('latitude', position.coords.latitude);
+        sessionStorage.setItem('longitude', position.coords.longitude);
+
+        // 位置情報取得成功後にボタンのテキストと色を変更
+        getLocationButton.textContent = '取得済';
+        getLocationButton.className = 'bg-gray-400 focus:outline-none text-white font-bold w-32 py-2 px-4 my-3 rounded-lg';
+
+      }, (error) => {
+        console.error('位置情報の取得に失敗しました:', error);
+        // 位置情報の取得に失敗した場合の処理（任意）
+      });
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+      // Geolocation APIがサポートされていない場合の処理（任意）
+    }
+  });
+
+  // 「今日すでに行った場所」の選択肢を表示するドロップダウン制御イベント
+  document.addEventListener('turbo:load', () => {
+    const dropdownTypeButton = document.getElementById('dropdown-type-button');
+    const overlay = document.getElementById('overlay');
+    const closeButton = document.getElementById('close-button');
+    const questionDiv = dropdownTypeButton.querySelector('div:first-child'); // 「今日どこに行っていた？」を表示するdiv要素を取得
+
+    dropdownTypeButton.addEventListener('click', toggleDropdown);
+
+    // ドロップダウン内の×ボタンをクリックしたときにドロップダウンを閉じる
+    closeButton.addEventListener('click', closeDropdown);
+
+    // チェックボックスの選択状態を監視
+    document.querySelectorAll('#dropdown-type-content input[type="checkbox"]').forEach((checkbox) => {
+      checkbox.addEventListener('change', function() {
+        updateQuestionText();
+      });
+    });
+
+    // ドロップダウンの表示/非表示を定義する関数
+    function toggleDropdown() {
+      const dropdownTypeContent = document.getElementById('dropdown-type-content');
+      dropdownTypeContent.classList.toggle('hidden');
+      overlay.classList.toggle('hidden');
+    }
+    function closeDropdown() {
+      const dropdownTypeContent = document.getElementById('dropdown-type-content');
+      dropdownTypeContent.classList.add('hidden');
+      overlay.classList.add('hidden');
+    };
+
+    function updateQuestionText() {
+      const selectedOptions = [];
+      document.querySelectorAll('#dropdown-type-content input[type="checkbox"]:checked').forEach((checkbox) => {
+        const label = checkbox.nextElementSibling;
+        if (label) {
+          selectedOptions.push(label.textContent.trim());
+        }
+      });
+
+      // 選択されたテキストを更新、選択がなければデフォルトテキストを表示
+      questionDiv.textContent = selectedOptions.length > 0 ? selectedOptions.join(', ') : '今日どこに行っていた？';
+    }
+  });
+</script>
