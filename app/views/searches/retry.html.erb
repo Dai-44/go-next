@@ -96,23 +96,43 @@
     const dropdownTypeButton = document.getElementById('dropdown-type-button');
     const overlay = document.getElementById('overlay');
     const closeButton = document.getElementById('close-button');
+    const questionDiv = dropdownTypeButton.querySelector('div:first-child'); // 「今日どこに行っていた？」を表示するdiv要素を取得
 
     dropdownTypeButton.addEventListener('click', toggleDropdown);
 
     // ドロップダウン内の×ボタンをクリックしたときにドロップダウンを閉じる
     closeButton.addEventListener('click', closeDropdown);
+
+    // チェックボックスの選択状態を監視
+    document.querySelectorAll('#dropdown-type-content input[type="checkbox"]').forEach((checkbox) => {
+      checkbox.addEventListener('change', function() {
+        updateQuestionText();
+      });
+    });
+
+    // ドロップダウンの表示/非表示を定義する関数
+    function toggleDropdown() {
+      const dropdownTypeContent = document.getElementById('dropdown-type-content');
+      dropdownTypeContent.classList.toggle('hidden');
+      overlay.classList.toggle('hidden');
+    }
+    function closeDropdown() {
+      const dropdownTypeContent = document.getElementById('dropdown-type-content');
+      dropdownTypeContent.classList.add('hidden');
+      overlay.classList.add('hidden');
+    };
+
+    function updateQuestionText() {
+      const selectedOptions = [];
+      document.querySelectorAll('#dropdown-type-content input[type="checkbox"]:checked').forEach((checkbox) => {
+        const label = checkbox.nextElementSibling;
+        if (label) {
+          selectedOptions.push(label.textContent.trim());
+        }
+      });
+
+      // 選択されたテキストを更新、選択がなければデフォルトテキストを表示
+      questionDiv.textContent = selectedOptions.length > 0 ? selectedOptions.join(', ') : '今日どこに行っていた？';
+    }
   });
-
-  // ドロップダウンの表示/非表示を定義する関数
-  function toggleDropdown() {
-    const dropdownTypeContent = document.getElementById('dropdown-type-content');
-    dropdownTypeContent.classList.toggle('hidden');
-    overlay.classList.toggle('hidden');
-  }
-
-  function closeDropdown() {
-    const dropdownTypeContent = document.getElementById('dropdown-type-content');
-    dropdownTypeContent.classList.add('hidden');
-    overlay.classList.add('hidden');
-  }
 </script>
