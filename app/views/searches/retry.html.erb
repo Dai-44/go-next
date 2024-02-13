@@ -3,13 +3,21 @@
     <h1 class="text-center font-bold text-slate-600 text-3xl mb-8">行き先を探す</h1>
   </div>
 
-  <%= button_tag '現在地を取得', type: 'button', id: 'get-location-button', class: "bg-indigo-900 hover:bg-indigo-600 focus:outline-none text-white font-bold w-32 py-2 px-4 my-3 rounded-lg" %>
+  <div class="w-3/4">
+    <h3 class="text-left font-bold text-slate-800 text-lg my-4">1. 現在地を取得</h3>
+  </div>
+
+  <%= button_tag '取得する', type: 'button', id: 'get-location-button', class: "bg-indigo-900 hover:bg-indigo-600 focus:outline-none text-white font-bold w-32 py-2 px-4 my-3 rounded-lg" %>
+
+  <div class="w-3/4">
+    <h3 class="text-left font-bold text-slate-800 text-lg my-4">2. 条件を選んで検索</h3>
+  </div>
 
   <%= form_with model: @user_selection, url: searches_path, class: "py-3 h-52 relative", data: { turbo: false } do |form| %>
     <%= render 'shared/error_messages', object: form.object %>
     <%= form.hidden_field :latitude, id: 'hidden_latitude' %>
     <%= form.hidden_field :longitude, id: 'hidden_longitude' %>
-    <div class="flex flex-col justify-center items-center space-y-3 mb-5">
+    <div class="flex flex-col justify-center items-center space-y-4 mb-5">
       <!-- いまの気分の選択 -->
       <div class="form-element">
         <%= form.select :feeling, options_from_collection_for_select(Feeling.all, :id, :name), { include_blank: 'いまの気分は？ (必須)' }, class: "form-select block rounded-md shadow-sm text-slate-600 bg-white border-2 border-indigo-300 hover:border-indigo-500 focus:border-indigo-400 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-72" %>
@@ -29,7 +37,7 @@
             <% end %>
           </div>
         <% end %>
-        <div id="dropdown-type-content" class="hidden absolute z-30 top-[-1rem] left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow w-80 mt-3 p-3 dark:bg-gray-700 ring-1 ring-black ring-opacity-5">
+        <div id="dropdown-type-content" class="hidden absolute z-30 top-[-40px] left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow w-80 mt-3 p-3 dark:bg-gray-700 ring-1 ring-black ring-opacity-5">
           <div class="form-element grid grid-cols-2 gap-x-3 gap-y-3 justify-center py-2">
             <%= form.collection_check_boxes :type, GooglePlacesApiType.limit(15), :name, :display_name, include_hidden: false do |b| %>
               <div class="flex items-center">
@@ -40,10 +48,9 @@
           </div>
         </div>
       </div>
-
       <!-- 検索ボタン -->
       <div class="form-element">
-        <%= form.submit '検索', class: "bg-indigo-900 hover:bg-indigo-600 focus:outline-none text-white font-bold w-32 py-2 px-4 mt-3 rounded-lg" %>
+        <%= form.submit '検索する', class: "bg-indigo-900 hover:bg-indigo-600 focus:outline-none text-white font-bold w-32 py-2 px-4 rounded-lg mt-4" %>
       </div>
     </div>
   <% end %>
@@ -62,9 +69,15 @@
         // 位置情報の取得に成功したら、隠しフィールドに値をセット
         document.getElementById('hidden_latitude').value = position.coords.latitude;
         document.getElementById('hidden_longitude').value = position.coords.longitude;
+
         // 検索実行後の遷移先である`searches/result`でのマップ表示に現在地の緯度および経度を用いるため、位置情報をセッションストレージに保存
         sessionStorage.setItem('latitude', position.coords.latitude);
         sessionStorage.setItem('longitude', position.coords.longitude);
+
+        // 位置情報取得成功後にボタンのテキストと色を変更
+        getLocationButton.textContent = '取得済';
+        getLocationButton.className = 'bg-gray-400 focus:outline-none text-white font-bold w-32 py-2 px-4 my-3 rounded-lg';
+
       }, (error) => {
         console.error('位置情報の取得に失敗しました:', error);
         // 位置情報の取得に失敗した場合の処理（任意）
