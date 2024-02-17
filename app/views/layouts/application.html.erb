@@ -10,6 +10,15 @@
     <%= javascript_importmap_tags %>
     <%= display_meta_tags(default_meta_tags) %>
     <%= favicon_link_tag('favicon.ico') %>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-THW292GSRH"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-THW292GSRH');
+    </script>
   </head>
 
   <body class="flex flex-col min-h-screen bg-gray-100">
